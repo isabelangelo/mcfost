@@ -1,0 +1,28 @@
+Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference      
+--------------- ---------- ------------- ---------------- ---------------------
+ 0.477224543139   1.19e-05       5.04202 PAN-STARRS/PS1:g            II/349/ps1
+ 0.612571430323   4.12e-05       5.82524 PAN-STARRS/PS1:r            II/349/ps1
+ 0.70             0.000121       12.0	 Karl			     Karl
+ 0.747985174651   0.000101        3.9604 PAN-STARRS/PS1:i            II/349/ps1
+ 0.80             0.000755       12.	 Karl			     Karl
+  0.86520189899   0.000158       3.79747 PAN-STARRS/PS1:z            II/349/ps1
+ 0.959642951344   0.000281       4.27046 PAN-STARRS/PS1:y            II/349/ps1
+  1.23901660605    0.00197       8.12183          2MASS:J        II/328/allwise
+   1.25            0.004287        7.0		  Karl		 Karl
+   1.6494770729    0.00397       7.30479          2MASS:H        II/328/allwise
+   1.65            0.007820        7.0		  Karl		 Karl
+  2.16378533381    0.00556       5.03597         2MASS:Ks        II/328/allwise
+  3.35001070511    0.00602       3.15615          WISE:W1        II/328/allwise
+  3.54998233253    0.00735       5.03401 Spitzer/IRAC:3.6            II/332/c2d
+  4.49302287033       0.01           5.0 Spitzer/IRAC:4.5            II/332/c2d
+  4.60001930277    0.00846       1.65485          WISE:W2        II/328/allwise
+  5.73096400375     0.0134       4.47761 Spitzer/IRAC:5.8            II/332/c2d
+   7.8720809285     0.0159       5.03145 Spitzer/IRAC:8.0            II/332/c2d
+  11.5598233207     0.0314       1.59236          WISE:W3        II/328/allwise
+  18.3899189057      0.291        56.701       AKARI:L18W            II/297/irc
+  22.0906681895      0.346        1.7341          WISE:W4        II/328/allwise
+  23.6746788281      0.375           9.6  Spitzer/MIPS:24            II/332/c2d
+   71.419968077       2.24         9.375  Spitzer/MIPS:70            II/332/c2d
+  155.898314093        3.9        2.5641 Spitzer/MIPS:160 J/ApJS/220/11/fluxobs
+  160.0                3.39678      -4.0 Karl		  Karl
+  350.0                1.03        -40.0 Karl		  Karl

@@ -1,0 +1,34 @@
+Frequency (um)  Flux (Jy)  Percent Error    Telescope            Reference        
+--------------- ---------- ------------- ---------------- ------------------------
+ 0.477224543139    0.00749      0.667557 PAN-STARRS/PS1:g               II/349/ps1
+ 0.55              0.008110      10.0	 Karl				Karl
+ 0.612571430323    0.00955       1.04712 PAN-STARRS/PS1:r               II/349/ps1
+ 0.747985174651     0.0113           0.0 PAN-STARRS/PS1:i               II/349/ps1
+ 0.81               0.008278       10.0		   Karl			Karl
+ 0.86520189899      0.0125           0.8 PAN-STARRS/PS1:z               II/349/ps1
+ 0.881690659373     0.0144           0.0         UKIDSS:Z              II/319/gcs9
+ 0.959642951344     0.0133       0.75188 PAN-STARRS/PS1:y               II/349/ps1
+  1.0304979307     0.0158           0.0         UKIDSS:Y              II/319/gcs9
+   1.23901660605     0.0197       4.06091          2MASS:J           II/328/allwise
+    1.6494770729     0.0303        3.9604          2MASS:H           II/328/allwise
+   2.20095777109     0.0474           0.0         UKIDSS:K              II/319/gcs9
+   3.35001070511       0.17       14.1176          WISE:W1           II/328/allwise
+  3.54998233253      0.142       7.74648 Spitzer/IRAC:3.6               II/332/c2d
+  3.776               0.094      13.83         KeckII/NIRC2            Perrin+2006 
+   4.49302287033      0.132       5.30303 Spitzer/IRAC:4.5               II/332/c2d
+  4.60001930277      0.281       43.4164          WISE:W2           II/328/allwise
+  5.73096400375        0.6       7.83333 Spitzer/IRAC:5.8               II/332/c2d
+   7.8720809285       2.27        6.1674 Spitzer/IRAC:8.0               II/332/c2d
+  8.61002492892       4.44        1.8018        AKARI:S9W           II/338/catalog
+  11.5598233207        1.3       12.3077          WISE:W3           II/328/allwise
+  22.0906681895       3.58       4.18994          WISE:W4           II/328/allwise
+  24.0                3.740          5.1	  Karl		    Karl
+   64.9998824856       7.75       9.29032        AKARI:N60               II/298/fis
+  70.0                2.58       5.4		Karl			Karl
+  90.0007379165       8.54       5.62061     AKARI:WIDE-S               II/298/fis
+  101.949417806       26.5           0.0         IRAS:100           II/338/catalog
+  139.998345942       6.98       31.9484     AKARI:WIDE-L               II/298/fis
+  160.000244436       4.84       13.4298       AKARI:N160               II/298/fis
+  350.0               1.43           11.8   Karl			Karl
+  450.0               1.34           17.2   Karl			Karl
+  2600.0              0.015           4.0   Karl			Karl

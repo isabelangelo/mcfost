@@ -1,0 +1,34 @@
+Frequency (um)  Flux (Jy)  Percent Error    Telescope          Reference      
+--------------- ---------- ------------- ---------------- --------------------
+ 0.351902124613   9.57e-05       2.19436           SDSS:u           IV/34/epic
+ 0.477224543139   7.21e-05       4.29958 PAN-STARRS/PS1:g           II/349/ps1
+ 0.55             0.000148       10.0	 Karl			    Karl
+ 0.612571430323    0.00023       3.47826 PAN-STARRS/PS1:r           II/349/ps1
+ 0.70             0.000380       10.0	 Karl			    Karl
+ 0.747985174651   0.000299         9.699 PAN-STARRS/PS1:i           II/349/ps1
+ 0.763491208679   0.000663      0.452489           SDSS:i           IV/34/epic
+ 0.80             0.000371       10.0		   Karl		    Karl
+  0.86520189899   0.000413       2.42131 PAN-STARRS/PS1:z           II/349/ps1
+ 0.901794182409     0.0011      0.909091           SDSS:z           IV/34/epic
+ 0.959642951344   0.000541        9.0573 PAN-STARRS/PS1:y           II/349/ps1
+  1.23901660605    0.00134       5.22388          2MASS:J       II/328/allwise
+   1.6494770729    0.00212       5.18868          2MASS:H       II/328/allwise
+  2.16378533381    0.00304       3.28947         2MASS:Ks       II/328/allwise
+  2.20095777109     0.0027       0.37037         UKIDSS:K          II/319/gcs9
+  3.35001070511    0.00293       2.04778          WISE:W1       II/328/allwise
+  3.54998233253    0.00293       1.02389 Spitzer/IRAC:3.6 J/ApJS/184/18/table4
+  4.49302287033    0.00321      0.934579 Spitzer/IRAC:4.5 J/ApJS/184/18/table4
+  4.60001930277    0.00354       2.25989          WISE:W2       II/328/allwise
+  5.73096400375    0.00242       1.65289 Spitzer/IRAC:5.8 J/ApJS/184/18/table4
+   7.8720809285    0.00201       1.99005 Spitzer/IRAC:8.0 J/ApJS/184/18/table4
+  9.6              0.0011         50.0	 Karl		  Karl
+  11.4             0.00125        25.0	 Karl		  Karl
+  11.5598233207    0.00206       16.9903          WISE:W3       II/328/allwise
+  14.3             0.0012         25.0   Karl	  		Karl
+  22.0906681895     0.0209       11.9617          WISE:W4       II/328/allwise
+  23.6746788281     0.0142        2.8169  Spitzer/MIPS:24 J/ApJS/184/18/table4
+  70.0              0.37303        12.0	  Karl		  Karl
+  90.0              1.0000        -50.0	  Karl		  Karl
+  855.010860451       0.02           0.0        SCUBA:850  J/ApJS/175/277/maps
+  1300.0            0.020            13.0	Karl	   Karl
+  2700.0           0.0037            20.0	Karl	   Karl

@@ -1,0 +1,19 @@
+Frequency (um)  Flux (Jy)  Percent Error Telescope          Reference        
+--------------- ---------- ------------- ---------- -------------------------
+ 0.606             0.000095     2.0	 Karl			Karl
+ 0.814             0.000206     2.0	 Karl			Karl
+ 0.763491208679    0.00905      0.552486    SDSS:i'             II/336/apass9
+  1.23901660605     0.0651       2.15054    2MASS:J            II/328/allwise
+   1.6494770729     0.0949       2.31823    2MASS:H            II/328/allwise
+  2.16378533381     0.0995       1.70854   2MASS:Ks            II/328/allwise
+  3.35001070511     0.0757       2.11361    WISE:W1            II/328/allwise
+  4.60001930277     0.0978       1.84049    WISE:W2            II/328/allwise
+  8.61002492892       0.22       7.27273  AKARI:S9W            II/338/catalog
+  11.5598233207      0.214       1.40187    WISE:W3            II/328/allwise
+  11.5902133302      0.355           0.0    IRAS:12            II/338/catalog
+  11.8               0.215113        1.6    Karl	       Karl
+  18.3899189057       0.26       13.4615 AKARI:L18W            II/338/catalog
+  22.0906681895      0.303        1.9802    WISE:W4            II/328/allwise
+   23.880234029      0.372           0.0    IRAS:25            II/338/catalog
+  61.8498603289      0.232           0.0    IRAS:60            II/338/catalog
+  101.949417806       4.24          -0.0   IRAS:100            II/338/catalog

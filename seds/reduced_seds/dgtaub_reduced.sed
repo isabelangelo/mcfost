@@ -1,0 +1,35 @@
+Frequency (um)  Flux (Jy)  Percent Error    Telescope          Reference      
+--------------- ---------- ------------- ---------------- --------------------
+ 0.477224543139   7.79e-06       3.08087 PAN-STARRS/PS1:g           II/349/ps1
+ 0.612571430323   1.77e-05       6.21469 PAN-STARRS/PS1:r           II/349/ps1
+ 0.70             0.000142       10.0	 Karl			    Karl
+ 0.747985174651    3.2e-05           7.5 PAN-STARRS/PS1:i           II/349/ps1
+ 0.80             0.000228       10.0	 Karl			    Karl
+  0.86520189899   7.58e-05       2.11082 PAN-STARRS/PS1:z           II/349/ps1
+ 0.881690659373   6.05e-05       3.47107         UKIDSS:Z          II/319/gcs9
+ 0.959642951344   0.000157       3.18471 PAN-STARRS/PS1:y           II/349/ps1
+   1.0304979307   0.000105       2.85714         UKIDSS:Y          II/319/gcs9
+  1.23901660605   0.000907       6.61521          2MASS:J       II/328/allwise
+  1.24830303964   0.000699      0.858369         UKIDSS:J          II/319/gcs9
+  1.25            0.002110       9.0		 Karl		   Karl
+   1.6494770729    0.00495           0.0          2MASS:H       II/328/allwise
+  2.16378533381     0.0126           0.0         2MASS:Ks       II/328/allwise
+  2.20095777109     0.0112           0.0         UKIDSS:K          II/319/gcs9
+  3.35001070511     0.0676       2.21894          WISE:W1       II/328/allwise
+  3.54998233253      0.083       1.80723 Spitzer/IRAC:3.6 J/ApJ/784/126/table1
+  4.49302287033       0.25           2.0 Spitzer/IRAC:4.5 J/ApJ/784/126/table1
+  4.60001930277       0.31       1.93548          WISE:W2       II/328/allwise
+  5.73096400375      0.556       2.69784 Spitzer/IRAC:5.8 J/ApJ/784/126/table1
+   7.8720809285      0.815       2.82209 Spitzer/IRAC:8.0 J/ApJ/784/126/table1
+  8.61002492892      0.413       1.93705        AKARI:S9W           II/297/irc
+  11.5598233207       1.17      0.854701          WISE:W3       II/328/allwise
+  18.3899189057       2.21       4.52489       AKARI:L18W           II/297/irc
+  22.0906681895       3.93       1.27226          WISE:W4       II/328/allwise
+  23.6746788281       3.48       3.73563  Spitzer/MIPS:24 J/ApJS/186/259/known
+   71.419968077        6.1       20.3279  Spitzer/MIPS:70 J/ApJS/186/259/known
+  155.898314093       17.8       32.0225 Spitzer/MIPS:160 J/ApJS/186/259/known
+  446.997760482       6.62           0.0        SCUBA:450  J/ApJS/175/277/maps
+  855.010860451       1.87           0.0        SCUBA:850  J/ApJS/175/277/maps
+  1356.0              0.316          11.0	Karl		Karl
+  2600.0              0.061	     3.3	Karl		Karl
+  66620.5462222   0.000249       10.4418         :=4.5GHz  J/ApJ/801/91/table2

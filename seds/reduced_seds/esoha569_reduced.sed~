@@ -1,0 +1,26 @@
+Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference      
+--------------- ---------- ------------- ---------------- ---------------------
+  0.551		  0.000030 	 13.33 	 2012 HST WFPC2		 Wolff+2017
+  0.606           0.000051        2.0	  	  Karl		 Karl
+  0.814           0.000202        2.0		  Karl		 Karl
+  1.23901660605   0.000655        8.0916          2MASS:J        II/328/allwise
+   1.6494770729   0.000994        8.2495          2MASS:H        II/328/allwise
+  2.16378533381   0.000995       9.24623         2MASS:Ks        II/328/allwise
+  3.35001070511   0.000596       2.34899          WISE:W1        II/328/allwise
+  3.6             0.00057        6.0		  Karl		 Karl
+  4.49302287033   0.000722       5.81717 Spitzer/IRAC:4.5            II/332/c2d
+  4.60001930277   0.000669       2.69058          WISE:W2        II/328/allwise
+  5.73096400375   0.000772       10.6218 Spitzer/IRAC:5.8            II/332/c2d
+   7.8720809285   0.000897       7.24638 Spitzer/IRAC:8.0            II/332/c2d
+  11.5598233207   0.000858       10.6061          WISE:W3        II/328/allwise
+  22.0906681895    0.00894       8.83669          WISE:W4        II/328/allwise
+  23.6746788281    0.00874       9.38215  Spitzer/MIPS:24            II/332/c2d
+  71.419968077       0.11          10.0   Spitzer/MIPS:70 J/ApJS/220/11/fluxobs
+  160		     0.200 	-100 	   Herschel PACS	     Wolff+2017
+  250		     0.100 	-100 	   Herschel SPIRE	     Wolff+2017
+  350		     0.050 	-100	   Herschel SPIRE	     Wolff+2017
+  500		     0.050 	-100	   Herschel SPIRE	     Wolff+2017
+  855.010860451      0.062       19.3548   SCUBA:850 	  J/ApJS/220/11/fluxobs
+  870 		     0.072	 19.44 	   APEX/LABOCA		     Wolff+2017
+  886.959934911     0.0543       3.31492   :=338GHz 	  J/ApJ/831/125/sources
+  2830 		    0.0032	 3.1		 ALMA		     Wolff+2017

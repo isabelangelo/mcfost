@@ -1,0 +1,34 @@
+Frequency (um)  Flux (Jy)  Percent Error    Telescope             Reference        
+--------------- ---------- ------------- ---------------- -------------------------
+ 0.477224543139   7.13e-08           0.0 PAN-STARRS/PS1:g                II/349/ps1
+ 0.612571430323   1.17e-05       10.2564 PAN-STARRS/PS1:r                II/349/ps1
+ 0.747985174651   2.09e-05       10.0478 PAN-STARRS/PS1:i                II/349/ps1
+ 0.80             0.000081       10.0	  Karl				  Karl
+  0.86520189899   5.05e-05       3.76238 PAN-STARRS/PS1:z                II/349/ps1
+ 0.959642951344    0.00012       4.16667 PAN-STARRS/PS1:y                II/349/ps1
+  1.23901660605   0.000678       9.73451          2MASS:J            II/328/allwise
+ 1.25             0.003374       15.0		   Karl		      Karl
+   1.6494770729    0.00307       6.18892          2MASS:H            II/328/allwise
+ 1.65             0.009576       8.0		   Karl 		     Karl
+  2.20             0.018516      6.0		   Karl 		     Karl
+  2.16378533381    0.00852       3.40376         2MASS:Ks            II/328/allwise
+  3.35001070511     0.0136       2.20588          WISE:W1            II/328/allwise
+  3.6              0.02200       10.0		   Karl 		     Karl
+  4.60001930277     0.0178       1.68539          WISE:W2            II/328/allwise
+  5.8              0.01340       10.0		   Karl 		     Karl
+  8.0              0.00680       10.0		   Karl 		     Karl
+  11.5598233207     0.0047       3.40426          WISE:W3            II/328/allwise
+  22.0906681895      0.161       2.48447          WISE:W4            II/328/allwise
+  23.880234029      0.319           0.0          IRAS:25            II/338/catalog
+  61.8498603289       4.88           0.0          IRAS:60            II/338/catalog
+  70.0               4.27759         4.0          Karl 		     Karl
+  101.949417806       11.1           0.0         IRAS:100            II/338/catalog
+  160.0              10.73137        15.0	  Karl 		     Karl
+  350.0               2.61           32.0	  Karl 		     Karl
+  446.997760482       2.77           50.0       SCUBA:450       J/ApJS/175/277/mapsDiFrancesco+(2008)
+  446.997760482	      6.7	     30.0	SCUBA:450	Launhart+(2010)
+  855.010860451       0.75           20.0       SCUBA:850       J/ApJS/175/277/mapsDiFrancesco+(2008)
+  855.010860451	      0.6	     20.0	SCUBA:850	Launhart+(2010)
+  1300		      0.24	     15.0	IRAM		Launhart+(2010)
+  1300.0              0.150          20.0	 Karl 		Karl
+  2600.0              0.022          18.0	 Karl 		Karl
