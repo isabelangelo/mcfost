@@ -16,7 +16,7 @@ from reduce_sed import parseline
 ###but should we only normalize in overplot? For now I like that it defaults to it
 
 # define paths to model and observation files
-model_path = 'grid_i5/grid/' ###CHANGE THIS FOR NEW GRID#
+model_path = '../grid_i15/' ###CHANGE THIS FOR NEW GRID#
 obs_path = 'seds/reduced_seds/' ###might want to change this to something better for leo#
 
 # set up plot axes
@@ -70,7 +70,9 @@ class Model(object):
             plt.plot(self.wavelength, self.seds[i], color='k', linewidth=0.5)
             
         setup_plot()
+        plt.xlim(self.wavelength[0],self.wavelength[-1])
         plt.title('model '+str(self.n_model))
+        plt.show()
         
     @staticmethod
     def overplot(model1, model2):
