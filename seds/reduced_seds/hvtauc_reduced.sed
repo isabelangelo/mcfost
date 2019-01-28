@@ -20,7 +20,6 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope              Reference
   4.60001930277     0.0115       12.1739          WISE:W2              II/328/allwise
   5.73096400375     0.0103       5.82524 Spitzer/IRAC:5.8                  II/332/c2d
    7.8720809285      0.013       5.38461 Spitzer/IRAC:8.0                  II/332/c2d
-  8.61002492892     0.0768        24.349        AKARI:S9W                  II/297/irc
   11.5598233207     0.0293       3.75427          WISE:W3              II/328/allwise
    23.6746788281      0.268       9.32836  Spitzer/MIPS:24                  II/332/c2d
    71.419968077        0.5           0.0  Spitzer/MIPS:70          J/ApJ/724/835/wtts
