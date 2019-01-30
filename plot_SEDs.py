@@ -12,12 +12,13 @@ import scipy.stats.mstats as stats
 from reduce_sed import parseline
 
 ###TO DO:#
+###fix limits for observation x axis?
 ###make input for static method list instead of just 2?
 ###but should we only normalize in overplot? For now I like that it defaults to it
 
 # define paths to model and observation files
-model_path = '../grid_i15/' ###CHANGE THIS FOR NEW GRID#
-obs_path = 'seds/reduced_seds/' ###might want to change this to something better for leo#
+model_path = '../grid_i15/'
+obs_path = 'seds/reduced_seds/'
 
 # set up plot axes
 def setup_plot():
@@ -72,7 +73,7 @@ class Model(object):
         setup_plot()
         plt.xlim(self.wavelength[0],self.wavelength[-1])
         plt.title('model '+str(self.n_model))
-        plt.show()
+       # plt.show()
         
     @staticmethod
     def overplot(model1, model2):
