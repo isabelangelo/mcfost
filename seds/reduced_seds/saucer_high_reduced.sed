@@ -1,0 +1,19 @@
+Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference      
+--------------- ---------- ------------- ---------------- ---------------------
+ 0.477224543139    1.6e-05         5.625 PAN-STARRS/PS1:g            II/349/ps1
+ 0.612571430323    7.8e-05       1.79487 PAN-STARRS/PS1:r            II/349/ps1
+ 0.70             0.000121       30.0	 Karl			     Karl
+ 0.80             0.000342       15.0	 Karl			     Karl
+  1.23901660605   0.000888       5.96847          2MASS:J        II/328/allwise
+   1.6494770729     0.0017       4.70588          2MASS:H        II/328/allwise
+  2.16378533381    0.00199       4.52261         2MASS:Ks        II/328/allwise
+  3.54998233253    0.00232       5.17241 Spitzer/IRAC:3.6            II/332/c2d
+  4.49302287033      0.002           5.0 Spitzer/IRAC:4.5            II/332/c2d
+  5.73096400375    0.00139       7.19424 Spitzer/IRAC:5.8            II/332/c2d
+   7.8720809285   0.000815       7.73006 Spitzer/IRAC:8.0            II/332/c2d
+  11.5598233207   0.000966        31.677          WISE:W3        II/328/allwise
+  22.0906681895    0.00491           0.0          WISE:W4        II/328/allwise
+  23.6746788281    0.00158       17.7215  Spitzer/MIPS:24            II/332/c2d
+  70.0             0.03776        15.0	  Karl			     Karl
+  160.0            3.500         -14.0	  Karl			     Karl
+  350.0            0.24           20.0	  Karl			     Karl
