@@ -131,7 +131,7 @@ class Obs(object):
         self.err = np.array([i*j*0.01 for i,j in zip(self.sed,percent_err)])
         
         # determine points that are upper limits
-        indices = [i for i, s in enumerate(self.err) if '-' in str(s)]
+        indices = [i for i, s in enumerate(self.err) if '-'==str(s)[0]]
         self.uplims = self.err<0
         self.uplims[indices]=True
         
