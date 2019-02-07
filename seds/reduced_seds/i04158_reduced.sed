@@ -30,12 +30,15 @@ Frequency (um)  Flux (Jy)  Percent Error     Telescope             Reference
   61.8498603289       1.07           0.0           IRAS:60            II/338/catalog
   64.9998824856       1.19           0.0         AKARI:N60                II/298/fis
    69.999172971       1.09           0.0  Herschel/PACS:70     J/A+A/570/A29/members
+   70.0		    1.05513	   2.867  Herschel/PACS				IRSA
    71.419968077      0.827       20.4353   Spitzer/MIPS:70      J/ApJS/186/259/known
   90.0007379165       1.47       9.52381      AKARI:WIDE-S                II/298/fis
+  100.0		    1.60039	 1.605	      Herschel/PACS			IRSA
   101.949417806       8.75          -0.0          IRAS:100            II/338/catalog
   155.898314093        1.6        20.625  Spitzer/MIPS:160      J/ApJS/186/259/known
   160.000244436       2.95       1.01695 Herschel/PACS:160     J/A+A/570/A29/members
   160.0              0.97654        15.0 Karl		       Karl
+  160.0		     2.92407	   1.734     Herschel/PACS			IRSA
     449.9969349        1.6          25.0           :=450um     J/A+A/570/A29/members
   849.270419263       0.44       9.09091          :=353GHz     J/A+A/570/A29/members
   1299.99764971       0.11       4.54545           :=1.3mm     J/A+A/570/A29/members

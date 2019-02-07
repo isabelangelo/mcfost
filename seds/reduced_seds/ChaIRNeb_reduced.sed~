@@ -15,7 +15,7 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope             Reference
   11.5902133302       11.6           0.0          IRAS:12            II/338/catalog
   18.3899189057       26.4      0.378788       AKARI:L18W            II/338/catalog
   22.0906681895       43.9           0.0          WISE:W4            II/328/allwise
-  +23.880234029       83.1           0.0          IRAS:25            II/338/catalog
- +61.8498603289      233.0           0.0          IRAS:60            II/338/catalog
- +101.949417806      250.0           0.0         IRAS:100            II/338/catalog
+  23.880234029       83.1          -0.0          IRAS:25            II/338/catalog
+  61.8498603289      233.0          -0.0          IRAS:60            II/338/catalog
+  101.949417806      250.0          -0.0         IRAS:100            II/338/catalog
   869.997556516       1.21           0.0          :=870um     J/A+A/527/A145/table2

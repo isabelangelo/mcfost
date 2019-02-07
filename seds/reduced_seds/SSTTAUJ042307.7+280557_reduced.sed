@@ -30,5 +30,7 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference
   90.0007379165      0.447       19.4631     AKARI:WIDE-S            II/298/fis
   101.949417806       7.56          -0.0         IRAS:100        II/338/catalog
   160.000244436       1.49       20.8054       AKARI:N160            II/298/fis
+  250.0		     0.2598	 18.868	    Herschel/SPIRE	     IRSA
+  350.0		     0.2239	 29.412	    Herschel/SPIRE	     IRSA
   886.959934911     0.0956       44.9791         :=338GHz  J/ApJ/771/129/table2
   1332.41092444     0.0366       3.55191         :=225GHz  J/ApJ/771/129/table2

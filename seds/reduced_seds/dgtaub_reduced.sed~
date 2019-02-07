@@ -26,11 +26,11 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope          Reference
   18.3899189057       2.21       4.52489       AKARI:L18W           II/297/irc
   22.0906681895       3.93       1.27226          WISE:W4       II/328/allwise
   23.6746788281       3.48       3.73563  Spitzer/MIPS:24 J/ApJS/186/259/known
-  70.0		    14.8455	 0.47994  Herschel/PACS		IRSA
+  70.0		    14.8455	 0.47994  Herschel/IPAC		IRSA
    71.419968077        6.1       20.3279  Spitzer/MIPS:70 J/ApJS/186/259/known
-  100.0		    17.300	 1.962	  Herschel/PACS		IRSA
+  100.0		    17.300	 1.962	  Herschel/IPAC		IRSA
   155.898314093       17.8       32.0225 Spitzer/MIPS:160 J/ApJS/186/259/known
-  160.0		    17.218	 0.819	 Herschel/PACS		IRSA
+  160.0		    17.218	 0.819	 Herschel/IPAC		IRSA
   250.0		    11.797	 7.463	 Herschel/SPIRE		IRSA
   350.0		    9.0283	 5.814	 Herschel/SPIRE		IRSA
   446.997760482       6.62           0.0        SCUBA:450  J/ApJS/175/277/maps

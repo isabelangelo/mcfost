@@ -30,5 +30,5 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope          Reference
   70.0              0.37303        12.0	  Karl		  Karl
   90.0              1.0000        -50.0	  Karl		  Karl
   855.010860451       0.02           0.0        SCUBA:850  J/ApJS/175/277/maps
-  1300.0            20.0            13.0	Karl	   Karl
-  2700.0             3.7            20.0	Karl	   Karl
+  1300.0            0.020            13.0	Karl	   Karl
+  2700.0           0.0037            20.0	Karl	   Karl

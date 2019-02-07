@@ -36,6 +36,7 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope             Reference
   139.998345942       1.73           0.0     AKARI:WIDE-L                II/298/fis
   160.0               1.05391        15.0    Karl			 Karl
   350.0               0.55           33.0    Karl			 Karl
+  350.0		     0.7633	  18.182     Herschel/SPIRE		 IRSA
   886.959934911      0.271       18.4502         :=338GHz      J/ApJ/771/129/table2
   1300.0             0.105           9.0	 Karl	       Karl
   1332.41092444       0.12       8.33333         :=225GHz      J/ApJ/771/129/table2

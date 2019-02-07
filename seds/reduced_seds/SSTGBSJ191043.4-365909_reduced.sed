@@ -16,4 +16,5 @@ Frequency (um)  Flux (Jy)  Percent Error Telescope          Reference
   22.0906681895      0.303        1.9802    WISE:W4            II/328/allwise
    23.880234029      0.372           0.0    IRAS:25            II/338/catalog
   61.8498603289      0.232           0.0    IRAS:60            II/338/catalog
+  70.0		   0.01603	  13.719   Herschel/PACS       IRSA
   101.949417806       4.24          -0.0   IRAS:100            II/338/catalog

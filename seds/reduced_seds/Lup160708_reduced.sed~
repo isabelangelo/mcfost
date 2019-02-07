@@ -1,5 +1,8 @@
 Frequency (um)  Flux (Jy)  Percent Error    Telescope             Reference        
 --------------- ---------- ------------- ---------------- -------------------------
+  0.44		   0.000290   	  5	 	  Spitzer		Merin+2008
+  0.79		   0.000274  	  4		  Spitzer		Merin+2008
+  0.96		   0.000303  	  6		  Spitzer		Merin+2008
   1.23901660605    0.00128        4.6875          2MASS:J            II/328/allwise
    1.6494770729    0.00587       2.72572          2MASS:H            II/328/allwise
   2.16378533381      0.016           2.5         2MASS:Ks            II/328/allwise
@@ -14,4 +17,5 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope             Reference
   22.0906681895      0.209       1.91388          WISE:W4            II/328/allwise
   23.6746788281      0.196       9.18367  Spitzer/MIPS:24                II/332/c2d
    71.419968077      0.189       12.1693  Spitzer/MIPS:70                II/332/c2d
+   100.0	     0.3814	 12.204	  Herschel/IPAC			 IRSA
   889.988000594     0.0921       1.62866          :=890um         J/ApJ/828/46/alma

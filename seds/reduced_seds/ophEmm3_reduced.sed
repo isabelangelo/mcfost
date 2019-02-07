@@ -9,4 +9,5 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference
   8.0              0.00733         4.0	  Karl				Karl
   24.0             0.02579         5.2	  Karl				Karl
   70.0             0.60000       -18.0	  Karl				Karl
+  100.0		   2.21136	 24.39	  Herschel/PACS			IRSA
   350.0            0.41           32.0	  Karl				Karl

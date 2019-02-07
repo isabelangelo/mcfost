@@ -26,6 +26,7 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope          Reference
   60.0004919444        6.4           0.0           :=60um      VII/185/catalog
   61.8498603289        6.4          10.0          IRAS:60          II/125/main
   64.9998824856       5.31       2.63653        AKARI:N60           II/298/fis
+  70.0		    7.6617	 0.2569	    Herschel/PACS		IRSA
    71.419968077       4.38       20.3196  Spitzer/MIPS:70 J/ApJS/186/259/known
   90.0007379165       8.36        3.4689     AKARI:WIDE-S           II/298/fis
   100.000819907       9.44           0.0          :=100um      VII/185/catalog
@@ -33,8 +34,12 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope          Reference
   139.998345942       12.5          12.0     AKARI:WIDE-L           II/298/fis
   155.898314093       10.1       31.6832 Spitzer/MIPS:160 J/ApJS/186/259/known
   160.000244436       7.12       35.1124       AKARI:N160           II/298/fis
+  160.0		    9.5653	 0.495	    Herschel/PACS	    IRSA
+  250.0		    6.704	 3.636	    Herschel/SPIRE	    IRSA
   350.0               2.87           25.0      Karl		    Karl
+  350.0		      4.2735	   4.717     Herschel/SPIRE	    IRSA
   446.997760482       1.25           0.0        SCUBA:450  J/ApJS/175/277/maps
+  500.0		      2.3057	   5.714     Herschel/SPIRE	IRSA
   855.010860451       0.49           0.0        SCUBA:850  J/ApJS/175/277/maps
   1300.0              0.083          11.0	Karl	   Karl
   2700.0              0.022          10.0	Karl	   Karl

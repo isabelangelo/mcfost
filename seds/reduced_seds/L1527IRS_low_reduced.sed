@@ -23,9 +23,12 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope          Reference
   25		     0.7436	 9.414		  IRAS		Tobin+2008
   60		     17.770	 9.004		  IRAS		Tobin+2008
   70		     24.170	 0.20		  MIPS		Tobin+2008
-   71.419968077       6.45           0.0  Spitzer/MIPS:70 J/ApJS/186/259/known
+  70.0               167.4621    0.293          Herschel/PACS   IRSA
+  71.419968077       6.45           0.0  Spitzer/MIPS:70 J/ApJS/186/259/known
   100		     73.260	 15.971	  	  IRAS		Tobin+2008
+  100.0              289.423     2.258          Herschel/PACS   IRSA
   155.898314093       9.15           0.0 Spitzer/MIPS:160 J/ApJS/186/259/known
+  160.0               470.1137       34.65      Herschel/PACS   IRSA
   446.997760482      115.0           0.0        SCUBA:450  J/ApJS/175/277/maps
   450		     18.20	     17.582	SCUBA		Tobin+2008
   750		     8.40	     13.095	SCUBA		Tobin+2008

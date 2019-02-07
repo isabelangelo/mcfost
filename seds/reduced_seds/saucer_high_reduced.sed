@@ -15,5 +15,6 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference
   22.0906681895    0.00491           0.0          WISE:W4        II/328/allwise
   23.6746788281    0.00158       17.7215  Spitzer/MIPS:24            II/332/c2d
   70.0             0.03776        15.0	  Karl			     Karl
+  70.0		   0.06468       65.617   Herschel/PACS              IRSA
   160.0            3.500         -14.0	  Karl			     Karl
   350.0            0.24           20.0	  Karl			     Karl

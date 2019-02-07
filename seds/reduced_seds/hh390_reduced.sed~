@@ -22,7 +22,6 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope             Reference
   22.0906681895      0.426       1.64319          WISE:W4            II/328/allwise
   23.6746788281      0.368       3.80435  Spitzer/MIPS:24      J/ApJ/784/126/table1
    69.999172971       2.14       0.46729           :=70um   J/MNRAS/459/342/tableb1
-   70.0		     2.5749	 1.714	    Herschel/PACS	IRSA
    71.419968077        1.6        20.625  Spitzer/MIPS:70        J/ApJS/186/259/new
   155.898314093       2.54       20.4724 Spitzer/MIPS:160        J/ApJS/186/259/new
   160.000244436       2.57       2.33463          :=160um   J/MNRAS/459/342/tableb1
