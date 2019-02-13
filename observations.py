@@ -71,8 +71,12 @@ class Obs(object):
         self.uplims = self.err<0
         self.uplims[indices]=True
         
-        # fix upper limit arrow lengths to 10% of upper limit value
+        # fix upper limit arrow lengths to 30% of upper limit value
         self.err[self.uplims]=-0.3*self.sed[self.uplims]
+        
+        # set 0 error to default 10% of flux
+        zero_err = np.where(self.err==0)
+        self.err[zero_err]=0.1*self.sed[zero_err]
     
     def plot(self):
         """
@@ -84,6 +88,7 @@ class Obs(object):
         
         setup_plot()
         plt.title(self.obs_name)
+        #plt.show()
         
     @staticmethod
     def overplot(obs1, obs2):
@@ -99,3 +104,37 @@ class Obs(object):
          
         setup_plot()
         plt.legend()
+        plt.show()
+        
+    def get_slopes(self, window):
+
+        # take log for analysis
+        logw = np.log10(self.wavelength)
+        logs = np.log10(self.sed)
+    
+        # remove points that are upper limits
+        logw = logw[self.uplims==False]
+        logs = logs[self.uplims==False]
+    
+        window = np.log10(window) # change input so we don't overwrite?
+        # might want a new way to define bins
+        window_start = np.arange(logw[0],logw[-1],0.01)
+        
+        slopes = []
+        for i in window_start:
+            fitpoints = np.where((i<=logw)&(logw<=i+window))[0]
+            if len(fitpoints)>=2:
+                # perform linear fit
+                x = logw[fitpoints]
+                y = logs[fitpoints]
+                a,b=np.polyfit(x,y,1)
+                # store slopes in a list
+                slopes.append(a)
+                # plot polyfit as a test
+                plt.plot(x,a*x+b)
+    
+        plt.plot(logw,logs,'k.')
+        plt.title(self.obs_name)
+        
+        plt.show()
+        #return(slopes)
