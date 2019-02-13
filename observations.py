@@ -7,6 +7,7 @@ Written: Isabel Angelo (2019)
 from astropy.io import fits
 import numpy as np
 import matplotlib.pyplot as plt
+import warnings
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
 
@@ -27,6 +28,9 @@ def setup_plot():
     plt.yscale('log')
     plt.xlabel('$\lambda [\mu m]$')
     plt.ylabel(r'$\lambda F_{\lambda} [\frac{W}{m^2}]$')
+
+# suppress polyfit warnings    
+warnings.simplefilter('ignore', np.RankWarning)
 
 class Obs(object):
     """
@@ -111,16 +115,22 @@ class Obs(object):
         # take log for analysis
         logw = np.log10(self.wavelength)
         logs = np.log10(self.sed)
+        window = np.log10(window)
     
         # remove points that are upper limits
         logw = logw[self.uplims==False]
         logs = logs[self.uplims==False]
-    
-        window = np.log10(window) # change input so we don't overwrite?
-        # might want a new way to define bins
-        window_start = np.arange(logw[0],logw[-1],0.01)
         
-        slopes = []
+        # define bins
+        window_start = np.arange(logw[0],logw[-1],0.01)
+        window_center = window_start+window/2.
+        
+        # set up figure subplots
+        ax0 = plt.subplot(211)
+        ax0.plot(logw,logs,'k.')
+        
+        # store slopes for each window
+        slopes = []       
         for i in window_start:
             fitpoints = np.where((i<=logw)&(logw<=i+window))[0]
             if len(fitpoints)>=2:
@@ -128,13 +138,38 @@ class Obs(object):
                 x = logw[fitpoints]
                 y = logs[fitpoints]
                 a,b=np.polyfit(x,y,1)
-                # store slopes in a list
-                slopes.append(a)
                 # plot polyfit as a test
-                plt.plot(x,a*x+b)
-    
-        plt.plot(logw,logs,'k.')
-        plt.title(self.obs_name)
+                ax0.plot(x,a*x+b, '-')
+                # store slope
+                slopes.append(a)
+            else:
+                slopes.append(np.nan)
+                        
+        # store unique slope and corresponding window values (median index)
+        unq_slopes = np.unique(slopes) 
+        unq_window_median = []
         
+        for s in unq_slopes:
+            slope_idx = np.where(slopes==s)[0]
+            if len(slope_idx)>0:
+                idx_median = int(np.median(slope_idx))
+                unq_window_median.append(window_center[idx_median])
+            else:
+                unq_window_median.append(np.nan)
+        
+        # finish plot        
+        ax1=plt.subplot(212, sharex=ax0)       
+        # plot all slopes
+        ax1.plot(window_center, slopes, '.', color='LightBlue')
+        # plot unique slope values        
+        ax1.plot(unq_window_median,unq_slopes,'r.')
+        # set labels
+        plt.suptitle(self.obs_name)
+        ax0.set_ylabel('log($\lambda F_\lambda$)')
+        ax1.set_ylabel('slope')
+        ax1.set_xlabel('log($\lambda$)')
+        ax1.set_ylim(-5,5)
+        plt.setp(ax0.get_xticklabels(), visible=False)
+        #plt.subplots_adjust(hspace=.0)
+        ## put the model parameter values below the title?
         plt.show()
-        #return(slopes)

@@ -133,23 +133,21 @@ class Model(object):
             else:
                 unq_window_median.append(np.nan)
         
+        # finish plot
         ax1=plt.subplot(212, sharex=ax0)       
         # plot all slopes
         ax1.plot(window_center, slopes, '.', color='LightBlue')
         # plot unique slope values        
         ax1.plot(unq_window_median,unq_slopes,'r.')
-        
+        # set labels
         plt.suptitle('model '+str(self.n_model))
-        ax0.set_ylabel('$\lambda F_\lambda$')
+        ax0.set_ylabel('log($\lambda F_\lambda$)')
         ax1.set_ylabel('slope')
-        ax1.set_xlabel('$\lambda$')
+        ax1.set_xlabel('log($\lambda$)')
         plt.setp(ax0.get_xticklabels(), visible=False)
-        plt.subplots_adjust(hspace=.0)
+        #plt.subplots_adjust(hspace=.0)
         ## put the model parameter values below the title?
         plt.show()
-        
-        ##TO DO:
-        # push to github, write for observations!!
         
         
         
