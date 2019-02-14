@@ -58,6 +58,11 @@ class Model(object):
         # for non-normalized case
         else:
             self.seds = sedlist
+            
+        # generate model inclinations- is it in the files?
+        i_0, i_f = np.radians(45), np.radians(90)
+        cosi = np.linspace(np.cos(i_0), np.cos(i_f), 15)
+        self.inclinations = np.degrees(np.arccos(cosi))
         
     def plot(self):
         """
@@ -90,20 +95,16 @@ class Model(object):
         plt.legend([lines1[-1],lines2[-1]], 
             ['model '+str(model1.n_model), 'model '+str(model2.n_model)])   
             
-    def get_slopes(self, window):
+    def get_slopes(self, inc_idx, window):
 
         # take log for analysis
         logw = np.log10(self.wavelength)
-        logs = np.log10(self.seds[-1])
+        logs = np.log10(self.seds[inc_idx])
         window = np.log10(window)
         
         # define bins
         window_start = np.arange(logw[0],logw[-1],0.01)
         window_center = window_start+window/2.
-        
-        # set up figure subplots
-        ax0 = plt.subplot(211)
-        ax0.plot(logw,logs,'k.')
         
         # store slopes for each window
         slopes = []       
@@ -115,7 +116,7 @@ class Model(object):
                 y = logs[fitpoints]
                 a,b=np.polyfit(x,y,1)
                 # plot polyfit as a test
-                ax0.plot(x,a*x+b, '-')
+                #ax0.plot(x,a*x+b, '-')
                 # store slope
                 slopes.append(a)
             else:
@@ -133,22 +134,39 @@ class Model(object):
             else:
                 unq_window_median.append(np.nan)
         
-        # finish plot
-        ax1=plt.subplot(212, sharex=ax0)       
-        # plot all slopes
-        ax1.plot(window_center, slopes, '.', color='LightBlue')
-        # plot unique slope values        
-        ax1.plot(unq_window_median,unq_slopes,'r.')
-        # set labels
+        # store window+slope data as tuples       
+        slopes_all = (window_center, slopes)
+        slopes_unq = (unq_window_median, unq_slopes)
+                
+        return slopes_all, slopes_unq
+        
+    def plot_slopes(self):
+    
+        # set up figure subplots
+        ax0 = plt.subplot(211)
+        ax1=plt.subplot(212, sharex=ax0)
+        
+        for i in np.arange(0,15,7):
+            slopes_all, slopes_unq = self.get_slopes(i,3)
+            
+            # plot sed in top panel
+            ax0.plot(np.log10(self.wavelength),np.log10(self.seds[i]),'-')
+            # plot all slopes
+            #ax1.plot(slopes_all[0], slopes_all[1], '.', color='LightBlue')
+            # plot unique slope values        
+            ax1.plot(slopes_unq[0], slopes_unq[1],'.', 
+                        label='i='+str(np.round(self.inclinations[i])))
+            
+        # set labels and subplots
         plt.suptitle('model '+str(self.n_model))
+        plt.setp(ax0.get_xticklabels(), visible=False)
+        plt.subplots_adjust(hspace=.0)
         ax0.set_ylabel('log($\lambda F_\lambda$)')
         ax1.set_ylabel('slope')
         ax1.set_xlabel('log($\lambda$)')
-        plt.setp(ax0.get_xticklabels(), visible=False)
-        #plt.subplots_adjust(hspace=.0)
+        ax1.legend()
         ## put the model parameter values below the title?
         plt.show()
-        
         
         
         
