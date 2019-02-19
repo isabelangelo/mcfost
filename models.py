@@ -11,10 +11,6 @@ import matplotlib.pyplot as plt
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
 
-###TO DO:#
-###make input for static method list instead of just 2?
-###but should we only normalize in overplot? For now I like that it defaults to it
-
 # define path to models
 model_path = 'grid_i15/' # add ../ for leo
 
@@ -27,7 +23,6 @@ def setup_plot():
     plt.yscale('log')
     plt.xlabel('$\lambda [\mu m]$')
     plt.ylabel(r'$\lambda F_{\lambda} [\frac{W}{m^2}]$')
-    
 
 class Model(object):
     """
@@ -95,7 +90,7 @@ class Model(object):
         plt.legend([lines1[-1],lines2[-1]], 
             ['model '+str(model1.n_model), 'model '+str(model2.n_model)])   
             
-    def get_slopes(self, inc_idx, window):
+    def get_slopes(self, inc_idx, window=4):
 
         # take log for analysis
         logw = np.log10(self.wavelength)
@@ -107,7 +102,7 @@ class Model(object):
         window_center = window_start+window/2.
         
         # store slopes for each window
-        slopes = []       
+        slopes = []      
         for i in window_start:
             fitpoints = np.where((i<=logw)&(logw<=i+window))[0]
             if len(fitpoints)>=2:
@@ -115,24 +110,22 @@ class Model(object):
                 x = logw[fitpoints]
                 y = logs[fitpoints]
                 a,b=np.polyfit(x,y,1)
-                # plot polyfit as a test
-                #ax0.plot(x,a*x+b, '-')
                 # store slope
                 slopes.append(a)
+                # plot polyfit as a test
+                #ax0.plot(x,a*x+b, '-')
             else:
                 slopes.append(np.nan)
-                
+              
         # store unique slope and corresponding window values (median index)
-        unq_slopes = np.unique(slopes) 
+        unq_slopes = np.unique(slopes)
+        unq_slopes = unq_slopes[~np.isnan(unq_slopes)]
         unq_window_median = []
         
         for s in unq_slopes:
             slope_idx = np.where(slopes==s)[0]
-            if len(slope_idx)>0:
-                idx_median = int(np.median(slope_idx))
-                unq_window_median.append(window_center[idx_median])
-            else:
-                unq_window_median.append(np.nan)
+            idx_median = int(np.median(slope_idx))
+            unq_window_median.append(window_center[idx_median])
         
         # store window+slope data as tuples       
         slopes_all = (window_center, slopes)
@@ -147,14 +140,14 @@ class Model(object):
         ax1=plt.subplot(212, sharex=ax0)
         
         for i in np.arange(0,15,7):
-            slopes_all, slopes_unq = self.get_slopes(i,3)
+            slopes_all, slopes_unq = self.get_slopes(i)
             
             # plot sed in top panel
             ax0.plot(np.log10(self.wavelength),np.log10(self.seds[i]),'-')
             # plot all slopes
-            #ax1.plot(slopes_all[0], slopes_all[1], '.', color='LightBlue')
+            ax1.plot(slopes_all[0], slopes_all[1], '.', color='LightBlue')
             # plot unique slope values        
-            ax1.plot(slopes_unq[0], slopes_unq[1],'.', 
+            ax1.plot(slopes_unq[0], slopes_unq[1], '.', 
                         label='i='+str(np.round(self.inclinations[i])))
             
         # set labels and subplots
@@ -167,6 +160,11 @@ class Model(object):
         ax1.legend()
         ## put the model parameter values below the title?
         plt.show()
+        
+
+
+##TO DO: maybe we don't need to return all slopes? 
+
         
         
         

@@ -13,8 +13,8 @@ from reduce_sed import parseline
 
 ###TO DO:#
 ###fix limits for observation x axis?
-###make input for static method list instead of just 2?
-###but should we only normalize in overplot? For now I like that it defaults to it
+### only normalize in overplot?
+### fix errors
 
 # define path to observation files
 obs_path = 'seds/reduced_seds/'
@@ -28,6 +28,12 @@ def setup_plot():
     plt.yscale('log')
     plt.xlabel('$\lambda [\mu m]$')
     plt.ylabel(r'$\lambda F_{\lambda} [\frac{W}{m^2}]$')
+    
+# dm/dy term for error calculations
+def dmdy(j, x_arr, N):
+    num = np.sum(x_arr)-N*x_arr[j]
+    denom = (np.sum(x_arr))**2.-N*np.sum(x_arr**2.)
+    return num/denom
 
 # suppress polyfit warnings    
 warnings.simplefilter('ignore', np.RankWarning)
@@ -110,7 +116,7 @@ class Obs(object):
         plt.legend()
         plt.show()
         
-    def get_slopes(self, window):
+    def get_slopes(self, window=4):
 
         # take log for analysis
         logw = np.log10(self.wavelength)
@@ -125,12 +131,9 @@ class Obs(object):
         window_start = np.arange(logw[0],logw[-1],0.01)
         window_center = window_start+window/2.
         
-        # set up figure subplots
-        ax0 = plt.subplot(211)
-        ax0.plot(logw,logs,'k.')
-        
         # store slopes for each window
-        slopes = []       
+        slopes = []
+        slope_err = []      
         for i in window_start:
             fitpoints = np.where((i<=logw)&(logw<=i+window))[0]
             if len(fitpoints)>=2:
@@ -138,38 +141,59 @@ class Obs(object):
                 x = logw[fitpoints]
                 y = logs[fitpoints]
                 a,b=np.polyfit(x,y,1)
-                # plot polyfit as a test
-                ax0.plot(x,a*x+b, '-')
                 # store slope
                 slopes.append(a)
+                # store slope error
+                dmdy_arr = [dmdy(j,x,len(x))for j in range(len(x))]
+                sigma_arr = [self.err[i] for i in fitpoints] #convert to log?
+                dm_arr = [t1**2.*t2**2. for t1,t2 in zip(dmdy_arr,sigma_arr)]
+                dm = np.sqrt(np.sum(dm_arr))
+                slope_err.append(dm)
+                # plot polyfit as a test
+                #ax0.plot(x,a*x+b, '-')
             else:
                 slopes.append(np.nan)
-                        
+                slope_err.append(np.nan)
+              
         # store unique slope and corresponding window values (median index)
-        unq_slopes = np.unique(slopes) 
+        unq_slopes = np.unique(slopes)
+        unq_slopes = unq_slopes[~np.isnan(unq_slopes)]
         unq_window_median = []
+        unq_err = []
         
         for s in unq_slopes:
             slope_idx = np.where(slopes==s)[0]
-            if len(slope_idx)>0:
-                idx_median = int(np.median(slope_idx))
-                unq_window_median.append(window_center[idx_median])
-            else:
-                unq_window_median.append(np.nan)
+        #    if len(slope_idx)>0: #delete this?
+            idx_median = int(np.median(slope_idx))
+            unq_window_median.append(window_center[idx_median])
+            unq_err.append(slope_err[idx_median])
         
-        # finish plot        
-        ax1=plt.subplot(212, sharex=ax0)       
+        # store window+slope data as tuples       
+        slopes_all = (window_center, slopes, slope_err)
+        slopes_unq = (unq_window_median, unq_slopes, unq_err)
+                
+        return slopes_all, slopes_unq
+        
+    def plot_slopes(self):
+    
+        # set up figure subplots
+        ax0 = plt.subplot(211)
+        ax1=plt.subplot(212, sharex=ax0)
+            
+        # plot sed in top panel
+        slopes_all, slopes_unq = self.get_slopes()
+        ax0.plot(np.log10(self.wavelength), np.log10(self.sed),'-')
         # plot all slopes
-        ax1.plot(window_center, slopes, '.', color='LightBlue')
+        ax1.plot(slopes_all[0], slopes_all[1], '.', color='LightBlue')
         # plot unique slope values        
-        ax1.plot(unq_window_median,unq_slopes,'r.')
-        # set labels
+        ax1.errorbar(slopes_unq[0], slopes_unq[1], yerr=slopes_unq[2], fmt='.')
+            
+        # set labels and subplots
         plt.suptitle(self.obs_name)
+        #plt.setp(ax0.get_xticklabels(), visible=False)
+        #plt.subplots_adjust(hspace=.0)
         ax0.set_ylabel('log($\lambda F_\lambda$)')
         ax1.set_ylabel('slope')
         ax1.set_xlabel('log($\lambda$)')
-        ax1.set_ylim(-5,5)
-        plt.setp(ax0.get_xticklabels(), visible=False)
-        #plt.subplots_adjust(hspace=.0)
-        ## put the model parameter values below the title?
         plt.show()
+        
