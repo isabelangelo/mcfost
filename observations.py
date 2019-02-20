@@ -156,14 +156,14 @@ class Obs(object):
                 slope_err.append(np.nan)
               
         # store unique slope and corresponding window values (median index)
-        unq_slopes = np.unique(slopes)
+        indexes = np.unique(slopes, return_index=True)[1]
+        unq_slopes = np.array([slopes[index] for index in sorted(indexes)])
         unq_slopes = unq_slopes[~np.isnan(unq_slopes)]
         unq_window_median = []
         unq_err = []
         
         for s in unq_slopes:
             slope_idx = np.where(slopes==s)[0]
-        #    if len(slope_idx)>0: #delete this?
             idx_median = int(np.median(slope_idx))
             unq_window_median.append(window_center[idx_median])
             unq_err.append(slope_err[idx_median])
@@ -182,17 +182,21 @@ class Obs(object):
             
         # plot sed in top panel
         slopes_all, slopes_unq = self.get_slopes()
-        ax0.plot(np.log10(self.wavelength), np.log10(self.sed),'-')
+        ax0.errorbar(self.wavelength, self.sed, yerr=self.err, fmt = '.--')
         # plot all slopes
-        ax1.plot(slopes_all[0], slopes_all[1], '.', color='LightBlue')
+        ax1.plot(10**np.array(slopes_all[0]), slopes_all[1], '.', color='LightBlue')
         # plot unique slope values        
-        ax1.errorbar(slopes_unq[0], slopes_unq[1], yerr=slopes_unq[2], fmt='.')
+        ax1.errorbar(10**np.array(slopes_unq[0]), slopes_unq[1], yerr=slopes_unq[2], fmt='.')
             
         # set labels and subplots
         plt.suptitle(self.obs_name)
-        #plt.setp(ax0.get_xticklabels(), visible=False)
-        #plt.subplots_adjust(hspace=.0)
+        plt.setp(ax0.get_xticklabels(), visible=False)
+        plt.subplots_adjust(hspace=.05)
         ax0.set_ylabel('log($\lambda F_\lambda$)')
+        ax0.set_xscale('log')
+        ax0.set_yscale('log')
+        ax1.set_xscale('log')
+        #ax1.set_ylim(-5,5)
         ax1.set_ylabel('slope')
         ax1.set_xlabel('log($\lambda$)')
         plt.show()

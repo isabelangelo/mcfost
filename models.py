@@ -10,6 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
+from find_model import *
+from observations import Obs
 
 # define path to models
 model_path = 'grid_i15/' # add ../ for leo
@@ -58,6 +60,9 @@ class Model(object):
         i_0, i_f = np.radians(45), np.radians(90)
         cosi = np.linspace(np.cos(i_0), np.cos(i_f), 15)
         self.inclinations = np.degrees(np.arccos(cosi))
+        
+        # store parameters
+        self.parameters = get_parameters(n_model)
         
     def plot(self):
         """
@@ -116,9 +121,10 @@ class Model(object):
                 #ax0.plot(x,a*x+b, '-')
             else:
                 slopes.append(np.nan)
-              
+      
         # store unique slope and corresponding window values (median index)
-        unq_slopes = np.unique(slopes)
+        indexes = np.unique(slopes, return_index=True)[1]
+        unq_slopes = np.array([slopes[index] for index in sorted(indexes)])
         unq_slopes = unq_slopes[~np.isnan(unq_slopes)]
         unq_window_median = []
         
@@ -130,41 +136,56 @@ class Model(object):
         # store window+slope data as tuples       
         slopes_all = (window_center, slopes)
         slopes_unq = (unq_window_median, unq_slopes)
-                
-        return slopes_all, slopes_unq
         
-    def plot_slopes(self):
+        print(unq_slopes)        
+        #return slopes_all, slopes_unq
+        
+    def plot_slopes(self, templates=False):
     
         # set up figure subplots
         ax0 = plt.subplot(211)
         ax1=plt.subplot(212, sharex=ax0)
         
+        # plot each SED and corresponding slopes
         for i in np.arange(0,15,7):
             slopes_all, slopes_unq = self.get_slopes(i)
-            
+
             # plot sed in top panel
-            ax0.plot(np.log10(self.wavelength),np.log10(self.seds[i]),'-')
-            # plot all slopes
-            ax1.plot(slopes_all[0], slopes_all[1], '.', color='LightBlue')
-            # plot unique slope values        
-            ax1.plot(slopes_unq[0], slopes_unq[1], '.', 
-                        label='i='+str(np.round(self.inclinations[i])))
+            ax0.plot(self.wavelength, self.seds[i], '-')
+            # plot all slope values
+            #ax1.plot(10**np.array(slopes_all[0]), slopes_all[1], '.', color='LightBlue')
+            # plot unique slope values
+            ax1.plot(10**np.array(slopes_unq[0]), slopes_unq[1], '.', 
+                    label='i='+str(np.round(self.inclinations[i])))
+                    
+        if templates==True:
+            template1_all, template1_unq = Obs('hh30').get_slopes() 
+            template2_all, template2_unq = Obs('i04302').get_slopes()
+            template3_all, template3_unq = Obs('SSTTAUJ042021.4+281349_low').get_slopes()
             
-        # set labels and subplots
-        plt.suptitle('model '+str(self.n_model))
-        plt.setp(ax0.get_xticklabels(), visible=False)
-        plt.subplots_adjust(hspace=.0)
+            ax1.plot(10**np.array(template1_unq[0]),template1_unq[1], 'k-', linewidth=0.4)
+            ax1.plot(10**np.array(template2_unq[0]),template2_unq[1], 'k-', linewidth=0.4)
+            ax1.plot(10**np.array(template3_unq[0]),template3_unq[1], 'k-', linewidth=0.4)
+        
+        # set labels and subplots            
         ax0.set_ylabel('log($\lambda F_\lambda$)')
+        ax0.set_xscale('log')
+        ax0.set_yscale('log')
+        plt.setp(ax0.get_xticklabels(), visible=False)
+        ax1.set_xscale('log') 
         ax1.set_ylabel('slope')
         ax1.set_xlabel('log($\lambda$)')
         ax1.legend()
-        ## put the model parameter values below the title?
+        ax0.set_title(str(self.parameters), fontsize=10)
+        plt.suptitle('model '+str(self.n_model))
+        plt.subplots_adjust(hspace=.05)
         plt.show()
         
 
 
 ##TO DO: maybe we don't need to return all slopes? 
-
+# every value in array for unique slopes ends in 13927?
+# add a for loop to plot templates?
         
         
         
