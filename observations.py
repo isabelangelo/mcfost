@@ -11,23 +11,18 @@ import warnings
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
 
-###TO DO:#
-###fix limits for observation x axis?
-### only normalize in overplot?
-### fix errors
-
 # define path to observation files
 obs_path = 'seds/reduced_seds/'
 
 # set up plot axes
-def setup_plot():
+def setup_plot(ax):
     """
     puts a plot on a log scale and labels the axes for an SED
     """
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.xlabel('$\lambda [\mu m]$')
-    plt.ylabel(r'$\lambda F_{\lambda} [\frac{W}{m^2}]$')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.set_xlabel('$\lambda [\mu m]$')
+    ax.set_ylabel(r'$\lambda F_{\lambda} [\frac{W}{m^2}]$')
     
 # dm/dy term for error calculations
 def dmdy(j, x_arr, N):
@@ -93,27 +88,35 @@ class Obs(object):
         plots an observed SED [W/m^2] versus wavelength [um]
         """
         # plot SED with errorbars and upper limits
-        plt.errorbar(self.wavelength, self.sed, yerr=np.abs(self.err), uplims = self.uplims,
+        f, ax = plt.subplots()
+        ax.errorbar(self.wavelength, self.sed, yerr=np.abs(self.err), uplims = self.uplims,
         fmt='o', color='darkslateblue', markersize=3, alpha=0.8, label=self.obs_name)
         
-        setup_plot()
-        plt.title(self.obs_name)
-        #plt.show()
+        setup_plot(ax)
+        ax.set_title(self.obs_name)
+        plt.show()
         
     @staticmethod
     def overplot(obs1, obs2):
         """
-        overplots two observed SED's and creates a corresponding legend
+        overplots two observed SED's and creates a corresponding legend.
+        example: Obs.overplot(Obs('hh30'), Obs('hvtauc))
+        
+        Args: 
+            obs1, obs2(Obs): observation objects to be plotted
+        Returns:
+            overplotted observations with legend
         """
         # plot each observation and label accordingly
-        plt.errorbar(obs1.wavelength, obs1.sed, yerr=np.abs(obs1.err), uplims = obs1.uplims,
+        f, ax = plt.subplots()
+        ax.errorbar(obs1.wavelength, obs1.sed, yerr=np.abs(obs1.err), uplims = obs1.uplims,
         fmt='o', markersize = 3,label=obs1.obs_name)
         
-        plt.errorbar(obs2.wavelength, obs2.sed, yerr=np.abs(obs2.err), uplims = obs2.uplims,
+        ax.errorbar(obs2.wavelength, obs2.sed, yerr=np.abs(obs2.err), uplims = obs2.uplims,
         fmt='o', markersize = 3,label=obs2.obs_name)
          
-        setup_plot()
-        plt.legend()
+        setup_plot(ax)
+        ax.legend()
         plt.show()
         
     def get_slopes(self, window=4):
@@ -172,19 +175,16 @@ class Obs(object):
         slopes_all = (window_center, slopes, slope_err)
         slopes_unq = (unq_window_median, unq_slopes, unq_err)
                 
-        return slopes_all, slopes_unq
+        return slopes_unq
         
     def plot_slopes(self):
     
         # set up figure subplots
         ax0 = plt.subplot(211)
-        ax1=plt.subplot(212, sharex=ax0)
-            
+        ax1=plt.subplot(212, sharex=ax0)            
         # plot sed in top panel
-        slopes_all, slopes_unq = self.get_slopes()
+        slopes_unq = self.get_slopes()
         ax0.errorbar(self.wavelength, self.sed, yerr=self.err, fmt = '.--')
-        # plot all slopes
-        ax1.plot(10**np.array(slopes_all[0]), slopes_all[1], '.', color='LightBlue')
         # plot unique slope values        
         ax1.errorbar(10**np.array(slopes_unq[0]), slopes_unq[1], yerr=slopes_unq[2], fmt='.')
             
@@ -192,9 +192,7 @@ class Obs(object):
         plt.suptitle(self.obs_name)
         plt.setp(ax0.get_xticklabels(), visible=False)
         plt.subplots_adjust(hspace=.05)
-        ax0.set_ylabel('log($\lambda F_\lambda$)')
-        ax0.set_xscale('log')
-        ax0.set_yscale('log')
+        setup_plot(ax0)
         ax1.set_xscale('log')
         #ax1.set_ylim(-5,5)
         ax1.set_ylabel('slope')
