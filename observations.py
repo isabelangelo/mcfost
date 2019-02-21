@@ -124,6 +124,7 @@ class Obs(object):
         # take log for analysis
         logw = np.log10(self.wavelength)
         logs = np.log10(self.sed)
+        logerr = 0.434*self.err/self.sed
         window = np.log10(window)
     
         # remove points that are upper limits
@@ -148,7 +149,7 @@ class Obs(object):
                 slopes.append(a)
                 # store slope error
                 dmdy_arr = [dmdy(j,x,len(x))for j in range(len(x))]
-                sigma_arr = [self.err[i] for i in fitpoints] #convert to log?
+                sigma_arr = [logerr[i] for i in fitpoints] #convert to log?
                 dm_arr = [t1**2.*t2**2. for t1,t2 in zip(dmdy_arr,sigma_arr)]
                 dm = np.sqrt(np.sum(dm_arr))
                 slope_err.append(dm)
@@ -186,7 +187,8 @@ class Obs(object):
         slopes_unq = self.get_slopes()
         ax0.errorbar(self.wavelength, self.sed, yerr=self.err, fmt = '.--')
         # plot unique slope values        
-        ax1.errorbar(10**np.array(slopes_unq[0]), slopes_unq[1], yerr=slopes_unq[2], fmt='.')
+        ax1.errorbar(10**np.array(slopes_unq[0]), slopes_unq[1], yerr=slopes_unq[2],
+                     fmt='.', markersize=3)
             
         # set labels and subplots
         plt.suptitle(self.obs_name)
