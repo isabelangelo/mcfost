@@ -25,6 +25,14 @@ def setup_plot(ax):
     ax.set_yscale('log')
     ax.set_xlabel('$\lambda [\mu m]$')
     ax.set_ylabel(r'$\lambda F_{\lambda} [\frac{W}{m^2}]$')
+    
+def P(x):
+    a,b,c,d = -0.332,53.1,15.5,0.5
+    y = a*np.arctan(b*x-c)+d
+    if y<0:
+        return 0
+    else:
+        return y
 
 class Model(object):
     """
@@ -169,29 +177,43 @@ class Model(object):
         plt.show()
         
     def brightness_test1(self, inc_idx=-1):
-        
+        """
+        most of edge-on should pass this test
+        """    
         # set wavelength for brightness calculation
         star_peak = 0.75 # found by taking peak brightness of star with 1e-12 dust mass
         
-        # compute brightness ratio at 45 and 90 degrees
-        i_45, i_90 = self.seds[0],self.seds[inc_idx]
+        # compute brightness at 45 degrees and input inclination
+        i_45, i = self.seds[0],self.seds[inc_idx]
         F_45 = i_45[np.where(self.wavelength==star_peak)][0]
-        F_90 = i_90[np.where(self.wavelength==star_peak)][0]
+        F = i[np.where(self.wavelength==star_peak)][0]
         
-        def P(x):
-            a,b,c,d = -0.332,53.1,15.5,0.5
-            y = a*np.arctan(b*x-c)+d
-            if y<0:
-                return 0
-            else:
-                return y
-                
-        return P(F_90/F_45)
+        # return the probability associated with brightness ratio        
+        return P(F/F_45)
         
         
     def brightness_test2(self, inc_idx=-1):
-        pass
+        """
+        single-peaked ones should pass this test
+        """    
+        # wavelength where starlight is attenuated
+        dim_wavelength = 4.5
         
+        # compute brightness at 45 and input inclination
+        i_45,i = self.seds[0], self.seds[inc_idx]
+        F_45 = i_45[np.where(self.wavelength==dim_wavelength)][0]
+        F = i[np.where(self.wavelength==dim_wavelength)][0]
+        
+        # return probability associated with brightness ratio
+        return P(F/F_45)
+        
+        
+        
+## TO DO: 
+#1. maybe once we are done testing the brightness tests we can make them
+#   only compute for 90 degrees and don't have to input inc_idx
+# 2. make it so when you plot the models you print their scores on each test, 
+#   these are the ones you should save on the flash drive
         
         
                
