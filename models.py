@@ -10,10 +10,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
-from find_model import *
+import find_model
 
 # define path to models
-model_path = 'grid_i15/' # add ../ for leo
+#model_path = 'grid_i15/' # add ../ for leo
+model_path='/Volumes/backup/grid_i15/'
 
 # set up plot axes
 def setup_plot(ax):
@@ -35,7 +36,7 @@ class Model(object):
                         between 2-10um of the highest inclination in the model, 
                         'False' plots raw data
     """    
-    def __init__(self, n_model, norm=True):
+    def __init__(self, n_model, norm=False):
         
         # retrieve sed and wavelength data from model
         self.n_model = n_model
@@ -61,7 +62,7 @@ class Model(object):
         self.inclinations = np.degrees(np.arccos(cosi))
         
         # store parameters
-        self.parameters = get_parameters(n_model)
+        self.parameters = find_model.get_parameters(n_model)
         
     def plot(self):
         """
@@ -140,7 +141,7 @@ class Model(object):
                
         return slopes_unq
         
-    def plot_slopes(self, templates=False):
+    def plot_slopes(self):
     
         # set up figure subplots
         ax0 = plt.subplot(211)
@@ -167,6 +168,29 @@ class Model(object):
         ax1.legend()
         plt.show()
         
+    def brightness_test1(self, inc_idx=-1):
+        
+        # set wavelength for brightness calculation
+        star_peak = 0.75 # found by taking peak brightness of star with 1e-12 dust mass
+        
+        # compute brightness ratio at 45 and 90 degrees
+        i_45, i_90 = self.seds[0],self.seds[inc_idx]
+        F_45 = i_45[np.where(self.wavelength==star_peak)][0]
+        F_90 = i_90[np.where(self.wavelength==star_peak)][0]
+        
+        def P(x):
+            a,b,c,d = -0.332,53.1,15.5,0.5
+            y = a*np.arctan(b*x-c)+d
+            if y<0:
+                return 0
+            else:
+                return y
+                
+        return P(F_90/F_45)
+        
+        
+    def brightness_test2(self, inc_idx=-1):
+        pass
         
         
         
