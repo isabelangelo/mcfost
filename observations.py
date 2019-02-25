@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import warnings
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
+from probability_functions import *
 
 # define path to observation files
 obs_path = 'seds/reduced_seds/'
@@ -136,8 +137,7 @@ class Obs(object):
         window_center = window_start+window/2.
         
         # store slopes for each window
-        slopes = []
-        slope_err = []      
+        slopes, slope_err = np.array([]), np.array([])     
         for i in window_start:
             fitpoints = np.where((i<=logw)&(logw<=i+window))[0]
             if len(fitpoints)>=2:
@@ -146,35 +146,34 @@ class Obs(object):
                 y = logs[fitpoints]
                 a,b=np.polyfit(x,y,1)
                 # store slope
-                slopes.append(a)
+                slopes = np.append(slopes,a)
                 # store slope error
                 dmdy_arr = [dmdy(j,x,len(x))for j in range(len(x))]
                 sigma_arr = [logerr[i] for i in fitpoints] #convert to log?
                 dm_arr = [t1**2.*t2**2. for t1,t2 in zip(dmdy_arr,sigma_arr)]
                 dm = np.sqrt(np.sum(dm_arr))
-                slope_err.append(dm)
+                slope_err = np.append(slope_err, dm)
                 # plot polyfit as a test
                 #ax0.plot(x,a*x+b, '-')
             else:
-                slopes.append(np.nan)
-                slope_err.append(np.nan)
+                slopes = np.append(slopes, np.nan)
+                slope_err = np.append(slope_err, np.nan)
               
         # store unique slope and corresponding window values (median index)
         indexes = np.unique(slopes, return_index=True)[1]
         unq_slopes = np.array([slopes[index] for index in sorted(indexes)])
         unq_slopes = unq_slopes[~np.isnan(unq_slopes)]
-        unq_window_median = []
-        unq_err = []
+        unq_window, unq_err= np.array([]), np.array([])
         
         for s in unq_slopes:
             slope_idx = np.where(slopes==s)[0]
             idx_median = int(np.median(slope_idx))
-            unq_window_median.append(window_center[idx_median])
-            unq_err.append(slope_err[idx_median])
+            unq_window = np.append(unq_window, window_center[idx_median])
+            unq_err = np.append(unq_err, slope_err[idx_median])
         
         # store window+slope data as tuples       
         slopes_all = (window_center, slopes, slope_err)
-        slopes_unq = (unq_window_median, unq_slopes, unq_err)
+        slopes_unq = (unq_window, unq_slopes, unq_err)
                 
         return slopes_unq
         
@@ -187,7 +186,7 @@ class Obs(object):
         slopes_unq = self.get_slopes()
         ax0.errorbar(self.wavelength, self.sed, yerr=self.err, fmt = '.--')
         # plot unique slope values        
-        ax1.errorbar(10**np.array(slopes_unq[0]), slopes_unq[1], yerr=slopes_unq[2],
+        ax1.errorbar(10**slopes_unq[0], slopes_unq[1], yerr=slopes_unq[2],
                      fmt='.', markersize=3)
             
         # set labels and subplots
@@ -200,4 +199,22 @@ class Obs(object):
         ax1.set_ylabel('slope')
         ax1.set_xlabel('log($\lambda$)')
         plt.show()
+        
+    def slope_test(self):
+        
+        s = self.get_slopes()
+        windows, slopes, slope_errs = 10**s[0], s[1], s[2]
+        
+        min = slopes[np.where((windows>=2) & (windows<=10))].min()
+        max = slopes[np.where((windows>10) & (windows<=20))].max()
+        
+        dif = max-min
+        return P3(dif)
+        
+    
+    
+    
+    
+    
+    
         

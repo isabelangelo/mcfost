@@ -11,10 +11,15 @@ import matplotlib.pyplot as plt
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
 import find_model
+from probability_functions import *
 
 # define path to models
 #model_path = 'grid_i15/' # add ../ for leo
 model_path='/Volumes/backup/grid_i15/'
+
+# store model star SED
+star_path = '/Volumes/backup/grid_i15/test_peak/data_th/sed_rt.fits'
+star_seds = fits.open(star_path)[0].data[0][0]
 
 # set up plot axes
 def setup_plot(ax):
@@ -25,14 +30,6 @@ def setup_plot(ax):
     ax.set_yscale('log')
     ax.set_xlabel('$\lambda [\mu m]$')
     ax.set_ylabel(r'$\lambda F_{\lambda} [\frac{W}{m^2}]$')
-    
-def P(x):
-    a,b,c,d = -0.332,53.1,15.5,0.5
-    y = a*np.arctan(b*x-c)+d
-    if y<0:
-        return 0
-    else:
-        return y
 
 class Model(object):
     """
@@ -119,7 +116,7 @@ class Model(object):
         window_center = window_start+window/2.
         
         # store slopes for each window
-        slopes = []      
+        slopes = np.array([])      
         for i in window_start:
             fitpoints = np.where((i<=logw)&(logw<=i+window))[0]
             if len(fitpoints)>=2:
@@ -128,24 +125,24 @@ class Model(object):
                 y = logs[fitpoints]
                 a,b=np.polyfit(x,y,1)
                 # store slope
-                slopes.append(a)
+                slopes = np.append(slopes, a)
             else:
-                slopes.append(np.nan)
+                slopes = np.append(slopes, np.nan)
       
         # store unique slope and corresponding window values (median index)
         indexes = np.unique(slopes, return_index=True)[1]
         unq_slopes = np.array([slopes[index] for index in sorted(indexes)])
         unq_slopes = unq_slopes[~np.isnan(unq_slopes)]
-        unq_window_median = []
+        unq_window = np.array([])
         
         for s in unq_slopes:
             slope_idx = np.where(slopes==s)[0]
             idx_median = int(np.median(slope_idx))
-            unq_window_median.append(window_center[idx_median])
+            unq_window = np.append(unq_window, window_center[idx_median])
         
         # store window+slope data as tuples       
         slopes_all = (window_center, slopes)
-        slopes_unq = (unq_window_median, unq_slopes)
+        slopes_unq = (unq_window, unq_slopes)
                
         return slopes_unq
         
@@ -161,7 +158,7 @@ class Model(object):
             # plot sed in top panel
             ax0.plot(self.wavelength, self.seds[i], '-')
             # plot unique slope values
-            ax1.plot(10**np.array(slopes_unq[0]), slopes_unq[1], '.', 
+            ax1.plot(10**slopes_unq[0], slopes_unq[1], '.', 
                     label='i='+str(np.round(self.inclinations[i])))
         
         # set labels and subplots            
@@ -176,7 +173,7 @@ class Model(object):
         ax1.legend()
         plt.show()
         
-    def brightness_test1(self, inc_idx=-1):
+    def brightness_test1(self, inc_idx=-1, func=2):
         """
         most of edge-on should pass this test
         """    
@@ -184,15 +181,15 @@ class Model(object):
         star_peak = 0.75 # found by taking peak brightness of star with 1e-12 dust mass
         
         # compute brightness at 45 degrees and input inclination
-        i_45, i = self.seds[0],self.seds[inc_idx]
-        F_45 = i_45[np.where(self.wavelength==star_peak)][0]
+        i_star, i = star_seds[0],self.seds[inc_idx]
+        F_star = i_star[np.where(self.wavelength==star_peak)][0]
         F = i[np.where(self.wavelength==star_peak)][0]
         
         # return the probability associated with brightness ratio        
-        return P(F/F_45)
+        return P1(F/F_star)
         
         
-    def brightness_test2(self, inc_idx=-1):
+    def brightness_test2(self, inc_idx=-1, func=2):
         """
         single-peaked ones should pass this test
         """    
@@ -200,20 +197,17 @@ class Model(object):
         dim_wavelength = 4.5
         
         # compute brightness at 45 and input inclination
-        i_45,i = self.seds[0], self.seds[inc_idx]
-        F_45 = i_45[np.where(self.wavelength==dim_wavelength)][0]
+        i_star,i = star_seds[0], self.seds[inc_idx]
+        F_star = i_star[np.where(self.wavelength==dim_wavelength)][0]
         F = i[np.where(self.wavelength==dim_wavelength)][0]
         
         # return probability associated with brightness ratio
-        return P(F/F_45)
+        return P2(F/F_star)
         
         
         
-## TO DO: 
-#1. maybe once we are done testing the brightness tests we can make them
-#   only compute for 90 degrees and don't have to input inc_idx
-# 2. make it so when you plot the models you print their scores on each test, 
-#   these are the ones you should save on the flash drive
         
+        
+            
         
                
