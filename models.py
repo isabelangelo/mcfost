@@ -81,7 +81,8 @@ class Model(object):
             
         setup_plot(ax)
         ax.set_xlim(self.wavelength[0],self.wavelength[-1])
-        ax.set_title('model '+str(self.n_model))
+        ax.set_title(str(self.parameters), fontsize=10)
+        plt.suptitle('model '+str(self.n_model))
         plt.show()
         
     @staticmethod
@@ -204,6 +205,19 @@ class Model(object):
         # return probability associated with brightness ratio
         return P2(F/F_star)
         
+        
+    def slope_test(self, inc_idx):
+        """
+        two-peaked disks and ones with large Rin should pass
+        """
+        s = self.get_slopes(inc_idx)
+        windows, slopes = 10**s[0], s[1]
+        
+        min = slopes[np.where((windows>=2) & (windows<=10))].min()
+        max = slopes[np.where((windows>10) & (windows<=20))].max()
+        
+        dif = max-min
+        print('model'+str(self.n_model), self.inclinations[inc_idx], dif, P3(dif))
         
         
         

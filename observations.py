@@ -209,7 +209,7 @@ class Obs(object):
         max = slopes[np.where((windows>10) & (windows<=20))].max()
         
         dif = max-min
-        return P3(dif)
+        print(self.obs_name, dif, P3(dif))
         
     
     
