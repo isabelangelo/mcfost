@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
-import find_model
+import model_grid
 from probability_functions import *
 
 # define path to models
@@ -67,7 +67,7 @@ class Model(object):
         self.inclinations = np.degrees(np.arccos(cosi))
         
         # store parameters
-        self.parameters = find_model.get_parameters(n_model)
+        self.parameters = model_grid.get_parameters(n_model)
         
     def plot(self):
         """

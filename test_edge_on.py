@@ -95,6 +95,13 @@ def slope_test(obj):
         #print(self.obs_name, dif, P3(dif))
         return P3(dif)
         
+def compute_P(obj):
+    """
+    compute weighted probability from 3 tests
+    """
+    sum = np.sum(brightness_test1(obj) + brightness_test2(obj) + slope_test(obj)
+    return(sum/3.)
+        
         
         
         
