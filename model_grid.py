@@ -19,7 +19,7 @@ grid_values = [dust_mass, Rc, f_exp, H0, Rin, sd_exp, porosity, amax]
 grid_parameters = dict(zip(grid_keys, grid_values))
 
 # find index corresponding to set of input parameters
-def get_model(parameter_input):
+def get_model_index(parameter_input):
     """
     reads in list of parameter values and outputs the name of the grid model with 
     corresponding parameters
@@ -39,7 +39,7 @@ def get_model(parameter_input):
     model_index = model_list.index(tuple(parameter_list))
     return model_index
     
-def get_parameters(model_index):
+def get_model_parameters(model_index):
     """
     takes in model number and returns dictionary of corresponding model parameters
     
@@ -56,3 +56,38 @@ def get_parameters(model_index):
     values = list(parameters)
     parameter_dict = dict(zip(keys,values))
     return parameter_dict
+    
+def get_grid_indexes(param, value, n=None):
+
+    if param=='dust_mass':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[0]==value]
+    if param=='Rc':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[1]==value]
+    if param=='f_exp':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[2]==value]
+    if param=='H0':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[3]==value]
+    if param=='Rin':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[4]==value]
+    if param=='sd_exp':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[5]==value]
+    if param=='porosity':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[6]==value]
+    if param=='amax':
+        grid_indexes = [i for i,x in enumerate(model_list) if x[7]==value]
+        
+    if n is not None:
+        return np.random.choice(grid_indexes, n)
+        
+    else:
+        return grid_indexes
+
+
+
+
+
+
+
+# TO DO: 
+#make it take in multiple parameters?
+#make get_grid_indexes take in ranges?
