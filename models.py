@@ -174,51 +174,6 @@ class Model(object):
         ax1.legend()
         plt.show()
         
-    def brightness_test1(self, inc_idx=-1, func=2):
-        """
-        most of edge-on should pass this test
-        """    
-        # set wavelength for brightness calculation
-        star_peak = 0.75 # found by taking peak brightness of star with 1e-12 dust mass
-        
-        # compute brightness at 45 degrees and input inclination
-        i_star, i = star_seds[0],self.seds[inc_idx]
-        F_star = i_star[np.where(self.wavelength==star_peak)][0]
-        F = i[np.where(self.wavelength==star_peak)][0]
-        
-        # return the probability associated with brightness ratio        
-        return P1(F/F_star)
-        
-        
-    def brightness_test2(self, inc_idx=-1, func=2):
-        """
-        single-peaked ones should pass this test
-        """    
-        # wavelength where starlight is attenuated
-        dim_wavelength = 4.5
-        
-        # compute brightness at 45 and input inclination
-        i_star,i = star_seds[0], self.seds[inc_idx]
-        F_star = i_star[np.where(self.wavelength==dim_wavelength)][0]
-        F = i[np.where(self.wavelength==dim_wavelength)][0]
-        
-        # return probability associated with brightness ratio
-        return P2(F/F_star)
-        
-        
-    def slope_test(self, inc_idx):
-        """
-        two-peaked disks and ones with large Rin should pass
-        """
-        s = self.get_slopes(inc_idx)
-        windows, slopes = 10**s[0], s[1]
-        
-        min = slopes[np.where((windows>=2) & (windows<=10))].min()
-        max = slopes[np.where((windows>10) & (windows<=20))].max()
-        
-        dif = max-min
-        print('model'+str(self.n_model), self.inclinations[inc_idx], dif, P3(dif))
-        
         
         
         

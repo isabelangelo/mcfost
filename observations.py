@@ -200,17 +200,6 @@ class Obs(object):
         ax1.set_xlabel('log($\lambda$)')
         plt.show()
         
-    def slope_test(self):
-        
-        s = self.get_slopes()
-        windows, slopes, slope_errs = 10**s[0], s[1], s[2]
-        
-        min = slopes[np.where((windows>=2) & (windows<=10))].min()
-        max = slopes[np.where((windows>10) & (windows<=20))].max()
-        
-        dif = max-min
-        print(self.obs_name, dif, P3(dif))
-        
     
     
     
