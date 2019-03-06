@@ -8,6 +8,7 @@ Written: Isabel Angelo (2019)
 from astropy.io import fits
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm 
 import scipy.stats.mstats as stats
 from reduce_sed import parseline
 import model_grid
@@ -67,7 +68,7 @@ class Model(object):
         self.inclinations = np.degrees(np.arccos(cosi))
         
         # store parameters
-        self.parameters = model_grid.get_parameters(n_model)
+        self.parameters = model_grid.get_model_parameters(n_model)
         
     def plot(self):
         """
@@ -78,11 +79,25 @@ class Model(object):
         n_i = len(self.seds)
         for i in range(n_i):                                                                                                       
             ax.plot(self.wavelength, self.seds[i], color='k', linewidth=0.5)
+        
+        # plot host star
+        ax.plot(self.wavelength, star_seds[0],color='midnightblue', linewidth=0.8, linestyle=':')
             
         setup_plot(ax)
         ax.set_xlim(self.wavelength[0],self.wavelength[-1])
         ax.set_title(str(self.parameters), fontsize=10)
         plt.suptitle('model '+str(self.n_model))
+        plt.show()
+       
+    def plot_gif(self):
+        impath = self.filepath[:-19]+'data_0.6/RT.fits'
+        hdulist = fits.open(impath)
+        d = hdulist[0].data[0][0]
+        # plot 0th inclination
+        vmin = 0.1*d.mean()
+        plt.imshow(d[0],norm=LogNorm(), cmap='plasma',vmin=vmin)
+        plt.xlim(110,140)
+        plt.ylim(110,140)
         plt.show()
         
     @staticmethod
@@ -103,7 +118,8 @@ class Model(object):
             ['model '+str(model1.n_model), 'model '+str(model2.n_model)])
             
         setup_plot(ax)   
-        plt.show() 
+        plt.show()
+  
             
     def get_slopes(self, inc_idx, window=4):
 
