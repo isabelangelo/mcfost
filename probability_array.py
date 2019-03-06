@@ -1,3 +1,16 @@
+"""
+generates an array that contains the associated probability for each grid model
+array dimensions:
+    
+    dust_mass x Rc x f_exp x H0 x Rin x sd_exp x amax
+
+so index of each dimension corresponds to the index of that parameter in 
+grid_parameters dictions. For example, 
+
+    arr[0,0,0,0,0,0,0] corresponds to get_model_index('1e-07,10,0.85,5,0.1,0,0,10')
+    
+written: Isabel Angelo (2019)
+"""
 import numpy as np
 from astropy.io import fits
 from generate_para import dust_mass, Rc, f_exp, H0, Rin, sd_exp, porosity, amax

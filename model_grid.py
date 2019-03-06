@@ -7,6 +7,7 @@ Written: Isabel Angelo (2018)
 
 from ast import literal_eval
 from generate_para import dust_mass, Rc, f_exp, H0, Rin, sd_exp, porosity, amax
+import numpy as np
 import sys
 
 # retrieve list with indices corresponding to parameter combinations
@@ -18,7 +19,7 @@ grid_keys = ['dust_mass', 'Rc','f_exp', 'H0', 'Rin', 'sd_exp', 'porosity', 'amax
 grid_values = [dust_mass, Rc, f_exp, H0, Rin, sd_exp, porosity, amax]
 grid_parameters = dict(zip(grid_keys, grid_values))
 
-# find index corresponding to set of input parameters
+
 def get_model_index(parameter_input):
     """
     reads in list of parameter values and outputs the name of the grid model with 
@@ -57,37 +58,55 @@ def get_model_parameters(model_index):
     parameter_dict = dict(zip(keys,values))
     return parameter_dict
     
-def get_grid_indexes(param, value, n=None):
-
-    if param=='dust_mass':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[0]==value]
-    if param=='Rc':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[1]==value]
-    if param=='f_exp':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[2]==value]
-    if param=='H0':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[3]==value]
-    if param=='Rin':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[4]==value]
-    if param=='sd_exp':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[5]==value]
-    if param=='porosity':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[6]==value]
-    if param=='amax':
-        grid_indexes = [i for i,x in enumerate(model_list) if x[7]==value]
+def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
+    Rin=None, sd_exp=None,porosity=None, amax=None,  n=None):
+    """
+    returns all model numbers of grid 
+    satisfying parameter conditions specified by inputs
+    """
+    # generate lists of indexes for each individual condisiton
+    indexes_all = []
+    if dust_mass is not None:
+        a = [i for i,x in enumerate(model_list) if x[0]==dust_mass]
+        indexes_all.append(a)
+    if Rc is not None:
+        b = [i for i,x in enumerate(model_list) if x[1]==Rc]
+        indexes_all.append(b)
+    if f_exp is not None:
+        c = [i for i,x in enumerate(model_list) if x[2]==f_exp]
+        indexes_all.append(c)
+    if H0 is not None:
+        d = [i for i,x in enumerate(model_list) if x[3]==H0]
+        indexes_all.append(d)
+    if Rin is not None:
+        e = [i for i,x in enumerate(model_list) if x[4]==Rin]
+        indexes_all.append(e) 
+    if sd_exp is not None:
+        f = [i for i,x in enumerate(model_list) if x[5]==sd_exp]
+        indexes_all.append(f)
+    if porosity is not None:
+        g = [i for i,x in enumerate(model_list) if x[6]==porosity]
+        indexes_all.append(g)
+    if amax is not None:
+        h = [i for i,x in enumerate(model_list) if x[7]==amax]
+        indexes_all.append(h)
+    
+    # find grid indexes that satisfy all conditions
+    if len(indexes_all)>0: 
+        grid_indexes = set(indexes_all[0])
+        for s in indexes_all[1:]:
+            grid_indexes.intersection_update(s)
+        grid_indexes=list(grid_indexes)
         
+    # for case where no conditions are input    
+    else:
+        grid_indexes = list(np.arange(0,11520,1))
+    
+    # generate random model numbers from grid indexes   
     if n is not None:
-        return np.random.choice(grid_indexes, n)
-        
+        return np.random.choice(grid_indexes, n)       
     else:
         return grid_indexes
-
-
-
-
-
-
-
-# TO DO: 
-#make it take in multiple parameters?
-#make get_grid_indexes take in ranges?
+        
+#make get_grid_indexes take in range of values?
+# get rid of porosity in all the functions? you should do this soon

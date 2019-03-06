@@ -99,9 +99,10 @@ def compute_P(obj):
     """
     compute weighted probability from 3 tests
     """
-    sum = np.sum(brightness_test1(obj) + brightness_test2(obj) + slope_test(obj)
-    return(sum/3.)
+    sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
+    return sum/3.
         
+# need to understand output of compute_P better
         
         
         
