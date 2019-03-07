@@ -22,14 +22,16 @@ def plot_parameter_probabilities(paramstr, cmap='inferno'):
     # determine tick labels
     inc = [str(i)[:2] for i in Model(0).inclinations]
     dm = [str(d) for d in param_list]
-
-    fig, ax = plt.subplots()
-    ax.set_xticks(np.arange(0,15,1));ax.set_yticks(np.arange(0,len(param_list)))
-    ax.set_xticklabels(inc);ax.set_yticklabels(dm)
-    ax.set_xlabel('inclination');ax.set_ylabel(paramstr)
-    ax.set_title(paramstr+' edge-on probabilities')
-    plt.imshow(arr, cmap=cmap)
+    
+    plt.imshow(arr, vmin=0, vmax=1, cmap=cmap, aspect='auto')
+    plt.xticks(np.arange(0,15,1),inc);plt.yticks(np.arange(0,len(param_list)),dm)
+    plt.ylabel(paramstr);plt.xlabel('inclination')
+    plt.title(paramstr+' edge-on probabilities')
     plt.colorbar();plt.show()
+
+    # shared colorbar for subplots
+    #cax = plt.axes([0.85, 0.1, 0.075, 0.8])
+    #plt.colorbar(cax=cax)
     
     
 #TO DO: make this so you can correlate any input two?
