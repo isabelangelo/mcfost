@@ -1,5 +1,11 @@
 """
-defines tests for determining if a Model or Obs object are observably edge-on
+Defines a set of tests for determining if a Model or Obs object are observably
+edge-on/optically thick. Probability for a given SED is generated based on weighted
+probabilities computed by 3 tests: brightness1 (0.75um), brightness2 (4.5um),
+and slope test. 
+
+All probability functions take a Model or Obs object as input and return
+a probability (float) 0<P<1.
 
 written: Isabel Angelo (2019)
 """
@@ -8,7 +14,8 @@ from observations import *
 
 def brightness_test1(obj):
     """
-    most of edge-on should pass this test
+    Tests to see if SED is significantly blocked by dust at 0.75um.
+    (most of edge-on disks should pass this test)
     """ 
     if type(obj)==Model:
     
@@ -38,7 +45,8 @@ def brightness_test1(obj):
     
 def brightness_test2(obj):
     """
-    single-peaked ones should pass this test
+    Tests for brightness significantly blocked at 4.5um.
+    (single-peaked ones should pass this test)
     """ 
     if type(obj)==Model:
         # wavelength where starlight is attenuated
@@ -66,7 +74,8 @@ def brightness_test2(obj):
     
 def slope_test(obj):
     """
-    two-peaked disks and ones with large Rin should pass
+    Tests to see if slope goes from negative to positive i.e. "double-peaked" shape.
+    (two-peaked disks and ones with large Rin should pass)
     """
     if type(obj)==Model:
         P_i = []
@@ -97,12 +106,10 @@ def slope_test(obj):
         
 def compute_P(obj):
     """
-    compute weighted probability from 3 tests
+    Compute final weighted probability from 3 tests
     """
     sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
     return sum/3.
-        
-# need to understand output of compute_P better
         
         
         

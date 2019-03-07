@@ -15,7 +15,6 @@ import model_grid
 from probability_functions import *
 
 # define path to models
-#model_path = 'grid_i15/' # add ../ for leo
 model_path='/Volumes/backup/grid_i15/'
 
 # store model star SED
@@ -72,7 +71,7 @@ class Model(object):
         
     def plot(self):
         """
-        plots an MCFOST model SED [W/m^2] versus wavelength [um]
+        plots an MCFOST model set of SEDs [W/m^2] versus wavelength [um]
         """        
         # plot SEDs for all model inclinations
         f, ax = plt.subplots()
@@ -90,6 +89,10 @@ class Model(object):
         plt.show()
        
     def plot_gif(self):
+        """
+        plot a gif that shows both the SED and output image change
+        as inclination increases.
+        """
         impath = self.filepath[:-19]+'data_0.6/RT.fits'
         hdulist = fits.open(impath)
         d = hdulist[0].data[0][0]
@@ -122,7 +125,20 @@ class Model(object):
   
             
     def get_slopes(self, inc_idx, window=4):
-
+        """
+        computes the slope if the SED as a function of wavelength
+    
+        Args:
+            inc_index(int): index of inclination that slopes are calculated for, 
+            corresponding to index of self.inclinations
+            window(int): size of the window for which the slope is calculated.
+            window=4 corresponds to window spanning a factor of 4, i.e. 0.1-0.4
+        
+        Returns:
+            slopes_unq(tuple): tuple (unq_window, unq_slopes) where unq_slopes
+            represents each specific slope value computed for the SED and 
+            unq_window represents their median corresponding index
+        """    
         # take log for analysis
         logw = np.log10(self.wavelength)
         logs = np.log10(self.seds[inc_idx])
@@ -164,7 +180,10 @@ class Model(object):
         return slopes_unq
         
     def plot_slopes(self):
-    
+        """
+        plots the SED's of a model in top panel and their slopes as a function
+        of wavelength in the bottom panel
+        """
         # set up figure subplots
         ax0 = plt.subplot(211)
         ax1=plt.subplot(212, sharex=ax0)

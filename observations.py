@@ -121,6 +121,18 @@ class Obs(object):
         plt.show()
         
     def get_slopes(self, window=4):
+        """
+        computes the slope if the SED as a function of wavelength
+    
+        Args:
+            window(int): size of the window for which the slope is calculated.
+            window=4 corresponds to window spanning a factor of 4, i.e. 0.1-0.4
+        
+        Returns:
+            slopes_unq(tuple): tuple (unq_window, unq_slopes, unq_err)
+            where unq_slopes represents each specific slope value computed for the SED 
+            and unq_window, unq_err represents their median corresponding index and errors
+        """  
 
         # take log for analysis
         logw = np.log10(self.wavelength)
@@ -178,6 +190,10 @@ class Obs(object):
         return slopes_unq
         
     def plot_slopes(self):
+        """
+        plots the observed SED in top panel and its slope as a function
+        of wavelength in the bottom panel
+        """
     
         # set up figure subplots
         ax0 = plt.subplot(211)

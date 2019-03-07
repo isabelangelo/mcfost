@@ -1,5 +1,5 @@
 """
-This code will generate a grid of parameter files to be run on MCFOST. 
+This code will define and generate a grid of parameter files to be run on MCFOST. 
 Lists contain the variable values of the grid, and the parameter files are 
 stored as model*.para.
 

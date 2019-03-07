@@ -63,6 +63,16 @@ def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
     """
     returns all model numbers of grid 
     satisfying parameter conditions specified by inputs
+    
+    Args:
+        dust_mass, Rc, f_exp, etc, (float,int): desired values
+        of corresponding parameters to be retrieved from grid
+        
+        n(int): number of randomly selected model indices to generate. 
+        Returns all possible indices if None.
+        
+        example: get_grid_indexes(dust_mass=1e-3) 
+        returns all model #'s with dustmass=1e-3
     """
     # generate lists of indexes for each individual condisiton
     indexes_all = []
@@ -107,6 +117,4 @@ def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
         return np.random.choice(grid_indexes, n)       
     else:
         return grid_indexes
-        
-#make get_grid_indexes take in range of values?
-# get rid of porosity in all the functions? you should do this soon
+
