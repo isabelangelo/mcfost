@@ -6,7 +6,7 @@ Written: Isabel Angelo (2018)
 """
 
 from ast import literal_eval
-from generate_para import dust_mass, Rc, f_exp, H0, Rin, sd_exp, porosity, amax
+from generate_para import dust_mass, Rc, f_exp, H0, Rin, sd_exp, amax
 import numpy as np
 import sys
 
@@ -15,8 +15,8 @@ f = open('model_indices_15i.txt','r')
 model_list = [literal_eval(line.strip()) for line in f]
 
 # store grid parameters in dictionary
-grid_keys = ['dust_mass', 'Rc','f_exp', 'H0', 'Rin', 'sd_exp', 'porosity', 'amax']
-grid_values = [dust_mass, Rc, f_exp, H0, Rin, sd_exp, porosity, amax]
+grid_keys = ['dust_mass', 'Rc','f_exp', 'H0', 'Rin', 'sd_exp', 'amax']
+grid_values = [dust_mass, Rc, f_exp, H0, Rin, sd_exp, amax]
 grid_parameters = dict(zip(grid_keys, grid_values))
 
 
@@ -27,8 +27,8 @@ def get_model_index(parameter_input):
     
     Args:
         parameter_input(str): string containing comma separated values of parameters in the format
-        'dust_mass,Rc,f_exp,H0,Rin,sd_exp,porosity,amax'
-        example: '1e-07,10,0.85,5,0.1,-0.5,0,10'
+        'dust_mass,Rc,f_exp,H0,Rin,sd_exp,amax'
+        example: '1e-07,10,0.85,5,0.1,-0.5,10'
         *note: for our models, porosity will always be 0
     
     Returns:
@@ -37,6 +37,7 @@ def get_model_index(parameter_input):
     """
 
     parameter_list = [float(p) for p in parameter_input.split(',')]
+    parameter_list.insert(-1,0) # for porosity=0 in grid
     model_index = model_list.index(tuple(parameter_list))
     return model_index
     
@@ -53,13 +54,14 @@ def get_model_parameters(model_index):
     """
     
     parameters = model_list[model_index]
-    keys = ['dust_mass', 'Rc','f_exp', 'H0', 'Rin', 'sd_exp', 'porosity', 'amax']
+    keys = ['dust_mass', 'Rc','f_exp', 'H0', 'Rin', 'sd_exp', 'amax']
     values = list(parameters)
+    values.pop(-2) # remove porosity
     parameter_dict = dict(zip(keys,values))
     return parameter_dict
     
 def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
-    Rin=None, sd_exp=None,porosity=None, amax=None,  n=None):
+    Rin=None, sd_exp=None, amax=None,  n=None):
     """
     returns all model numbers of grid 
     satisfying parameter conditions specified by inputs
@@ -94,12 +96,9 @@ def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
     if sd_exp is not None:
         f = [i for i,x in enumerate(model_list) if x[5]==sd_exp]
         indexes_all.append(f)
-    if porosity is not None:
-        g = [i for i,x in enumerate(model_list) if x[6]==porosity]
-        indexes_all.append(g)
     if amax is not None:
-        h = [i for i,x in enumerate(model_list) if x[7]==amax]
-        indexes_all.append(h)
+        g = [i for i,x in enumerate(model_list) if x[6]==amax]
+        indexes_all.append(g)
     
     # find grid indexes that satisfy all conditions
     if len(indexes_all)>0: 

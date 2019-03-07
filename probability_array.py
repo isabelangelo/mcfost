@@ -7,7 +7,7 @@ array dimensions:
 so index of each dimension corresponds to the index of that parameter in 
 grid_parameters dictions. For example, 
 
-    arr[0,0,0,0,0,0,0] corresponds to get_model_index('1e-07,10,0.85,5,0.1,0,0,10')
+arr[0,0,0,0,0,0,0] corresponds to model_grid.get_model_index('1e-07,10,0.85,5,0.1,0,0,10')
     
 written: Isabel Angelo (2019)
 """
