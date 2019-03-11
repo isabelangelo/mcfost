@@ -58,6 +58,20 @@ def P3(x):
     y = 1-1/denom
     return y
     
+def gaussian_kernel():
+    """ 
+    generates 2D gaussian kernel to convolve with mcfost image
+    """
+    
+    # generate 1D gaussian
+    t = np.linspace(-5, 5, 15)
+    bump = np.exp(-0.5*t**2)
+    bump /= np.trapz(bump) # normalize
+    
+    # make 2D kernel
+    kernel = bump[:, np.newaxis] * bump[np.newaxis, :]
+    
+    return kernel
         
 
         
