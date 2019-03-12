@@ -10,9 +10,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm 
 import scipy.stats.mstats as stats
+from astropy.convolution import convolve_fft
 from reduce_sed import parseline
 import model_grid
 from probability_functions import *
+
+import imageio
 
 # define path to models
 model_path='/Volumes/backup/grid_i15/'
@@ -61,6 +64,10 @@ class Model(object):
         else:
             self.seds = sedlist
             
+        # store the model image
+        impath = self.filepath[:-19]+'data_0.6/RT.fits'
+        self.images = fits.open(impath)[0].data[0][0]
+            
         # generate model inclinations- is it in the files?
         i_0, i_f = np.radians(45), np.radians(90)
         cosi = np.linspace(np.cos(i_0), np.cos(i_f), 15)
@@ -88,20 +95,37 @@ class Model(object):
         plt.suptitle('model '+str(self.n_model))
         plt.show()
        
-    def plot_gif(self):
+    def plot_gif(self, inc_idx):
         """
         plot a gif that shows both the SED and output image change
         as inclination increases.
         """
-        impath = self.filepath[:-19]+'data_0.6/RT.fits'
-        hdulist = fits.open(impath)
-        d = hdulist[0].data[0][0]
-        # plot 0th inclination
-        vmin = 0.1*d.mean()
-        plt.imshow(d[0],norm=LogNorm(), cmap='plasma',vmin=vmin)
-        plt.xlim(110,140)
-        plt.ylim(110,140)
+        fig,ax =plt.subplots(1,2,figsize=(8,4))
+        
+        # plot SED inclinations
+        n_i = len(self.seds)
+        for i in range(n_i): 
+            if i==inc_idx: # plot input inclination in bold
+                ax[0].plot(self.wavelength, self.seds[i], 'k-') 
+            else:                                                                                                   
+                ax[0].plot(self.wavelength, self.seds[i], color='gray', linewidth=0.5)
+        setup_plot(ax[0])
+        
+        # get image data for plotting
+        image = self.images[inc_idx]
+        vmin = 0.1*image.mean()
+        vmax = image.max()
+                    
+        # plot convolved image
+        convolved_image = convolve_fft(image,gaussian_kernel())
+        im = ax[1].imshow(convolved_image, norm=LogNorm(), \
+                vmin=vmin,vmax=vmax, aspect='auto')
+        fig.colorbar(im, ax=ax[1])
+        
+        fig.suptitle('model '+str(self.n_model))
+        fig.text(.5, .9, str(self.parameters)[1:-1], ha='center', fontsize=9)
         plt.show()
+        #plt.savefig('../test_png/'+str(inc_idx)+'.png')
         
     @staticmethod
     def overplot(model1, model2):
