@@ -1,7 +1,34 @@
+"""
+This code computes statistics on model grid from MCFOST 
+and defines for plotting them.
+
+written: Isabel Angelo (2019)
+"""
 from models import *
 from model_grid import grid_parameters
+from probability_array import generate_weighted_array
 
-d = fits.open('binary_array.fits')[0].data
+# load binary array with probabilities
+binary_array = fits.open('binary_array.fits')[0].data
+
+# generate array with masked values
+masked_array = generate_weighted_array(
+    dust_mass = [1e-07, 1e-06, 1e-05, 0.0001, 0.001],
+    Rc = [10, 30, 100, 300],
+    f_exp = [0.85, 1.0, 1.15, 1.3],
+    H0 = [5, 10, 15, 20],
+    Rin =  [0.1, 1, 10],
+    sd_exp = [0, -0.5, -1, -1.5],
+    amax = [10, 100, 1000, 10000]
+    )
+
+# generate weighted array here
+
+# update array with masks and weights    
+binary_array *= masked_array # multiply by weighted array
+
+
+# generate array to multiply by binary that maps
 
 # update dictionary to inclue inclinations
 param_dict = model_grid.grid_parameters.copy()
@@ -19,8 +46,8 @@ def plotP_1D(ax, paramstr):
     keys = list(param_dict.keys())
     axes = [7,6,5,4,3,2,1,0]
     axes.remove(keys.index(paramstr))
-    values = np.sum(d,axis=tuple(axes)) # do we want to normalize?
-    max = d.size/(len(param_list))
+    values = np.sum(binary_array,axis=tuple(axes)) # do we want to normalize?
+    max = binary_array.size/(len(param_list))
     arr = values/max
     arr2=np.concatenate(([arr[0]],arr,[arr[-1]])) # looks better in plot
     
@@ -56,8 +83,8 @@ def plotP_2D(fig, ax, paramstrx,paramstry,cmap='Purples',cbar=False):
     axes.remove(keys.index(paramstry))
     
     # collapse into 2D array and normalize
-    values = np.sum(d,axis=tuple(axes))
-    max = d.size/(len(param_listx)*len(param_listy))
+    values = np.sum(binary_array,axis=tuple(axes))
+    max = binary_array.size/(len(param_listx)*len(param_listy))
     arr = values/max
     
     # determine tick labels
@@ -80,14 +107,20 @@ def plotP_2D(fig, ax, paramstrx,paramstry,cmap='Purples',cbar=False):
         cb = fig.colorbar(im, cax=plt.axes([0.1,0,1,0.02]), orientation='horizontal')
     
 def plot_corner():
+    """
+    generates corner plot where all histogram and 2D correlation plots are shown
+    """
+    # list of parameter names and corresponding indexes
     pnames = ['inc']+list(grid_parameters.keys())
     ilist = np.arange(0,len(pnames),1)
     
+    # generate combinations for correlation plots
     pcomb = [(pnames[a],pnames[b]) for a in ilist for b in ilist if b>=a]
     icomb = [(a,b) for a in ilist for b in ilist if b>=a]
     allcomb = [(a,b) for a in ilist for b in ilist]
     
-    fig, axes = plt.subplots(8,8, figsize=(10,10))
+    # create figure
+    fig, axes = plt.subplots(8,8, figsize=(6,6))
     for comb in allcomb:
         ax = axes[comb[1],comb[0]]
         if comb in icomb:
@@ -112,7 +145,7 @@ def plot_corner():
             ax.set_xticklabels(['52','70','84'])
             
     plt.subplots_adjust(wspace=0, hspace=0)
-    #plt.show()
+    plt.show()
 
     
     
