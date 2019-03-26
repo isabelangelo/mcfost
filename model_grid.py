@@ -116,4 +116,11 @@ def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
         return np.random.choice(grid_indexes, n)       
     else:
         return grid_indexes
+        
+        
+###LINES TO CHANGE###
+# line 14
+# line 112
+# line 40 (might need to change the rest of the function)
+# line 59
 

@@ -16,9 +16,14 @@ import model_grid
 from probability_functions import *
 
 import imageio
+import glob
+import os
 
 # define path to models
 model_path='/Volumes/backup/grid_i15/'
+
+# define path to HST PSF
+tinytim_PSF = fits.open('../result00_psf.fits')[0].data
 
 # store model star SED
 star_path = '/Volumes/backup/grid_i15/test_peak/data_th/sed_rt.fits'
@@ -95,37 +100,61 @@ class Model(object):
         plt.suptitle('model '+str(self.n_model))
         plt.show()
        
-    def plot_gif(self, inc_idx):
+    def create_gif(self):
         """
         plot a gif that shows both the SED and output image change
         as inclination increases.
         """
-        fig,ax =plt.subplots(1,2,figsize=(8,4))
+    
+        # generate plots as pngs
+        for inc_idx in range(0,15):
+            fig,ax =plt.subplots(1,3,figsize=(17,5))
+            
+            # plot SED inclinations
+            n_i = len(self.seds)
+            for i in range(n_i): 
+                if i==inc_idx: # plot input inclination in bold
+                    ax[0].plot(self.wavelength, self.seds[i], 'k-') 
+                else:                                                                                                   
+                    ax[0].plot(self.wavelength, self.seds[i], color='gray', linewidth=0.5)
+            setup_plot(ax[0])
+    
+            # get image and convulation data
+            image = self.images[inc_idx] # image
+            imc = rebin(image[:-1,:-1], (125,125)) # binned image
+    
+            tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
+            tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
+    
+            vmin = 10*image.mean();vmax = image.max() 
+            cm = 'RdPu'
+    
+            # plot original image
+            im1 = ax[1].imshow(image, norm=LogNorm(),\
+                    vmin=vmin,vmax=vmax, aspect='auto', cmap=cm)
+            #fig.colorbar(im1, ax=ax[1])#orientation='horizontal',ax=ax[1])
+            #ax[1].set_title('MCFOST Image')
+                
+            # plot convolved with tinytim PSF
+            convolved_image = convolve_fft(imc, tinytim_PSFnorm)
+            im2 = ax[2].imshow(convolved_image, norm=LogNorm(),\
+                    vmin=vmin,vmax=vmax, aspect='auto', cmap=cm)
+            fig.colorbar(im2, ax=ax[2],fraction=0.05,pad=0.01)#orientation='horizontal',ax=ax[2])
+            #ax[2].set_title('Convolved with HST PSF')
+    
+            fig.suptitle('Model '+str(self.n_model))
+            fig.text(.5, .9, str(self.parameters)[1:-1], ha='center', fontsize=9)
+            plt.savefig('../'+str(inc_idx)+'.png')
+            plt.close()
         
-        # plot SED inclinations
-        n_i = len(self.seds)
-        for i in range(n_i): 
-            if i==inc_idx: # plot input inclination in bold
-                ax[0].plot(self.wavelength, self.seds[i], 'k-') 
-            else:                                                                                                   
-                ax[0].plot(self.wavelength, self.seds[i], color='gray', linewidth=0.5)
-        setup_plot(ax[0])
-        
-        # get image data for plotting
-        image = self.images[inc_idx]
-        vmin = 0.1*image.mean()
-        vmax = image.max()
-                    
-        # plot convolved image
-        convolved_image = convolve_fft(image,gaussian_kernel())
-        im = ax[1].imshow(convolved_image, norm=LogNorm(), \
-                vmin=vmin,vmax=vmax, aspect='auto')
-        fig.colorbar(im, ax=ax[1])
-        
-        fig.suptitle('model '+str(self.n_model))
-        fig.text(.5, .9, str(self.parameters)[1:-1], ha='center', fontsize=9)
-        plt.show()
-        #plt.savefig('../test_png/'+str(inc_idx)+'.png')
+        # combine pngs into .gif
+        images=[]
+        for i in range(0,15):
+            filename='../'+str(i)+'.png'
+            images.append(imageio.imread(filename))
+            os.remove(filename)
+        imageio.mimsave('../Model'+str(self.n_model)+'.gif', images)
+         
         
     @staticmethod
     def overplot(model1, model2):
@@ -234,7 +263,9 @@ class Model(object):
         plt.show()
         
         
-        
+###LINES TO CHANGE
+# line 24
+# line 21 (need to make new test peak)   
         
             
         

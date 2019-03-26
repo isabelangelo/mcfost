@@ -65,13 +65,22 @@ def gaussian_kernel():
     
     # generate 1D gaussian
     t = np.linspace(-5, 5, 15)
-    bump = np.exp(-0.5*t**2)
+    bump = np.exp(-0.75*t**2)
     bump /= np.trapz(bump) # normalize
     
     # make 2D kernel
     kernel = bump[:, np.newaxis] * bump[np.newaxis, :]
     
     return kernel
+
+
+def rebin(arr, new_shape):
+    """
+    rebin an array into a desired shape
+    """
+    shape = (new_shape[0], arr.shape[0] // new_shape[0],
+             new_shape[1], arr.shape[1] // new_shape[1])
+    return arr.reshape(shape).mean(-1).mean(1)
         
 
         

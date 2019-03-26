@@ -65,7 +65,7 @@ para = parameters.McfostParams(filename='ref3.0.para')
 #     new_para.zones[0].surface_density_exp = comb[5]
 #     #new_para.zones[0].dust[0].porosity = comb[6]
 #     new_para.zones[0].dust[0].amax = comb[6]
-#     new_para.writeto('model'+str(i)+'.para')
+#     new_para.writeto('grid_new_para/model'+str(i)+'.para')
 
 
 

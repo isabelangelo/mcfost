@@ -45,3 +45,8 @@ for a in range(len(dust_mass)):
 # write the large array to a text file
 hdu = fits.PrimaryHDU(data=arr)
 hdu.writeto('probability_array.fits')
+
+
+###LINES TO CHANGE###
+# line 21
+# line 47 or rename
