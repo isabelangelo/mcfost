@@ -6,13 +6,13 @@ written: Isabel Angelo (2019)
 """
 from models import *
 from model_grid import grid_parameters
-from probability_array import generate_weighted_array
+from probability_array import generate_masked_array
 
 # load binary array with probabilities
 binary_array = fits.open('binary_array.fits')[0].data
 
 # generate array with masked values
-masked_array = generate_weighted_array(
+masked_array = generate_masked_array(
     dust_mass = [1e-07, 1e-06, 1e-05, 0.0001, 0.001],
     Rc = [10, 30, 100, 300],
     f_exp = [0.85, 1.0, 1.15, 1.3],
