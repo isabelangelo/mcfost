@@ -72,6 +72,12 @@ class Model(object):
         # store the model image
         impath = self.filepath[:-19]+'data_0.6/RT.fits'
         self.images = fits.open(impath)[0].data[0][0]
+        
+        # store convolved image
+        tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
+        tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
+        rebinned_images = [rebin(i[:-1,:-1], (125,125)) for i in self.images] # binned image
+        self.convolved_images = [convolve_fft(i, tinytim_PSFnorm) for i in rebinned_images]
             
         # generate model inclinations- is it in the files?
         i_0, i_f = np.radians(45), np.radians(90)
@@ -121,10 +127,10 @@ class Model(object):
     
             # get image and convulation data
             image = self.images[inc_idx] # image
-            imc = rebin(image[:-1,:-1], (125,125)) # binned image
-    
-            tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
-            tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
+            convolved_image = self.convolved_images[inc_idx]
+#            imc = rebin(image[:-1,:-1], (125,125)) # binned image
+#            tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
+#            tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
     
             vmin = 10*image.mean();vmax = image.max() 
             cm = 'RdPu'
@@ -136,7 +142,7 @@ class Model(object):
             #ax[1].set_title('MCFOST Image')
                 
             # plot convolved with tinytim PSF
-            convolved_image = convolve_fft(imc, tinytim_PSFnorm)
+#            convolved_image = convolve_fft(imc, tinytim_PSFnorm)
             im2 = ax[2].imshow(convolved_image, norm=LogNorm(),\
                     vmin=vmin,vmax=vmax, aspect='auto', cmap=cm)
             fig.colorbar(im2, ax=ax[2],fraction=0.05,pad=0.01)#orientation='horizontal',ax=ax[2])
