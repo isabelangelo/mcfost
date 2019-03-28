@@ -128,9 +128,6 @@ class Model(object):
             # get image and convulation data
             image = self.images[inc_idx] # image
             convolved_image = self.convolved_images[inc_idx]
-#            imc = rebin(image[:-1,:-1], (125,125)) # binned image
-#            tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
-#            tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
     
             vmin = 10*image.mean();vmax = image.max() 
             cm = 'RdPu'
@@ -142,7 +139,6 @@ class Model(object):
             #ax[1].set_title('MCFOST Image')
                 
             # plot convolved with tinytim PSF
-#            convolved_image = convolve_fft(imc, tinytim_PSFnorm)
             im2 = ax[2].imshow(convolved_image, norm=LogNorm(),\
                     vmin=vmin,vmax=vmax, aspect='auto', cmap=cm)
             fig.colorbar(im2, ax=ax[2],fraction=0.05,pad=0.01)#orientation='horizontal',ax=ax[2])
