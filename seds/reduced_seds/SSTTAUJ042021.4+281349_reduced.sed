@@ -26,13 +26,9 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope            Reference
    71.419968077     0.0747       20.3481  Spitzer/MIPS:70      J/ApJS/186/259/new
   100.0             0.2988        8.593   Herschel/PACS      IRSA
   155.898314093      0.317           0.0 Spitzer/MIPS:160      J/ApJS/186/259/new
-  160.0             0.4446        10.93   Herschel/PACS      IRSA
   160.000244436      0.306       8.16994          :=160um J/MNRAS/459/342/tableb1
   249.993710807      0.317       9.14826          :=250um J/MNRAS/459/342/tableb1
-  250.0		    0.4041       11.7647    Herschel/SPIRE     IRSA
   349.999950966      0.319       10.6583          :=350um J/MNRAS/459/342/tableb1
-  350.0             0.3618       16.6667    Herschel/SPIRE     IRSA
   499.995760436      0.254       14.1732          :=500um J/MNRAS/459/342/tableb1
-  500.0             0.2472       23.8095    Herschel/SPIRE     IRSA
   886.959934911      0.137       45.2555         :=338GHz    J/ApJ/771/129/table2
   1332.41092444     0.0524        2.8626         :=225GHz    J/ApJ/771/129/table2

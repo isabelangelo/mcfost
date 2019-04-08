@@ -18,7 +18,6 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference
   70.0		   0.150283	 17.007	  Herschel/PACS		     IRSA
   71.419968077       0.11          10.0   Spitzer/MIPS:70 J/ApJS/220/11/fluxobs
   100.0		   0.193168	 13.787	  Herschel/PACS		     IRSA
-  160		     0.200 	-100 	  Herschel/PACS		     Wolff+2017
   160.0		     0.242803	19.234	   Herschel/PACS	     IRSA
   250		     0.100 	-100 	   Herschel/SPIRE	     Wolff+2017
   350		     0.050 	-100	   Herschel/SPIRE	     Wolff+2017

@@ -27,12 +27,8 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference
   70.0		    0.5743	 4.089	  Herschel/PACS		     IRSA
    71.419968077      0.287       11.8467  Spitzer/MIPS:70            II/332/c2d
   100.0		   0.59544	 7.186	  Herschel/PACS		     IRSA
-  100.0            0.472         10.0	  Karl			     Karl
-  160.0            0.605         10.0	  Karl			     Karl
   160.0		   0.7092	 11.927	  Herschel/PACS		     IRSA
-  250.0            0.701         10.0	  Karl			     Karl
   250.0		   0.1348	 19.608	  Herschel/SPIRE	     IRSA
-  350.0            0.538         15.0	  Karl			     Karl
   350.0		   0.5099	 17.544	  Herschel/SPIRE	     IRSA
   500.0            0.317         20.0	  Karl			     Karl
   870.0            0.094          4.0	  Karl			     Karl

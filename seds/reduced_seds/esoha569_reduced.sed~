@@ -15,14 +15,14 @@ Frequency (um)  Flux (Jy)  Percent Error    Telescope           Reference
   11.5598233207   0.000858       10.6061          WISE:W3        II/328/allwise
   22.0906681895    0.00894       8.83669          WISE:W4        II/328/allwise
   23.6746788281    0.00874       9.38215  Spitzer/MIPS:24            II/332/c2d
-  70.0		   0.150283	 17.007	  Herschel/IPAC		     IRSA
+  70.0		   0.150283	 17.007	  Herschel/PACS		     IRSA
   71.419968077       0.11          10.0   Spitzer/MIPS:70 J/ApJS/220/11/fluxobs
-  100.0		   0.193168	 13.787	  Herschel/IPAC		     IRSA
-  160		     0.200 	-100 	   HerschelPACS		     Wolff+2017
-  160.0		     0.242803	19.234	   Herschel/IPAC	     IRSA
-  250		     0.100 	-100 	   HerschelSPIRE	     Wolff+2017
-  350		     0.050 	-100	   HerschelSPIRE	     Wolff+2017
-  500		     0.050 	-100	   HerschelSPIRE	     Wolff+2017
+  100.0		   0.193168	 13.787	  Herschel/PACS		     IRSA
+  160		     0.200 	-100 	  Herschel/PACS		     Wolff+2017
+  160.0		     0.242803	19.234	   Herschel/PACS	     IRSA
+  250		     0.100 	-100 	   Herschel/SPIRE	     Wolff+2017
+  350		     0.050 	-100	   Herschel/SPIRE	     Wolff+2017
+  500		     0.050 	-100	   Herschel/SPIRE	     Wolff+2017
   855.010860451      0.062       19.3548   SCUBA:850 	  J/ApJS/220/11/fluxobs
   870 		     0.072	 19.44 	   APEX/LABOCA		     Wolff+2017
   886.959934911     0.0543       3.31492   :=338GHz 	  J/ApJ/831/125/sources
