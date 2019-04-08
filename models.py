@@ -124,6 +124,8 @@ class Model(object):
                 else:                                                                                                   
                     ax[0].plot(self.wavelength, self.seds[i], color='gray', linewidth=0.5)
             setup_plot(ax[0])
+            ax[0].annotate('i='+str(np.round(self.inclinations[inc_idx]))[:-2]+'$^\circ$',\
+                            (0.87,0.95),xycoords='axes fraction')
     
             # get image and convulation data
             image = self.images[inc_idx] # image
