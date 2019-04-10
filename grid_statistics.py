@@ -12,6 +12,7 @@ from probability_array import generate_masked_array
 binary_array = fits.open('binary_array.fits')[0].data
 
 # generate array with masked values
+# this gets changed when you want to mask different values
 masked_array = generate_masked_array(
     dust_mass = [1e-07, 1e-06, 1e-05, 0.0001, 0.001],
     Rc = [10, 30, 100, 300],
@@ -33,7 +34,6 @@ binary_array *= masked_array # multiply by weighted array
 # update dictionary to inclue inclinations
 param_dict = model_grid.grid_parameters.copy()
 param_dict['inc']=[str(i)[:2] for i in list(Model(0).inclinations)]
-param_dict['sd_exp']=[0, -0.5, -1.5] #REMOVE THIS LATER
 
 def plotP_1D(ax, paramstr):
     """
@@ -146,8 +146,4 @@ def plot_corner():
             
     plt.subplots_adjust(wspace=0, hspace=0)
     plt.show()
-
-    
-    
-#REMOVE LINE 9
     

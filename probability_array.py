@@ -9,7 +9,7 @@ array dimensions:
 so index of each dimension corresponds to the index of that parameter in 
 grid_parameters dictions. For example, 
 
-arr[0,0,0,0,0,0,0] corresponds to model_grid.get_model_index('1e-07,10,0.85,5,0.1,0,0,10')
+arr[0,0,0,0,0,0,0] corresponds to model_grid.get_model_index('1e-07,10,0.85,5,0.1,0,10')
 
 2. generates masked array where excluded models have their value set to zero.
 
@@ -26,7 +26,7 @@ from models import *
 from test_edge_on import *
 
 # define shape of grid arrays
-arr_shape = (5,4,4,4,3,3,4,15)
+arr_shape = (5,4,4,4,3,4,4,15)
 
 def generate_probability_array():
     """
@@ -55,7 +55,7 @@ def generate_probability_array():
                                 g_s = str(amax[g])
                             
                                 # get index with corresponding model                            
-                                param_str = ','.join([a_s,b_s,c_s,d_s,e_s,f_s,'0',g_s])
+                                param_str = ','.join([a_s,b_s,c_s,d_s,e_s,f_s,g_s])
                                 idx = get_model_index(param_str)
                                 p = compute_P(Model(idx))
                                 arr[a,b,c,d,e,f,g,:] = p
@@ -109,7 +109,4 @@ def generate_masked_array(dust_mass=None, Rc=None, f_exp=None, H0=None,\
             if grid_parameters['amax'][i] not in amax:
                 masked_arr[:,:,:,:,:,:,i] = np.zeros(arr[:,:,:,:,:,:,i].shape)                           
     return masked_arr
-
-###LINES TO CHANGE###
-# line 21 (new shape of array)
-# line 47 or rename
+    

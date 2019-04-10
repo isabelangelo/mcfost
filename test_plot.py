@@ -45,15 +45,15 @@ def makeplot(gridlist, title):
     plt.close()
     print(title)
 
-# makeplot(random, 'randomly selected')
-# makeplot(high_dust_mass, 'high dust mass (1e-3)')
-# makeplot(steep_surface_density, 'steep surface density')
-# makeplot(small_Rin, 'small inner radius')
-# makeplot(small_flaring_exp, 'small flaring exponent')
-# makeplot(mid_dust_mass, 'medium dust mass (1e-5)')
-# makeplot(mid_surface_density, 'medium surface density')
-# makeplot(mid_Rin, 'medium inner radius')
-# makeplot(mid_flaring_exp, 'medium flaring exponent')
+makeplot(random, 'randomly selected')
+makeplot(high_dust_mass, 'high dust mass (1e-3)')
+makeplot(steep_surface_density, 'steep surface density')
+makeplot(small_Rin, 'small inner radius')
+makeplot(small_flaring_exp, 'small flaring exponent')
+makeplot(mid_dust_mass, 'medium dust mass (1e-5)')
+makeplot(mid_surface_density, 'medium surface density')
+makeplot(mid_Rin, 'medium inner radius')
+makeplot(mid_flaring_exp, 'medium flaring exponent')
 
 
 

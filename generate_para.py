@@ -28,30 +28,30 @@ for d in H0 for e in Rin for f in sd_exp for g in amax]
 
 # generate initial parameters
 from pymcfost import parameters
-para = parameters.McfostParams(filename='ref3.0.para')
+para = parameters.Params(filename='ref3.0.para')
 
 # update fixed parameters
-# para.phot.nphot_image = 1.28e4
-# para.simu.use_default_wl = False
-# #para.wavelengths.file = 'lambda3.lambda'
-# para.wavelengths.file = 'lambda4.lambda'
-# #para.map.nx = 251
-# #para.map.ny = 251
-# para.map.nx = 375
-# para.map.ny = 375
-# para.map.size=1050 #added for second grid
-# para.map.RT_imin = 45
-# para.map.RT_imax = 90
-# para.map.RT_ntheta = 15
-# para.simu.radial_migration = False
-# para.simu.dust_sublimation = False
-# para.simu.hydrostatic_eq = False
-# para.simu.viscous_heating = False
-# para.zones[0].Rout = 600 #added for second grid
-# para.zones[0].geometry = 2
-# para.zones[0].dust[0].amin = 0.01
-# para.zones[0].dust[0].n_grains = 50
-# para.zones[0].dust[0].amax = 10
+para.phot.nphot_image = 1.28e4
+para.simu.use_default_wl = False
+#para.wavelengths.file = 'lambda3.lambda'
+para.wavelengths.file = 'lambda4.lambda'
+#para.map.nx = 251
+#para.map.ny = 251
+para.map.nx = 375
+para.map.ny = 375
+para.map.size=1050 #added for second grid
+para.map.RT_imin = 45
+para.map.RT_imax = 90
+para.map.RT_ntheta = 15
+para.simu.radial_migration = False
+para.simu.dust_sublimation = False
+para.simu.hydrostatic_eq = False
+para.simu.viscous_heating = False
+para.zones[0].Rout = 600 #added for second grid
+para.zones[0].geometry = 2
+para.zones[0].dust[0].amin = 0.01
+para.zones[0].dust[0].n_grains = 50
+para.zones[0].dust[0].amax = 10
 # 
 # # generate individual parameter files
 # for i in range(len(combinations)):

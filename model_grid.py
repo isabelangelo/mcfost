@@ -11,7 +11,7 @@ import numpy as np
 import sys
 
 # retrieve list with indices corresponding to parameter combinations
-f = open('model_indices_15i.txt','r')
+f = open('model_indices.txt','r')
 model_list = [literal_eval(line.strip()) for line in f]
 
 # store grid parameters in dictionary
@@ -37,7 +37,7 @@ def get_model_index(parameter_input):
     """
 
     parameter_list = [float(p) for p in parameter_input.split(',')]
-    parameter_list.insert(-1,0) # for porosity=0 in grid
+    #parameter_list.insert(-1,0) # for porosity=0 in grid
     model_index = model_list.index(tuple(parameter_list))
     return model_index
     
@@ -56,7 +56,7 @@ def get_model_parameters(model_index):
     parameters = model_list[model_index]
     keys = ['dust_mass', 'Rc','f_exp', 'H0', 'Rin', 'sd_exp', 'amax']
     values = list(parameters)
-    values.pop(-2) # remove porosity
+    #values.pop(-2) # remove porosity
     parameter_dict = dict(zip(keys,values))
     return parameter_dict
     
@@ -109,18 +109,11 @@ def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
         
     # for case where no conditions are input    
     else:
-        grid_indexes = list(np.arange(0,11520,1))
+        grid_indexes = list(np.arange(0,15360,1))
     
     # generate random model numbers from grid indexes   
     if n is not None:
         return np.random.choice(grid_indexes, n)       
     else:
         return grid_indexes
-        
-        
-###LINES TO CHANGE###
-# line 14
-# line 112
-# line 40 (might need to change the rest of the function)
-# line 59
 

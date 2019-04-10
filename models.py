@@ -20,13 +20,13 @@ import glob
 import os
 
 # define path to models
-model_path='/Volumes/backup/grid_i15/'
+model_path='/Volumes/backup/disks/grid_new/'
 
 # define path to HST PSF
 tinytim_PSF = fits.open('../result00_psf.fits')[0].data
 
 # store model star SED
-star_path = '/Volumes/backup/grid_i15/test_peak/data_th/sed_rt.fits'
+star_path = '/Volumes/backup/disks/grid_new/test_peak/data_th/sed_rt.fits'
 star_seds = fits.open(star_path)[0].data[0][0]
 
 # set up plot axes
@@ -76,7 +76,7 @@ class Model(object):
         # store convolved image
         tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
         tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
-        rebinned_images = [rebin(i[:-1,:-1], (125,125)) for i in self.images] # binned image
+        rebinned_images = [rebin(i[:-1,:-1], (187,187)) for i in self.images] # binned image
         self.convolved_images = [convolve_fft(i, tinytim_PSFnorm) for i in rebinned_images]
             
         # generate model inclinations- is it in the files?
@@ -124,6 +124,10 @@ class Model(object):
                 else:                                                                                                   
                     ax[0].plot(self.wavelength, self.seds[i], color='gray', linewidth=0.5)
             setup_plot(ax[0])
+            
+            # plot host star
+            ax[0].plot(self.wavelength, star_seds[0],color='midnightblue', linewidth=0.8, linestyle=':')
+            # print inclination
             ax[0].annotate('i='+str(np.round(self.inclinations[inc_idx]))[:-2]+'$^\circ$',\
                             (0.87,0.95),xycoords='axes fraction')
     
@@ -265,11 +269,7 @@ class Model(object):
         ax1.set_xlabel('log($\lambda$)')
         ax1.legend()
         plt.show()
-        
-        
-###LINES TO CHANGE
-# line 24
-# line 21 (need to make new test peak)   
+         
         
             
         
