@@ -26,7 +26,10 @@ from models import *
 from test_edge_on import *
 
 # define shape of grid arrays
-arr_shape = (5,4,4,4,3,4,4,15)
+if grid == 'new':
+    arr_shape = (5,4,4,4,3,4,4,15)
+if grid == 'old':
+    arr_shape = (5,4,4,4,3,3,4,15)
 
 def generate_probability_array():
     """

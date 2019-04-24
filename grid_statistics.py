@@ -4,12 +4,17 @@ and defines for plotting them.
 
 written: Isabel Angelo (2019)
 """
+
+###NOTE : this code can't really go between both grids yet,
+# but that's okay because you can't make the arrays for the new one yet anyways
+
 from models import *
 from model_grid import grid_parameters
 from probability_array import generate_masked_array
 
 # load binary array with probabilities
-binary_array = fits.open('binary_array.fits')[0].data
+binary_arr_path = model_path + 'binary_array.fits'
+binary_array = fits.open(binary_arr_path)[0].data
 
 # generate array with masked values
 # this gets changed when you want to mask different values

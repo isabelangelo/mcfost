@@ -1,9 +1,11 @@
 """
 probability filters that compute associated probability for properties of model
-and observation SEDs
+and observation SEDs and model images
 """
 import numpy as np
 
+
+### SED Probability Filters ###
 def P1(x):
     """
     Arctan filter used to test brightness ratio at 0.75um.
@@ -58,6 +60,7 @@ def P3(x):
     y = 1-1/denom
     return y
     
+### Image Functions and Probability Filters ###
 def gaussian_kernel():
     """ 
     generates 2D gaussian kernel to convolve with mcfost image
@@ -81,6 +84,14 @@ def rebin(arr, new_shape):
     shape = (new_shape[0], arr.shape[0] // new_shape[0],
              new_shape[1], arr.shape[1] // new_shape[1])
     return arr.reshape(shape).mean(-1).mean(1)
+    
+def image_P2(x):
+    pass
+    
+def image_P3(x):
+    pass
+    
+
         
 
         

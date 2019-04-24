@@ -12,21 +12,18 @@ from matplotlib.colors import LogNorm
 import scipy.stats.mstats as stats
 from astropy.convolution import convolve_fft
 from reduce_sed import parseline
-import model_grid
+from model_grid import *
 from probability_functions import *
 
 import imageio
 import glob
 import os
 
-# define path to models
-model_path='/Volumes/backup/disks/grid_new/'
-
 # define path to HST PSF
 tinytim_PSF = fits.open('../result00_psf.fits')[0].data
 
 # store model star SED
-star_path = '/Volumes/backup/disks/grid_new/test_peak/data_th/sed_rt.fits'
+star_path = model_path + 'test_peak/data_th/sed_rt.fits'
 star_seds = fits.open(star_path)[0].data[0][0]
 
 # set up plot axes
@@ -76,7 +73,8 @@ class Model(object):
         # store convolved image
         tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
         tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
-        rebinned_images = [rebin(i[:-1,:-1], (187,187)) for i in self.images] # binned image
+        binpix = int((self.images[0].shape[0]-1)/2)
+        rebinned_images = [rebin(i[:-1,:-1], (binpix,binpix)) for i in self.images] # binned image
         self.convolved_images = [convolve_fft(i, tinytim_PSFnorm) for i in rebinned_images]
             
         # generate model inclinations- is it in the files?
@@ -85,7 +83,7 @@ class Model(object):
         self.inclinations = np.degrees(np.arccos(cosi))
         
         # store parameters
-        self.parameters = model_grid.get_model_parameters(n_model)
+        self.parameters = get_model_parameters(n_model)
         
     def plot(self):
         """
@@ -271,6 +269,6 @@ class Model(object):
         plt.show()
          
         
-            
+ #LINES TO CHANGE: 23          
         
                

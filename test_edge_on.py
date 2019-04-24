@@ -4,8 +4,10 @@ edge-on/optically thick. Probability for a given SED is generated based on weigh
 probabilities computed by 3 tests: brightness1 (0.75um), brightness2 (4.5um),
 and slope test. 
 
-All probability functions take a Model or Obs object as input and return
-a probability (float) 0<P<1.
+SED probability functions take a Model or Obs object as input and return
+a list containing an associated probability (float) 0<P<1 for all inclinations.
+
+Image probability functions only take models.
 
 written: Isabel Angelo (2019)
 """
@@ -16,6 +18,8 @@ def brightness_test1(obj):
     """
     Tests to see if SED is significantly blocked by dust at 0.75um.
     (most of edge-on disks should pass this test)
+    
+    Returns list that contains associated P for each model inclination
     """ 
     if type(obj)==Model:
     
@@ -47,6 +51,8 @@ def brightness_test2(obj):
     """
     Tests for brightness significantly blocked at 4.5um.
     (single-peaked ones should pass this test)
+    
+    Returns list that contains associated P for each model inclination
     """ 
     if type(obj)==Model:
         # wavelength where starlight is attenuated
@@ -76,6 +82,8 @@ def slope_test(obj):
     """
     Tests to see if slope goes from negative to positive i.e. "double-peaked" shape.
     (two-peaked disks and ones with large Rin should pass)
+    
+    Returns list that contains associated P for each model inclination
     """
     if type(obj)==Model:
         P_i = []
@@ -106,7 +114,7 @@ def slope_test(obj):
         
 def compute_P(obj):
     """
-    Compute final weighted probability from 3 tests
+    Compute final weighted probability from 3 tests for each model inclination
     """
     sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
     return sum/3.

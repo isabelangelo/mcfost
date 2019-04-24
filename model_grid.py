@@ -10,8 +10,19 @@ from generate_para import dust_mass, Rc, f_exp, H0, Rin, sd_exp, amax
 import numpy as np
 import sys
 
+# define path to models
+#model_path='/Volumes/backup/disks/grid_new/' # new grid
+model_path='/Volumes/backup/disks/old_grid/' # old grid
+
+# store which grid is being used
+if 'new' in model_path:
+    grid = 'new'
+else:
+    grid = 'old'
+
 # retrieve list with indices corresponding to parameter combinations
-f = open('model_indices.txt','r')
+model_idx_path = model_path+ 'model_indices.txt'
+f = open(model_idx_path,'r')
 model_list = [literal_eval(line.strip()) for line in f]
 
 # store grid parameters in dictionary
@@ -37,7 +48,10 @@ def get_model_index(parameter_input):
     """
 
     parameter_list = [float(p) for p in parameter_input.split(',')]
-    #parameter_list.insert(-1,0) # for porosity=0 in grid
+    
+    if grid=='old':
+        parameter_list.insert(-1,0) # for porosity=0 in grid
+        
     model_index = model_list.index(tuple(parameter_list))
     return model_index
     
@@ -56,7 +70,10 @@ def get_model_parameters(model_index):
     parameters = model_list[model_index]
     keys = ['dust_mass', 'Rc','f_exp', 'H0', 'Rin', 'sd_exp', 'amax']
     values = list(parameters)
-    #values.pop(-2) # remove porosity
+    
+    if grid == 'old':
+        values.pop(-2) # remove porosity
+        
     parameter_dict = dict(zip(keys,values))
     return parameter_dict
     
@@ -109,7 +126,7 @@ def get_grid_indexes(dust_mass=None, Rc=None, f_exp=None, H0=None,\
         
     # for case where no conditions are input    
     else:
-        grid_indexes = list(np.arange(0,15360,1))
+        grid_indexes = list(np.arange(0,len(model_list),1))
     
     # generate random model numbers from grid indexes   
     if n is not None:
