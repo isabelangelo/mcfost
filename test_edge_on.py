@@ -2,11 +2,11 @@
 Defines a set of tests for determining if a Model or Obs object are observably
 edge-on/optically thick. Probability for a given SED is generated based on weighted
 probabilities computed by 3 tests: brightness1 (0.75um), brightness2 (4.5um),
-and slope test. 
+and slope test. Probability for a given image is generated based on brightest pixel
+location, disk shape and outer disk flux.
 
 SED probability functions take a Model or Obs object as input and return
 a list containing an associated probability (float) 0<P<1 for all inclinations.
-
 Image probability functions only take models.
 
 written: Isabel Angelo (2019)
@@ -14,6 +14,7 @@ written: Isabel Angelo (2019)
 from models import *
 from observations import *
 
+### SED Tests ###
 def brightness_test1(obj):
     """
     Tests to see if SED is significantly blocked by dust at 0.75um.
@@ -118,8 +119,83 @@ def compute_P(obj):
     """
     sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
     return sum/3.
+    
+    
+### Image Tests ###
+def image_brightpixel_test(model):
+    """
+    determines binary edge-on probability based on criteria of the pixel location
+    of the brightest pixel in the image
+    """
+    P_i = []
+    images = model.convolved_images
+    # get center pixel of images
+    center_pixel = int(images[0].shape[0]/2-0.5)
+    # determine location of brightest pixel + associated probability
+    for inc_idx in range(len(model.images)):
+        im=images[inc_idx]
+        if im[center_pixel,center_pixel]!=im.max():
+            P_i.append(1)
+        else:
+            P_i.append(0)
+    return P_i   
+
         
-        
+PSFparams = fitgaussian(tinytim_PSF)
+PSFfit = gaussian(*PSFparams)
+(PSFheight, PSFx, PSFy, PSFwidth_x, PSFwidth_y) = PSFparams
+
+
+def image_shape_test(model):
+    """
+    determines edge-on probability (0<=P<=1) based on ratio of convolved image sma to 
+    TinyTim PSF sma
+    """
+    P_i = []
+    # compute sma ratio of image to PSF
+    images=model.convolved_images
+    for inc_idx in range(len(images)):
+        data=images[inc_idx]
+        params = fitgaussian(data)
+        fit = gaussian(*params)
+        (height, x, y, width_x, width_y) = params
+        sma_ratio = width_y/PSFwidth_y
+        # append associated probability
+        P_i.append(image_P2(sma_ratio))
+    return P_i
+    
+    
+def image_fluxratio_test(model):
+    """
+    determines edge-on probability (0<=P<=1) based on the flux ratio of 
+    an offset column brightest pixel to the image brightest pixel
+    """
+    # define horizontal shift for flux ratio computation
+    shiftx = 8
+    # define flux ratio threshold
+    ratio_threshold = 0.1
+    P_i = []
+    images = model.convolved_images
+    for inc_idx in range(len(images)):
+        # get image for inc
+        im = images[inc_idx]
+        # store location of maximum
+        (xmax,ymax) = np.unravel_index(np.argmax(im, axis=None), im.shape)
+        # compute ratio
+        num = np.max(im[:,ymax+shiftx]) # brightest pixel in column shifted from brightest
+        denom = im[xmax,ymax] # brightest pixel
+        flux_ratio = num/denom
+        P_i.append(image_P3(flux_ratio))
+    return P_i
+    
+def image_compute_P(model):
+    """
+    Compute final weighted probability from 3 tests for each model image inclination
+    """
+    sum = np.array(image_brightpixel_test(model))+\
+            np.array(image_shape_test(model))+\
+            np.array(image_fluxratio_test(model))
+    return sum/3.       
         
         
         
