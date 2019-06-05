@@ -39,6 +39,9 @@ def generate_probability_array():
     example:
         
         arr[0,0,0,0,0,0,0] is the probability of Model(0) being edge-on
+        
+    Returns:
+        probability_array.fits (FITS):file containing hypercube
     """
     # generate empty array to fill with probabilities
     arr = np.empty(arr_shape)
@@ -68,7 +71,7 @@ def generate_probability_array():
     hdu = fits.PrimaryHDU(data=arr)
     hdu.writeto('probability_array.fits')
 
-#NOTE: do we want to make this values that ARE masked?    
+    
 def generate_masked_array(dust_mass=None, Rc=None, f_exp=None, H0=None,\
     Rin=None, sd_exp=None, amax=None):
     """
@@ -78,6 +81,9 @@ def generate_masked_array(dust_mass=None, Rc=None, f_exp=None, H0=None,\
     Args:
         dust_mass, Rc, etc. (list): list of values for a specified parameter to be
         included in masked array
+    
+    Returns:
+        masked_arr(np.array): hypercube with masks as values
     """
     # generate array of ones to weight
     masked_arr = np.ones(arr_shape)
@@ -85,31 +91,76 @@ def generate_masked_array(dust_mass=None, Rc=None, f_exp=None, H0=None,\
     if dust_mass is not None:
         for i in range(len(grid_parameters['dust_mass'])):
             if grid_parameters['dust_mass'][i] not in dust_mass:
-                masked_arr[i] = np.zeros(arr[i].shape)
+                masked_arr[i] = np.zeros(masked_arr[i].shape)
     if Rc is not None:
         for i in range(len(grid_parameters['Rc'])):
             if grid_parameters['Rc'][i] not in Rc:
-                masked_arr[:,i]=np.zeros(arr[:,i].shape)
+                masked_arr[:,i]=np.zeros(masked_arr[:,i].shape)
     if f_exp is not None:
         for i in range(len(grid_parameters['f_exp'])):
             if grid_parameters['f_exp'][i] not in f_exp:
-                masked_arr[:,:,i]=np.zeros(arr[:,:,i].shape)
+                masked_arr[:,:,i]=np.zeros(masked_arr[:,:,i].shape)
     if H0 is not None:
         for i in range(len(grid_parameters['H0'])):
             if grid_parameters['H0'][i] not in H0:
-                masked_arr[:,:,:,i] = np.zeros(arr[:,:,:,i].shape)
+                masked_arr[:,:,:,i] = np.zeros(masked_arr[:,:,:,i].shape)
     if Rin is not None:
         for i in range(len(grid_parameters['Rin'])):
             if grid_parameters['Rin'][i] not in Rin:
-                masked_arr[:,:,:,:,i] = np.zeros(arr[:,:,:,:,i].shape)
+                masked_arr[:,:,:,:,i] = np.zeros(masked_arr[:,:,:,:,i].shape)
     if sd_exp is not None:
         for i in range(len(grid_parameters['sd_exp'])):
             if grid_parameters['sd_exp'][i] not in sd_exp:
                 print(i)
-                masked_arr[:,:,:,:,:,i] = np.zeros(arr[:,:,:,:,:,i].shape)
+                masked_arr[:,:,:,:,:,i] = np.zeros(masked_arr[:,:,:,:,:,i].shape)
     if amax is not None:
         for i in range(len(grid_parameters['amax'])):
             if grid_parameters['amax'][i] not in amax:
-                masked_arr[:,:,:,:,:,:,i] = np.zeros(arr[:,:,:,:,:,:,i].shape)                           
+                masked_arr[:,:,:,:,:,:,i] = np.zeros(masked_arr[:,:,:,:,:,:,i].shape)                           
     return masked_arr
+    
+    
+def generate_weighted_array(dust_mass_weights=None,Rc_weights=None,f_exp_weights=None,\
+                           H0_weights=None,Rin_weights=None, sd_exp_weights=None,\
+                           amax_weights=None):
+    """
+    create an array with weights specified by input parameters. For example,
+    Rc=[10,30,100,300] can have a corresponding Rc_weights=[0.15,0.2,0.3,0.35],
+     with an output where all models with Rc=10 will be weighted by 0.15, 
+     Rc=30 by 0.2, and so on
+    
+    Args:
+        dust_mass_weights, etc. (list): list of weights where each index represents the
+        weight of the corresponding parameter value
+        
+    Returns:
+        weighted_arr(np.array): hypercube with weights as values
+        
+    """
+    # generate empty array
+    weighted_arr = np.ones(arr_shape)
+    # weight dust mass
+    if dust_mass_weights is not None:
+        for i in range(len(dust_mass)):
+            weighted_arr[i] *= dust_mass_weights[i]
+    if Rc_weights is not None:
+        for i in range(len(Rc)):
+            weighted_arr[:,i] *= Rc_weights[i]
+    if f_exp_weights is not None:
+        for i in range(len(f_exp)):
+            weighted_arr[:,:,i] *= f_exp_weights[i]
+    if H0_weights is not None:
+        for i in range(len(H0)):
+            weighted_arr[:,:,:,i] *= H0_weights[i]
+    if Rin_weights is not None:
+        for i in range(len(Rin)):
+            weighted_arr[:,:,:,:,i] *= Rin_weights[i]
+    if sd_exp_weights is not None:
+        for i in range(len(sd_exp)):
+            weighted_arr[:,:,:,:,:,i] *= sd_exp_weights[i]
+    if amax_weights is not None:
+        for i in range(len(amax)):
+            weighted_arr[:,:,:,:,:,:,i] *= amax_weights[i]
+            
+    return weighted_arr
     

@@ -31,7 +31,7 @@ masked_array = generate_masked_array(
 # generate weighted array here
 
 # update array with masks and weights    
-binary_array *= masked_array # multiply by weighted array
+binary_array *= weighted_array # might not need masked array??
 
 
 # generate array to multiply by binary that maps

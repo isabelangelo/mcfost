@@ -23,35 +23,53 @@ random1 = get_grid_indexes(n=6)
 random2 = get_grid_indexes(n=6)
 
 def makeplot(gridlist, title):
-    fig=plt.figure(figsize=(5, 6))
-    gs = gridspec.GridSpec(4,2)
-
+    fig=plt.figure(figsize=(6, 8))
+    gs = gridspec.GridSpec(4,4)
     ax = fig.add_subplot(gs[0, :])
-    for i in range(len(gridlist)):
-        m = Model(gridlist[i])
+    
+    # for images
+    subplot_arr = np.arange(0,12,1)[0::2]
+    num = 0
+    for i in subplot_arr:
+        m = Model(gridlist[num])
 
-        # for images
         p_threshold = 0.5
         p = image_compute_P(m)
-        ax.plot(m.inclinations, p, label=str(i))
+        ax.plot(m.inclinations, p, label=str(num))
         ax.set_ylim(0,1)
     
-        ax2 = fig.add_subplot(gs[i+2])
+        ax2 = fig.add_subplot(gs[i+4])
+        ax3 = fig.add_subplot(gs[i+5])
         if len(np.where(p>p_threshold)[0])==0:
-            image = m.convolved_images[-1]
-            ax2.annotate('never edge on',(0,100))
+            image2 = m.convolved_images[-2]
+            image3 = m.convolved_images[-1]
+            ax3.annotate('never edge on',(0,100))
         else:
             first_edgeon_idx = np.where(p>p_threshold)[0][0]
-            image = m.convolved_images[first_edgeon_idx]
-            ax2.annotate(str(m.inclinations[first_edgeon_idx])[:2],(100,100))
-            
-        ax2.set_ylabel(str(i),rotation=0)    
-        vmin = 10*image.mean();vmax = image.max()                                                                                                     
-        ax2.imshow(image, norm=LogNorm(),\
-                    vmin=vmin,vmax=vmax, cmap='RdPu')
-        ax2.axis('off')
+            image2 = m.convolved_images[first_edgeon_idx-1]
+            image3 = m.convolved_images[first_edgeon_idx]
+            ax2.annotate(str(m.inclinations[first_edgeon_idx-1])[:2],(100,100))
+            ax3.annotate(str(m.inclinations[first_edgeon_idx])[:2],(100,100))
+              
+        vmin2 = 10*image2.mean();vmax2 = image2.max() 
+        vmin3 = 10*image3.mean();vmax3 = image3.max() 
+                                                                                                           
+        ax2.imshow(image2, norm=LogNorm(),\
+                    vmin=vmin2,vmax=vmax2, cmap='RdPu')
+        ax3.imshow(image3, norm=LogNorm(),\
+                    vmin=vmin3,vmax=vmax3, cmap='RdPu')
+                    
+        ax2.yaxis.set_major_locator(plt.NullLocator())
+        ax2.xaxis.set_major_formatter(plt.NullFormatter())
+        ax3.yaxis.set_major_locator(plt.NullLocator())
+        ax3.xaxis.set_major_formatter(plt.NullFormatter())
+        ax2.set_ylabel(str(num), rotation=0)
 
-        # for SEDS
+        num += 1
+
+    # for SEDS   
+    #for i in range(len(gridlist)):
+    #    m = Model(gridlist[i])
         #p = compute_P(m)
         #ax.plot(m.inclinations, p, label=str(i))
 

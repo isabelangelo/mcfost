@@ -122,23 +122,44 @@ def compute_P(obj):
     
     
 ### Image Tests ###
-def image_brightpixel_test(model):
+#def image_brightpixel_test(model):
+#    """
+#    determines binary edge-on probability based on criteria of the pixel location
+#    of the brightest pixel in the image
+#    """
+#    P_i = []
+#    images = model.convolved_images
+#    # get center pixel of images
+#    center_pixel = int(images[0].shape[0]/2-0.5)
+#    # determine location of brightest pixel + associated probability
+#    for inc_idx in range(len(model.images)):
+#        im=images[inc_idx]
+#        if im[center_pixel,center_pixel]!=im.max():
+#            P_i.append(1)
+#        else:
+#            P_i.append(0)
+#    return P_i   
+    
+def image_ysma_test(model):
     """
-    determines binary edge-on probability based on criteria of the pixel location
-    of the brightest pixel in the image
+    determines edge-on probability (0<=P<=1) based on ratio of convolved image sma to 
+    TinyTim PSF sma
+    
+    note: width_x corresponds to the vertical axis (rows) and 
+    width_y corresponds to the horizontal axis (columns)
     """
     P_i = []
-    images = model.convolved_images
-    # get center pixel of images
-    center_pixel = int(images[0].shape[0]/2-0.5)
-    # determine location of brightest pixel + associated probability
-    for inc_idx in range(len(model.images)):
-        im=images[inc_idx]
-        if im[center_pixel,center_pixel]!=im.max():
-            P_i.append(1)
-        else:
-            P_i.append(0)
-    return P_i   
+    # compute sma ratio of image to PSF
+    images=model.convolved_images
+    for inc_idx in range(len(images)):
+        data=images[inc_idx]
+        params = fitgaussian(data)
+        fit = gaussian(*params)
+        (height, x, y, width_x, width_y) = params
+        sma_ratio = width_x/PSFwidth_x
+        # append associated probability
+        P_i.append(image_P2(sma_ratio))
+    return P_i  
 
         
 PSFparams = fitgaussian(tinytim_PSF)
@@ -171,7 +192,7 @@ def image_fluxratio_test(model):
     an offset column brightest pixel to the image brightest pixel
     """
     # define horizontal shift for flux ratio computation
-    shiftx = 8
+    shiftx = 8 #6
     # define flux ratio threshold
     ratio_threshold = 0.1
     P_i = []
@@ -192,7 +213,7 @@ def image_compute_P(model):
     """
     Compute final weighted probability from 3 tests for each model image inclination
     """
-    sum = np.array(image_brightpixel_test(model))+\
+    sum = np.array(image_ysma_test(model))+\
             np.array(image_shape_test(model))+\
             np.array(image_fluxratio_test(model))
     return sum/3.       
