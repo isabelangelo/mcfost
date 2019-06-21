@@ -11,8 +11,8 @@ import numpy as np
 import sys
 
 # define path to models
-#model_path='/Volumes/backup/disks/grid_new/' # new grid
-model_path='/Volumes/backup/disks/old_grid/' # old grid
+model_path='/Volumes/backup/disks/grid_new/' # new grid
+#model_path='/Volumes/backup/disks/old_grid/' # old grid
 
 # store which grid is being used
 if 'new' in model_path:
