@@ -29,15 +29,24 @@ masked_array = generate_masked_array(
     )
 
 # generate weighted array here
+#weighted_array = generate_weighted_array(
+#    dust_mass_weights = [],
+#    Rc_weights = [],
+#    f_exp_weights = [],
+#    H0_weights = [],
+#    Rin_weights =  [],
+#    sd_exp_weights = [],
+#    amax_weights = []
+#    )
 
 # update array with masks and weights    
-binary_array *= weighted_array # might not need masked array??
+#binary_array *= weighted_array # might not need masked array??
 
 
 # generate array to multiply by binary that maps
 
 # update dictionary to inclue inclinations
-param_dict = model_grid.grid_parameters.copy()
+param_dict = grid_parameters.copy()
 param_dict['inc']=[str(i)[:2] for i in list(Model(0).inclinations)]
 
 def plotP_1D(ax, paramstr):

@@ -118,7 +118,29 @@ def fitgaussian(data):
     p, success = optimize.leastsq(errorfunction, params)
     return p
 
-# these functions are needed to compute associated probabilities    
+# these functions are needed to compute associated probabilities 
+def image_P1(x):
+    """
+    Logistic filter used to test used to test shape of star/disk,
+    or ratio of sma_y to PSF sma_y. sma ratio 1.5< corresponds to P=0,
+    and sma ratio>2 corresponds to P=1
+    Arg:
+        x(float):sma_ratio output of image_shape_test
+    Returns:
+        y(float): associated probability
+    """
+    a = 1
+    b = 0.1
+    # old parameters
+    c = 23
+    d = -1.8
+    # new parameters
+#    c = 40
+#    d = -1.4
+    denom = 1 + b*np.e**(-c*(x+d))
+    y = a/denom
+    return y
+       
 def image_P2(x):
     """
     Logistic filter used to test shape of star/disk,
@@ -139,6 +161,7 @@ def image_P2(x):
 
 def image_P3(x):
     """
+    *used when pixel shift=6*
     Logistic filter used to test flux ratio of disk/star,
     flux ratio <0.1 corresponds to P=0, and sma ratio>0.2 corresponds to P=1
     Arg:
@@ -154,6 +177,23 @@ def image_P3(x):
     y = a/denom
     return y
     
+def image_P4(x):
+    """
+    *used when pixel shift=8*
+    Logistic filter used to test flux ratio of disk/star,
+    flux ratio <0.02 corresponds to P=0, and sma ratio>0.1 corresponds to P=1
+    Arg:
+        x(float):sma_ratio output of image_shape_test
+    Returns:
+        y(float): associated probability
+    """
+    a = 1
+    b = 0.1
+    c = 150
+    d = -0.08
+    denom = 1 + b*np.e**(-c*(x+d))
+    y = a/denom
+    return y
 
         
 
