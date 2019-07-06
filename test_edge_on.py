@@ -164,7 +164,7 @@ def compute_P(obj):
 def image_verticalfluxratio_test(model):
     """
     determines edge-on probability (0<=P<=1) based on the flux ratio of 
-    an offset column brightest pixel to the image brightest pixel
+    an offset row brightest pixel to the image brightest pixel
     """
     # define vertical shift for flux ratio computation
     shift = 6
@@ -206,7 +206,7 @@ def image_shape_test(model):
         (height, x, y, width_x, width_y) = params
         sma_ratio = width_y/PSFwidth_y
         # append associated probability
-        P_i.append(image_P2(sma_ratio))
+        P_i.append(image_P1(sma_ratio))
     return P_i
     
     

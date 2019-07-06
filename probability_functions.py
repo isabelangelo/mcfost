@@ -131,10 +131,10 @@ def image_P1(x):
     """
     a = 1
     b = 0.1
-    # old parameters
+    # old parameters (1.5-2)
     c = 23
     d = -1.8
-    # new parameters
+    # new parameters (1.25-1.5)
 #    c = 40
 #    d = -1.4
     denom = 1 + b*np.e**(-c*(x+d))

@@ -34,7 +34,8 @@ def makeplot(gridlist, title):
     for i in subplot_arr:
         m = Model(gridlist[num])
 
-        p_threshold = 0.5
+        #p_threshold = 0.5
+        p_threshold = 0.3
         p = image_compute_P(m)
         ax.plot(m.inclinations, p, label=str(num))
         ax.set_ylim(0,1)
