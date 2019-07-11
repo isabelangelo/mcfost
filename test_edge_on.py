@@ -26,20 +26,29 @@ def brightness_test1(obj):
     
         # set wavelength for brightness calculation
         # found by taking peak brightness of star with 1e-12 dust mass
-        star_peak = 0.75 
+        ##star_peak = 0.75
+        ##test for Megan
+        star_peak=0.55 
         
         # compute peak brightness of the star
         star_sed = star_seds[0]
         F_star = star_sed[np.where(obj.wavelength==star_peak)][0]
         
         # store probabilities for each inclination
-        P_i = []
+        ##P_i = []
+        P_i=0
         for inc_idx in range(len(obj.seds)):
             # compute brightness of SED at peak wavelength
             obj_sed = obj.seds[inc_idx]
             F = obj_sed[np.where(obj.wavelength==star_peak)][0]
-            # store probability associated with brightness ratio
-            P_i.append(P1(F/F_star))
+            ## store probability associated with brightness ratio
+            #P_i.append(P1(F/F_star))
+            #test for Megan:
+            ratio=F/F_star
+            if ratio>=0.02:
+                P_i=1
+            if ratio<0.02:
+                P_i=0
     
         return P_i
     
@@ -117,8 +126,9 @@ def compute_P(obj):
     """
     Compute final weighted probability from 3 tests for each model inclination
     """
-    sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
-    return sum/3.
+    ##sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
+    ##return sum/3.
+    return np.array(brightness_test1(obj))
     
     
 ### Image Tests ###
