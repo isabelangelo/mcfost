@@ -10,10 +10,12 @@ written: Isabel Angelo (2019)
 
 from models import *
 from model_grid import grid_parameters
-from probability_array import generate_masked_array
+from probability_array import *
+from weights import *
 
 # load binary array with probabilities
 binary_arr_path = model_path + 'binary_array.fits'
+#binary_arr_path = model_path + 'Megan_array_20.fits'
 binary_array = fits.open(binary_arr_path)[0].data
 
 # generate array with masked values
@@ -29,18 +31,18 @@ masked_array = generate_masked_array(
     )
 
 # generate weighted array here
-#weighted_array = generate_weighted_array(
-#    dust_mass_weights = [],
-#    Rc_weights = [],
-#    f_exp_weights = [],
-#    H0_weights = [],
-#    Rin_weights =  [],
-#    sd_exp_weights = [],
-#    amax_weights = []
-#    )
+weighted_array = generate_weighted_array(
+    dust_mass_weights = None,
+    Rc_weights = None,
+    f_exp_weights = None,
+    H0_weights = None,
+    Rin_weights =  None,
+    sd_exp_weights = None,
+    amax_weights = None
+    )
 
 # update array with masks and weights    
-#binary_array *= weighted_array # might not need masked array??
+binary_array *= weighted_array # might not need masked array??
 
 
 # generate array to multiply by binary that maps
@@ -119,8 +121,8 @@ def plotP_2D(fig, ax, paramstrx,paramstry,cmap='Purples',cbar=False):
     # plot colorbar
     if cbar==True:
         cb = fig.colorbar(im, cax=plt.axes([0.1,0,1,0.02]), orientation='horizontal')
-    
-def plot_corner():
+        
+def plot_corner(s):
     """
     generates corner plot where all histogram and 2D correlation plots are shown
     """
@@ -134,7 +136,7 @@ def plot_corner():
     allcomb = [(a,b) for a in ilist for b in ilist]
     
     # create figure
-    fig, axes = plt.subplots(8,8, figsize=(6,6))
+    fig, axes = plt.subplots(8,8, figsize=(8,8))
     for comb in allcomb:
         ax = axes[comb[1],comb[0]]
         if comb in icomb:
@@ -142,7 +144,7 @@ def plot_corner():
             if x==y:
                 plotP_1D(ax, x)
             elif comb==(0,1):
-                plotP_2D(fig,ax,y,x,cbar=True)
+                plotP_2D(fig,ax,y,x)#,cbar=True)
             else:
                 plotP_2D(fig,ax,y,x,cmap='Purples')
         else:
@@ -159,5 +161,6 @@ def plot_corner():
             ax.set_xticklabels(['52','70','84'])
             
     plt.subplots_adjust(wspace=0, hspace=0)
-    plt.show()
+    #plt.show()
+    plt.savefig('corner_plots/'+s+'_corner.png')
     
