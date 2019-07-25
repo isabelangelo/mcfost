@@ -32,13 +32,13 @@ masked_array = generate_masked_array(
 
 # generate weighted array here
 weighted_array = generate_weighted_array(
-    dust_mass_weights = None,
-    Rc_weights = None,
-    f_exp_weights = None,
-    H0_weights = None,
-    Rin_weights =  None,
-    sd_exp_weights = None,
-    amax_weights = None
+    dust_mass_weights = [1,1,1,1,1],
+    Rc_weights = [1,1,1,1]
+    f_exp_weights = [1,1,1,1],
+    H0_weights = [1,1,1,1],
+    Rin_weights =  [1,1,1],
+    sd_exp_weights = [1,1,1,1],
+    amax_weights = [1,1,1,1]
     )
 
 # update array with masks and weights    

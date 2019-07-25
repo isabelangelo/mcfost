@@ -121,9 +121,13 @@ def generate_masked_array(dust_mass=None, Rc=None, f_exp=None, H0=None,\
     return masked_arr
     
     
-def generate_weighted_array(dust_mass_weights=None,Rc_weights=None,f_exp_weights=None,\
-                           H0_weights=None,Rin_weights=None, sd_exp_weights=None,\
-                           amax_weights=None):
+def generate_weighted_array(dust_mass_weights = [1,1,1,1,1],
+                        Rc_weights = [1,1,1,1]
+                        f_exp_weights = [1,1,1,1],
+                        H0_weights = [1,1,1,1],
+                        Rin_weights =  [1,1,1],
+                        sd_exp_weights = [1,1,1,1],
+                        amax_weights = [1,1,1,1]):
     """
     create an array with weights specified by input parameters. For example,
     Rc=[10,30,100,300] can have a corresponding Rc_weights=[0.15,0.2,0.3,0.35],
@@ -141,27 +145,26 @@ def generate_weighted_array(dust_mass_weights=None,Rc_weights=None,f_exp_weights
     # generate empty array
     weighted_arr = np.ones(arr_shape)
     # weight dust mass
-    if dust_mass_weights is not None:
-        for i in range(len(dust_mass)):
-            weighted_arr[i] *= dust_mass_weights[i]
-    if Rc_weights is not None:
-        for i in range(len(Rc)):
-            weighted_arr[:,i] *= Rc_weights[i]
-    if f_exp_weights is not None:
-        for i in range(len(f_exp)):
-            weighted_arr[:,:,i] *= f_exp_weights[i]
-    if H0_weights is not None:
-        for i in range(len(H0)):
-            weighted_arr[:,:,:,i] *= H0_weights[i]
-    if Rin_weights is not None:
-        for i in range(len(Rin)):
-            weighted_arr[:,:,:,:,i] *= Rin_weights[i]
-    if sd_exp_weights is not None:
-        for i in range(len(sd_exp)):
-            weighted_arr[:,:,:,:,:,i] *= sd_exp_weights[i]
-    if amax_weights is not None:
-        for i in range(len(amax)):
-            weighted_arr[:,:,:,:,:,:,i] *= amax_weights[i]
+    for i in range(len(dust_mass)):
+        weighted_arr[i] *= dust_mass_weights[i]
+    # weight Rc
+    for i in range(len(Rc)):
+        weighted_arr[:,i] *= Rc_weights[i]
+    # weight f_exp
+    for i in range(len(f_exp)):
+        weighted_arr[:,:,i] *= f_exp_weights[i]
+    # weight H0
+    for i in range(len(H0)):
+        weighted_arr[:,:,:,i] *= H0_weights[i]
+    # weight Rin
+    for i in range(len(Rin)):
+        weighted_arr[:,:,:,:,i] *= Rin_weights[i]
+    # weight sd_exp
+    for i in range(len(sd_exp)):
+        weighted_arr[:,:,:,:,:,i] *= sd_exp_weights[i]
+    # weight amax
+    for i in range(len(amax)):
+        weighted_arr[:,:,:,:,:,:,i] *= amax_weights[i]
             
     return weighted_arr
     
