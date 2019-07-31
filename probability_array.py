@@ -122,7 +122,7 @@ def generate_masked_array(dust_mass=None, Rc=None, f_exp=None, H0=None,\
     
     
 def generate_weighted_array(dust_mass_weights = [1,1,1,1,1],
-                        Rc_weights = [1,1,1,1]
+                        Rc_weights = [1,1,1,1],
                         f_exp_weights = [1,1,1,1],
                         H0_weights = [1,1,1,1],
                         Rin_weights =  [1,1,1],

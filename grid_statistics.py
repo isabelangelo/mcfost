@@ -9,7 +9,7 @@ written: Isabel Angelo (2019)
 # but that's okay because you can't make the arrays for the new one yet anyways
 
 from models import *
-from model_grid import grid_parameters
+from model_grid import *
 from probability_array import *
 from weights import *
 
@@ -31,18 +31,25 @@ masked_array = generate_masked_array(
     )
 
 # generate weighted array here
-weighted_array = generate_weighted_array(
-    dust_mass_weights = [1,1,1,1,1],
-    Rc_weights = [1,1,1,1]
-    f_exp_weights = [1,1,1,1],
-    H0_weights = [1,1,1,1],
-    Rin_weights =  [1,1,1],
-    sd_exp_weights = [1,1,1,1],
-    amax_weights = [1,1,1,1]
-    )
+weight_values = [[10,10,1,1,0], # dust_mass_weights
+                [1,1,1,1], # Rc_weights
+                [1,1,1,1], # f_exp_weights
+                [1,1,1,1], # H0_weights
+                [1,1,1], # Rin_weights
+                [1,1,1,1], # sd_exp_weights
+                [1,1,1,1]] # amax weights
+grid_weights = dict(zip(grid_keys, weight_values))
+    
 
-# update array with masks and weights    
-binary_array *= weighted_array # might not need masked array??
+weighted_array = generate_weighted_array(
+    dust_mass_weights = grid_weights['dust_mass'],
+    Rc_weights = grid_weights['Rc'],
+    f_exp_weights = grid_weights['f_exp'],
+    H0_weights = grid_weights['H0'],
+    Rin_weights =  grid_weights['Rin'],
+    sd_exp_weights = grid_weights['sd_exp'],
+    amax_weights = grid_weights['amax']
+    )
 
 
 # generate array to multiply by binary that maps
@@ -62,9 +69,18 @@ def plotP_1D(ax, paramstr):
     keys = list(param_dict.keys())
     axes = [7,6,5,4,3,2,1,0]
     axes.remove(keys.index(paramstr))
-    values = np.sum(binary_array,axis=tuple(axes)) # do we want to normalize?
-    max = binary_array.size/(len(param_list))
-    arr = values/max
+#    values = np.sum(binary_array,axis=tuple(axes)) # do we want to normalize?
+    
+    weighted_binary_array = binary_array*weighted_array #bool*weight
+    numerator = np.sum(weighted_binary_array,axis=tuple(axes))#take sum
+    denominator = np.sum(weighted_array, axis=tuple(axes))#sum weights
+    arr = numerator/denominator
+    
+    ######## lines to change to normalize ########
+#    n_models = binary_array.size/(len(param_list))
+#    arr = values/n_models
+    ##############################################
+
     arr2=np.concatenate(([arr[0]],arr,[arr[-1]])) # looks better in plot
     
     # plot values in steps
@@ -87,6 +103,10 @@ def plotP_1D(ax, paramstr):
 def plotP_2D(fig, ax, paramstrx,paramstry,cmap='Purples',cbar=False):
     """
     plot correlation image for 2 input parameters
+    
+    weighted array is computed as follows
+    
+    weighted_value = sum(bool*weight)/sum(weight)
     """
     # get list of parameter values
     param_listx = param_dict[paramstrx]
@@ -99,9 +119,10 @@ def plotP_2D(fig, ax, paramstrx,paramstry,cmap='Purples',cbar=False):
     axes.remove(keys.index(paramstry))
     
     # collapse into 2D array and normalize
-    values = np.sum(binary_array,axis=tuple(axes))
-    max = binary_array.size/(len(param_listx)*len(param_listy))
-    arr = values/max
+    weighted_binary_array = binary_array*weighted_array #bool*weight
+    numerator = np.sum(weighted_binary_array,axis=tuple(axes))#take sum
+    denominator = np.sum(weighted_array, axis=tuple(axes))#sum weights
+    arr = numerator/denominator
     
     # determine tick labels
     labelsx = [str(i) for i in param_listx]
@@ -161,6 +182,6 @@ def plot_corner(s):
             ax.set_xticklabels(['52','70','84'])
             
     plt.subplots_adjust(wspace=0, hspace=0)
-    #plt.show()
-    plt.savefig('corner_plots/'+s+'_corner.png')
+    plt.show()
+    #plt.savefig('corner_plots/'+s+'_corner.png')
     
