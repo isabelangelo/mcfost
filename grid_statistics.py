@@ -14,8 +14,8 @@ from probability_array import *
 from weights import *
 
 # load binary array with probabilities
-binary_arr_path = model_path + 'binary_array.fits'
-#binary_arr_path = model_path + 'Megan_array_20.fits'
+#binary_arr_path = model_path + 'binary_array.fits'
+binary_arr_path = model_path + 'Megan_array_20.fits'
 binary_array = fits.open(binary_arr_path)[0].data
 
 # generate array with masked values
@@ -31,11 +31,11 @@ masked_array = generate_masked_array(
     )
 
 # generate weighted array here
-weight_values = [[10,10,1,1,0], # dust_mass_weights
-                [1,1,1,1], # Rc_weights
-                [1,1,1,1], # f_exp_weights
-                [1,1,1,1], # H0_weights
-                [1,1,1], # Rin_weights
+weight_values = [mass_lupus_truncated, #[1,1,1,1,1], # dust_mass_weights
+                [1,1,1,0], # Rc_weights
+                [0,1,1,1], # f_exp_weights
+                H0_gaussian_norm, #[1,1,1,1], # H0_weights
+                [1,0,0], # Rin_weights
                 [1,1,1,1], # sd_exp_weights
                 [1,1,1,1]] # amax weights
 grid_weights = dict(zip(grid_keys, weight_values))
@@ -182,6 +182,6 @@ def plot_corner(s):
             ax.set_xticklabels(['52','70','84'])
             
     plt.subplots_adjust(wspace=0, hspace=0)
-    plt.show()
-    #plt.savefig('corner_plots/'+s+'_corner.png')
+    #plt.show()
+    plt.savefig('corner_plots/'+s+'_corner.png')
     
