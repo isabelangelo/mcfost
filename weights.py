@@ -18,8 +18,8 @@ mass_lupus_norm = [0.42140561, 0.3071352 , 0.1928648 , 0.07859439, 0.        ]
 mass_taurus_norm = [0.43447259, 0.31149086, 0.18850914, 0.06552741, 0.        ]
 
 # mass with Mdust=1e-7 truncated
-mass_lupus_truncated = mass_taurus_norm.copy()
-mass_lupus_truncated[0] = 0
+mass_taurus_truncated = mass_taurus_norm.copy()
+mass_taurus_truncated[0] = 0
 
 ### H0 WIEIGHTS ###
 
