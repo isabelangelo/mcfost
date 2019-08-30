@@ -15,9 +15,6 @@ from weights import *
 
 # load binary array with probabilities
 binary_arr_path = model_path + 'binary_array.fits'
-#binary_arr_path = model_path + 'image_binary_array.fits'
-#binary_arr_path = model_path + 'Megan_array_50.fits'
-#binary_arr_path = model_path + 'SED_only.fits'
 binary_array = fits.open(binary_arr_path)[0].data
 
 # generate array with masked values
@@ -33,10 +30,10 @@ masked_array = generate_masked_array(
     )
 
 # generate weighted array here
-weight_values = [[1,1,1,1,1], #mass_taurus_truncated, # dust_mass_weights
-                [1,1,1,1], # Rc_weights
-                [1,1,1,1], # f_exp_weights
-                [1,1,1,1], # H0_gaussian_norm # H0_weights
+weight_values = [mass_taurus_truncated, #[1,1,1,1,1], # dust_mass_weights
+                [1,1,1,0], # Rc_weights
+                [0,1,1,1], # f_exp_weights
+                H0_gaussian_norm, # [1,1,1,1] # H0_weights
                 [1,1,1], # Rin_weights
                 [1,1,1,1], # sd_exp_weights
                 [1,1,1,1]] # amax weights
@@ -186,4 +183,25 @@ def plot_corner(s):
     plt.subplots_adjust(wspace=0, hspace=0)
     plt.show()
     #plt.savefig('corner_plots/'+s+'_corner.png')
+    
+def bar_graph(ax, paramstr):
+    """
+    plot histogram for parameter showing probability count
+    """
+    # get list of parameter values
+    param_list = param_dict[paramstr]
+    values = [float(i) for i in param_dict[paramstr]]
+    
+    # collapse axes
+    keys = list(param_dict.keys())
+    axes = [7,6,5,4,3,2,1,0]
+    axes.remove(keys.index(paramstr))
+    
+    weighted_binary_array = binary_array*weighted_array #bool*weight
+    numerator = np.sum(weighted_binary_array,axis=tuple(axes))#take sum
+    denominator = np.sum(weighted_array, axis=tuple(axes))#sum weights
+    arr = numerator/denominator
+
+    plt.bar(values, arr, width=2, label='SED', color='purple', alpha=0.4)
+    #plt.show()
     
