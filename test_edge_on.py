@@ -26,29 +26,20 @@ def brightness_test1(obj):
     
         # set wavelength for brightness calculation
         # found by taking peak brightness of star with 1e-12 dust mass
-        ##star_peak = 0.75
-        ##test for Megan
-        star_peak=0.55 
+        star_peak = 0.75
         
         # compute peak brightness of the star
         star_sed = star_seds[0]
         F_star = star_sed[np.where(obj.wavelength==star_peak)][0]
         
         # store probabilities for each inclination
-        ##P_i = []
-        P_i=0
+        P_i = []
         for inc_idx in range(len(obj.seds)):
             # compute brightness of SED at peak wavelength
             obj_sed = obj.seds[inc_idx]
             F = obj_sed[np.where(obj.wavelength==star_peak)][0]
             ## store probability associated with brightness ratio
-            #P_i.append(P1(F/F_star))
-            #test for Megan:
-            ratio=F/F_star
-            if ratio>=0.02:
-                P_i=1
-            if ratio<0.02:
-                P_i=0
+            P_i.append(P1(F/F_star))
     
         return P_i
     
@@ -122,13 +113,64 @@ def slope_test(obj):
         #print(self.obs_name, dif, P3(dif))
         return P3(dif)
         
+def color_test(obj):
+    """
+    Tests for color of object.
+    
+    Returns list that contains color for each model inclination
+    """
+    # compute 0.75 zeroth magnitude flux
+    x1,x2 = 6.38e-7*10**6.,7.97e-7*10**6. #micron
+    dx1,dx2 = 1.38e-7, 1.49e-7 #meters
+    y1,y2 = 2.2387e-02*dx1, 1.1482e-02*dx2 #W/m^2
+    m = (y2-y1)/(x2-x1); b = y1-(m*x1) #W/m^2/micron, W/m^2
+    F0_75 = m*0.75+b #W/m^2      
+    # compute 4.5 zeroth magnitude flux
+    F0_45_WmHz = 179.7*(1e-26) #converting from jansky
+    F0_45_Wmm = F0_45_WmHz*2.998e8/(4.5e-6)**2. #F_nu *1e-26*c/lambda^2=F_lambda
+    F0_45 = F0_45_Wmm*1.1e-6 #W/m^2
+    
+    # handle models
+    if type(obj)==Model:
+        #store probabilities
+        P_i = []
+        for inc_idx in range(len(obj.seds)):
+            # compute flux at 0.75 and 4.5 um
+            obj_sed = obj.seds[inc_idx]
+            F_75 = obj_sed[np.where(obj.wavelength==0.75)][0]
+            F_45 = obj_sed[np.where(obj.wavelength==4.5)][0]
+            # compute magnitudes
+            m_75 = -2.5*np.log10(F_75/F0_75)
+            m_45 = -2.5*np.log10(F_45/F0_45) 
+            color = m_75-m_45
+            P_i.append(color)
+            return P_i
+            
+    # handle observations
+    if type(obj)==Obs:
+        # determine index of fluxes to compute
+        idx_75 = np.abs(obj.wavelength-0.75).argmin()
+        idx_45 = np.abs(obj.wavelength-4.5).argmin()
+        # compute fluxes
+        F_75 = obj.sed[idx_75]
+        F_45 = obj.sed[idx_45]
+        # compute magnitudes
+        m_75 = -2.5*np.log10(F_75/F0_75)
+        m_45 = -2.5*np.log10(F_45/F0_45)
+        color = m_75-m_45
+        return color
+        
+        
+
+        
 def compute_P(obj):
     """
     Compute final weighted probability from 3 tests for each model inclination
     """
-    ##sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
-    ##return sum/3.
-    return np.array(brightness_test1(obj))
+    #sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
+    sum = np.array(color_test(obj))
+    #return sum/3.
+    return sum
     
     
 ### Image Tests ###
