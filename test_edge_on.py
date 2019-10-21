@@ -131,14 +131,15 @@ def color_test(obj):
     
     Returns list that contains color for each model inclination
     """
-    # compute 0.75 zeroth magnitude flux    
-    x1,x2 = 6.38e-7*10**6.,7.97e-7*10**6. #micron
-    y1 = 3037*(1e-23)*(3e10)/(x1*1e-4)
-    y2 = 2431*(1e-23)*(3e10)/(x2*1e-4)
-    m = (y2-y1)/(x2-x1); b = y1-(m*x1) #W/m^2/m, W/m^2
-    
-    F0_75 = m*0.75+b #W/m^2
-    F0_45 = 179.7*(1e-23)*(3e10)/(0.45*1e-4) #converting from jansky
+    # compute 0.75 zeroth magnitude flux
+    x1,x2 = 6.38e-7,7.97e-7 # meters
+    y1 = 3037*1e-26*3e8/x1 # Jy>W/m^2
+    y2 = 2431*1e-26*3e8/x2 # Jy>W/m^2
+    m = (y2-y1)/(x2-x1); b = y1-(m*x1) # y=mx+b
+    F0_75 = m*(0.75e-6)+b #W/m^2
+        
+    # compute 4.5 zeroth magnitude flux    
+    F0_45 = 179.7*1e-26*3e8/(4.5*1e-6) #Jy>W/m^2
     
     # handle models
     if type(obj)==Model:
@@ -146,7 +147,6 @@ def color_test(obj):
         #store probabilities
         P_i = []
         for inc_idx in range(len(obj.seds)):
-            print(inc_idx)
             # compute flux at 0.75 and 4.5 um
             obj_sed = obj.seds[inc_idx]
             F_75 = obj_sed[np.where(obj.wavelength==0.75)][0]
@@ -159,11 +159,6 @@ def color_test(obj):
             color = m_75-m_45
             P_i.append(color)
             
-            if inc_idx==14:
-                print('0.75 magnitude: ',m_75)
-                print('4.5 magnitude: ',m_45)
-                print('color: ', color)
-            
         return P_i
     
     # handle observations
@@ -171,6 +166,7 @@ def color_test(obj):
         
         idx_75 = np.abs(obj.wavelength-0.75).argmin()
         idx_45 = np.abs(obj.wavelength-4.5).argmin()
+    
         
         F_75 = obj.sed[idx_75]
         F_45 = obj.sed[idx_45]
@@ -178,16 +174,9 @@ def color_test(obj):
         m_75 = -2.5*np.log10(F_75/F0_75)
         m_45 = -2.5*np.log10(F_45/F0_45)
         
-        print(obj.obs_name)
-        print('0.75 magnitude: ',m_75)
-        print('4.5 magnitude: ',m_45)
-        
         color = m_75-m_45
         
-        print('color: ', color)
-        
         return color
-        
         
 
         

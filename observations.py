@@ -45,7 +45,7 @@ class Obs(object):
         norm(bool): 'True' will normalize according to the geometric mean 
                     between 2-10um of observed SED, 'False' plots raw data
     """
-    def __init__(self, obs_name, norm=True):
+    def __init__(self, obs_name, norm=False):
     
         # retrieve data from observation file
         self.obs_name = obs_name
@@ -56,7 +56,7 @@ class Obs(object):
         # compute wavelength, % error, and SED in W/m^s
         self.wavelength = np.array([float(i) for i in data[:,0]])
         flux_jy = [float(i) for i in data[:,1]]
-        sed = np.array([j*1e-23*3e10/(l*1e-4) for j,l in zip(flux_jy,self.wavelength)])
+        sed = np.array([j*1e-26*3e8/(l*1e-6) for j,l in zip(flux_jy,self.wavelength)])
         percent_err = [float(i) for i in data[:,2]]
         
         # normalize according observations
@@ -200,21 +200,24 @@ class Obs(object):
         ax1=plt.subplot(212, sharex=ax0)            
         # plot sed in top panel
         slopes_unq = self.get_slopes()
-        ax0.errorbar(self.wavelength, self.sed, yerr=self.err, fmt = '.--')
+        ax0.errorbar(self.wavelength, self.sed, yerr=self.err, 
+                    fmt = '.--', label=self.obs_name)
         # plot unique slope values        
         ax1.errorbar(10**slopes_unq[0], slopes_unq[1], yerr=slopes_unq[2],
                      fmt='.', markersize=3)
             
         # set labels and subplots
-        plt.suptitle(self.obs_name)
+        #plt.suptitle(self.obs_name)
         plt.setp(ax0.get_xticklabels(), visible=False)
+        ax0.legend()
         plt.subplots_adjust(hspace=.05)
         setup_plot(ax0)
         ax1.set_xscale('log')
         #ax1.set_ylim(-5,5)
         ax1.set_ylabel('slope')
         ax1.set_xlabel('log($\lambda$)')
-        plt.show()
+        plt.subplots_adjust(hspace=None)
+        #plt.show()
         
     
     
