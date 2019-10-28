@@ -11,7 +11,7 @@ Image probability functions only take models.
 
 written: Isabel Angelo (2019)
 """
-from models import *
+#from models import *
 from observations import *
 
 ### SED Tests ###
@@ -112,71 +112,90 @@ def slope_test(obj):
         dif = max-min
         #print(self.obs_name, dif, P3(dif))
         return P3(dif)
-        
-# compute 0.75 zeroth magnitude flux
-x1,x2 = 6.38e-7*10**6.,7.97e-7*10**6. #micron
-dx1,dx2 = 1.38e-7, 1.49e-7 #meters
-y1,y2 = 2.2387e-02*dx1, 1.1482e-02*dx2 #W/m^2
-m = (y2-y1)/(x2-x1); b = y1-(m*x1) #W/m^2/micron, W/m^2
-F0_75 = m*0.75+b #W/m^2
-    
-# compute 4.5 zeroth magnitude flux
-F0_45_WmHz = 179.7*(1e-26) #converting from jansky
-F0_45_Wmm = F0_45_WmHz*2.998e8/(4.5e-6)**2. #F_nu *1e-26*c/lambda^2=F_lambda
-F0_45 = F0_45_Wmm*1.1e-6 #W/m^2
 
+## compute zeroth magnitude fluxes for color calculation ##        
+# compute 0.75 zeroth magnitude flux
+#    x1,x2 = 6.38e-7,7.97e-7 # meters
+#    y1 = 3037*1e-26*3e8/x1 # Jy>W/m^2
+#    y2 = 2431*1e-26*3e8/x2 # Jy>W/m^2
+#    m = (y2-y1)/(x2-x1); b = y1-(m*x1) # y=mx+b
+#    F0_75 = m*(0.75e-6)+b #W/m^2
+
+# compute 1.2 zeroth magnitude flux
+F0_12 = 1600*1e-26*3e8/(1.22*1e-6) #Jy>W/m^2
+    
+# compute 4.5 zeroth magnitude flux    
+F0_45 = 179.7*1e-26*3e8/(4.5*1e-6) #Jy>W/m^2
+    
+# compute 2.2 zeroth magnitude flux
+F0_22 = 657*1e-26*3e8/(2.19*1e-6) #Jy>W/m^2
+    
+# compute 5.6 zeroth magnitude flux
+F0_56 = 115*1e-26*3e8/(5.8*1e-6) #Jy>W/m^2
+        
 def color_test(obj):
     """
     Tests for color of object.
     
     Returns list that contains color for each model inclination
-    """
-    # compute 0.75 zeroth magnitude flux
-    x1,x2 = 6.38e-7,7.97e-7 # meters
-    y1 = 3037*1e-26*3e8/x1 # Jy>W/m^2
-    y2 = 2431*1e-26*3e8/x2 # Jy>W/m^2
-    m = (y2-y1)/(x2-x1); b = y1-(m*x1) # y=mx+b
-    F0_75 = m*(0.75e-6)+b #W/m^2
-        
-    # compute 4.5 zeroth magnitude flux    
-    F0_45 = 179.7*1e-26*3e8/(4.5*1e-6) #Jy>W/m^2
-    
+    """    
     # handle models
     if type(obj)==Model:
         
         #store probabilities
-        P_i = []
+        P_iJ = []
+        P_iK = []
         for inc_idx in range(len(obj.seds)):
             # compute flux at 0.75 and 4.5 um
             obj_sed = obj.seds[inc_idx]
-            F_75 = obj_sed[np.where(obj.wavelength==0.75)][0]
-            F_45 = obj_sed[np.where(obj.wavelength==4.5)][0]
+#           F_75 = obj_sed[np.where(obj.wavelength==0.75)][0] # W/m^2
+            F_12 = obj_sed[np.where(obj.wavelength==1.25)][0] # W/m^2
+            F_45 = obj_sed[np.where(obj.wavelength==4.5)][0] # W/m^2
+            F_22 = obj_sed[np.where(obj.wavelength==2.2)][0] # W/m^2
+            F_56 = obj_sed[np.where(obj.wavelength==5.8)][0] # W/m^2
             
             # compute magnitudes
-            m_75 = -2.5*np.log10(F_75/F0_75)
+#            m_75 = -2.5*np.log10(F_75/F0_75)
+            m_12 = -2.5*np.log10(F_12/F0_12)
             m_45 = -2.5*np.log10(F_45/F0_45)
+            m_22 = -2.5*np.log10(F_22/F0_22)
+            m_56 = -2.5*np.log10(F_56/F0_56)
             
-            color = m_75-m_45
-            P_i.append(color)
+#            color = m_75-m_45
+            colorJ = m_12-m_45
+            colorK = m_22-m_56
+        
+            P_iJ.append(colorJ)
+            P_iK.append(colorK)
             
-        return P_i
+        return (P_iJ,P_iK)
     
     # handle observations
     if type(obj)==Obs:
         
-        idx_75 = np.abs(obj.wavelength-0.75).argmin()
-        idx_45 = np.abs(obj.wavelength-4.5).argmin()
-    
+#        idx_75 = np.abs(obj.wavelength-0.75).argmin()
+        idx_12 = np.abs(obj.wavelength-4.5).argmin()
+        idx_45 = np.abs(obj.wavelength-1.2).argmin()
+        idx_22 = np.abs(obj.wavelength-2.2).argmin()
+        idx_56 = np.abs(obj.wavelength-5.8).argmin()
         
-        F_75 = obj.sed[idx_75]
-        F_45 = obj.sed[idx_45]
+#        F_75 = obj.sed[idx_75] # W/m^2
+        F_12 = obj.sed[idx_12] # W/m^2
+        F_45 = obj.sed[idx_45] # W/m^2
+        F_22 = obj.sed[idx_22] # W/m^2
+        F_56 = obj.sed[idx_56] # W/m^2
         
-        m_75 = -2.5*np.log10(F_75/F0_75)
+#        m_75 = -2.5*np.log10(F_75/F0_75)
+        m_12 = -2.5*np.log10(F_12/F0_12)
         m_45 = -2.5*np.log10(F_45/F0_45)
+        m_22 = -2.5*np.log10(F_22/F0_22)
+        m_56 = -2.5*np.log10(F_56/F0_56)
         
-        color = m_75-m_45
+#        color = m_75-m_45
+        colorJ = m_12-m_45
+        colorK = m_22-m_56
         
-        return color
+        return (colorJ,colorK)
         
 
         
