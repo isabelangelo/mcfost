@@ -44,7 +44,9 @@ def generate_probability_array():
         probability_array.fits (FITS):file containing hypercube
     """
     # generate empty array to fill with probabilities
-    arr = np.empty(arr_shape)
+#    arr = np.empty(arr_shape)
+    arrJ = np.empty(arr_shape)
+    arrK = np.empty(arr_shape)
     for a in range(len(dust_mass)):
         a_s = str(dust_mass[a])
         for b in range(len(Rc)):
@@ -63,14 +65,22 @@ def generate_probability_array():
                                 # get index with corresponding model                            
                                 param_str = ','.join([a_s,b_s,c_s,d_s,e_s,f_s,g_s])
                                 idx = get_model_index(param_str)
-                                #p = compute_P(Model(idx))
-                                p = compute_P(Model(idx))
-                                arr[a,b,c,d,e,f,g,:] = p
+#                                p = compute_P(Model(idx))
+                                pJ,pK = compute_P(Model(idx))
+#                                arr[a,b,c,d,e,f,g,:] = p
+                                arrJ[a,b,c,d,e,f,g,:] = pJ
+                                arrK[a,b,c,d,e,f,g,:] = pK
                                 print(idx)
                 
     # write the large array to a text file
-    hdu = fits.PrimaryHDU(data=arr)
-    hdu.writeto('color_array.fits')
+#    hdu = fits.PrimaryHDU(data=arr)
+#    hdu.writeto('color_array.fits')
+    
+    hduJ = fits.PrimaryHDU(data=arrJ)
+    hduJ.writeto('color_arrayJ.fits')
+    
+    hduK = fits.PrimaryHDU(data=arrK)
+    hduK.writeto('color_arrayK.fits')
 
     
 def generate_masked_array(dust_mass=None, Rc=None, f_exp=None, H0=None,\

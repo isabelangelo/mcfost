@@ -11,7 +11,7 @@ Image probability functions only take models.
 
 written: Isabel Angelo (2019)
 """
-#from models import *
+from models import *
 from observations import *
 
 ### SED Tests ###
@@ -113,7 +113,9 @@ def slope_test(obj):
         #print(self.obs_name, dif, P3(dif))
         return P3(dif)
 
-## compute zeroth magnitude fluxes for color calculation ##        
+#####BEFORE RE_RUNNING ON ENTIRE GRID YOU NEED TO MAKE SURE IT IS AVERAGING P#
+
+# compute zeroth magnitude fluxes for color calculation ##        
 # compute 0.75 zeroth magnitude flux
 #    x1,x2 = 6.38e-7,7.97e-7 # meters
 #    y1 = 3037*1e-26*3e8/x1 # Jy>W/m^2

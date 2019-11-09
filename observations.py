@@ -14,6 +14,7 @@ from probability_functions import *
 
 # define path to observation files
 obs_path = '/Volumes/backup/disks/reduced_seds/'
+#obs_path = 'seds/reduced_seds/'
 
 # set up plot axes
 def setup_plot(ax):

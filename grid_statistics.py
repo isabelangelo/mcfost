@@ -29,7 +29,16 @@ masked_array = generate_masked_array(
     amax = [10, 100, 1000, 10000]
     )
 
-# generate weighted array here
+# generate weights array here
+unweighted_values = [[1,1,1,1,1], # dust_mass_weights
+                [1,1,1,1], # Rc_weights
+                [1,1,1,1], # f_exp_weights
+                [1,1,1,1], # H0_weights
+                [1,1,1], # Rin_weights
+                [1,1,1,1], # sd_exp_weights
+                [1,1,1,1]] # amax weights
+
+
 weight_values = [mass_taurus_truncated, #[1,1,1,1,1], # dust_mass_weights
                 [1,1,1,0], # Rc_weights
                 [0,1,1,1], # f_exp_weights
@@ -37,6 +46,9 @@ weight_values = [mass_taurus_truncated, #[1,1,1,1,1], # dust_mass_weights
                 [1,1,1], # Rin_weights
                 [1,1,1,1], # sd_exp_weights
                 [1,1,1,1]] # amax weights
+
+
+# CHANGE THIS LINE TO CHOOSE WHICH WEIGHT SET
 grid_weights = dict(zip(grid_keys, weight_values))
     
 
@@ -68,17 +80,11 @@ def plotP_1D(ax, paramstr):
     keys = list(param_dict.keys())
     axes = [7,6,5,4,3,2,1,0]
     axes.remove(keys.index(paramstr))
-#    values = np.sum(binary_array,axis=tuple(axes)) # do we want to normalize?
     
     weighted_binary_array = binary_array*weighted_array #bool*weight
     numerator = np.sum(weighted_binary_array,axis=tuple(axes))#take sum
     denominator = np.sum(weighted_array, axis=tuple(axes))#sum weights
     arr = numerator/denominator
-    
-    ######## lines to change to normalize ########
-#    n_models = binary_array.size/(len(param_list))
-#    arr = values/n_models
-    ##############################################
 
     arr2=np.concatenate(([arr[0]],arr,[arr[-1]])) # looks better in plot
     
@@ -181,8 +187,8 @@ def plot_corner(s):
             ax.set_xticklabels(['52','70','84'])
             
     plt.subplots_adjust(wspace=0, hspace=0)
-    plt.show()
     #plt.savefig('corner_plots/'+s+'_corner.png')
+    plt.show()
     
 def bar_graph(ax, paramstr):
     """
