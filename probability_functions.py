@@ -60,6 +60,37 @@ def P3(x):
     y = 1-1/denom
     return y
     
+def Pcolor(x):
+    """
+    Piecewise logistic filter used to test Class II slope at NIR 2-8um.
+    P=0 for alpha<-2.2 and m>0, P=1 for -2<alpha<-0.05
+    Arg:
+        x(float):alpha computed in color_test
+    Returns:
+        y(float) associated probability
+    """
+    if x<-2.2 or x>0:
+        y=0
+    elif x>=-2.2 and x<=-2:
+        a = 1
+        b = 0.4
+        c = -66.5
+        d = 2.09
+        num = a
+        denom = 1+b*np.e**(c*(x+d))
+        y = num/denom
+    elif x>-2 and x<-0.05:
+        y=1
+    elif x>=-0.05 and x<=0:
+        a = 1
+        b = 1
+        c = 300
+        d = 0.025
+        num = a
+        denom = 1+b*np.e**(c*(x+d))
+        y=num/denom
+    return y
+    
 ### Image Functions and Probability Filters ###
 
 # these functions are needed to produce convolved images

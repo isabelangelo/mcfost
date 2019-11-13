@@ -69,7 +69,7 @@ def generate_probability_array():
                 
     # write the large array to a text file
     hdu = fits.PrimaryHDU(data=arr)
-    hdu.writeto('color_array.fits')
+    hdu.writeto('probability_array_new.fits')
 
 
     

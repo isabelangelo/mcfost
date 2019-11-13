@@ -40,9 +40,9 @@ def brightness_test1(obj):
             F = obj_sed[np.where(obj.wavelength==star_peak)][0]
             ## store probability associated with brightness ratio
             P_i.append(P1(F/F_star))
-    
+   
         return P_i
-    
+        
     if type(obj)==Obs:
         
         return 1
@@ -71,7 +71,7 @@ def brightness_test2(obj):
             F = obj_sed[np.where(obj.wavelength==dim_wavelength)][0]
             # store probability associated with brightness ratio
             P_i.append(P2(F/F_star))
-        
+            
         return P_i
         
     if type(obj)==Obs:
@@ -112,8 +112,6 @@ def slope_test(obj):
         dif = max-min
         #print(self.obs_name, dif, P3(dif))
         return P3(dif)
-
-#####BEFORE RE_RUNNING ON ENTIRE GRID YOU NEED TO MAKE SURE IT IS AVERAGING P#
         
 def color_test(obj):
     """
@@ -134,6 +132,7 @@ def color_test(obj):
         wavelength_range = np.where((wmin<=obj.wavelength)&(obj.wavelength<=wmax))[0]
         w = obj.wavelength[wavelength_range]
         
+        # compute color for each SED
         for obj_sed in obj.seds: 
             sed = obj_sed[wavelength_range]
         
@@ -143,9 +142,11 @@ def color_test(obj):
         
             # perform fit
             a,b=np.polyfit(logw,logs,1)
-            P_i.append(a)
+            # convert slope to probability
+            P_i.append(Pcolor(a))
             
         return P_i
+            
     
     # handle observations
     if type(obj)==Obs:
@@ -176,10 +177,12 @@ def compute_P(obj):
     """
     Compute final weighted probability from 3 tests for each model inclination
     """
-    #sum = np.array(brightness_test1(obj))+np.array(brightness_test2(obj))+np.array(slope_test(obj))
-    sum = np.array(color_test(obj))
-    #return sum/3.
-    return sum
+    P1 = np.array(brightness_test1(obj))
+    P2 = np.array(color_test(obj))
+    P3 = np.array(slope_test(obj))
+    
+    P = P1 * ((P2+P3)/2.)
+    return P
     
     
 ### Image Tests ###
