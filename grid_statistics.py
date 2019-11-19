@@ -14,7 +14,8 @@ from probability_array import *
 from weights import *
 
 # load binary array with probabilities
-binary_arr_path = model_path + 'binary_array.fits'
+#binary_arr_path = model_path + 'binary_array.fits'
+binary_arr_path = model_path + 'SED_and_image_array.fits'
 binary_array = fits.open(binary_arr_path)[0].data
 
 # generate array with masked values
@@ -49,7 +50,7 @@ weight_values = [mass_taurus_truncated, #[1,1,1,1,1], # dust_mass_weights
 
 
 # CHANGE THIS LINE TO CHOOSE WHICH WEIGHT SET
-grid_weights = dict(zip(grid_keys, weight_values))
+grid_weights = dict(zip(grid_keys, unweighted_values))
     
 
 weighted_array = generate_weighted_array(

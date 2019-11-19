@@ -9,22 +9,18 @@ from scipy import optimize
 def P1(x):
     """
     Arctan filter used to test brightness ratio at 0.75um.
-    Designed so Fdisk/F*<=0.1 has P=1 and Fdisk/F*>=0.5 has P=0.
+    Designed so Fdisk/F*<=0.1 has P=1 and Fdisk/F*>=0.25 has P=0.
     Arg:
         x(float):Fdisk/F* output of brightness_test1
     Returns:
         y(float): associated probability
     """
-    a = -0.332
-    b = 53.1
-    c = 15.5
-    d = 0.5
-    y = a*np.arctan(b*x-c)+d
-    if y<0:
-        return 0
-    else:
-        return y
-        
+    a = 26
+    b = 99
+    c = 20
+    denom = 1+a*np.e**(b*x-c)
+    y=1/denom
+    return y        
 def P2(x):
     """
     Arctan filter used to test brightness ratio at 4.5um.
@@ -63,32 +59,19 @@ def P3(x):
 def Pcolor(x):
     """
     Piecewise logistic filter used to test Class II slope at NIR 2-8um.
-    P=0 for alpha<-2.2 and m>0, P=1 for -2<alpha<-0.05
+    P=0 alpha>0, P=1 for alpha<-0.05
     Arg:
         x(float):alpha computed in color_test
     Returns:
         y(float) associated probability
     """
-    if x<-2.2 or x>0:
-        y=0
-    elif x>=-2.2 and x<=-2:
-        a = 1
-        b = 0.4
-        c = -66.5
-        d = 2.09
-        num = a
-        denom = 1+b*np.e**(c*(x+d))
-        y = num/denom
-    elif x>-2 and x<-0.05:
-        y=1
-    elif x>=-0.05 and x<=0:
-        a = 1
-        b = 1
-        c = 300
-        d = 0.025
-        num = a
-        denom = 1+b*np.e**(c*(x+d))
-        y=num/denom
+    a = 1
+    b = 1
+    c = 27
+    d = 0.25
+    num = a
+    denom = 1+b*np.e**(c*(x+d))
+    y=num/denom
     return y
     
 ### Image Functions and Probability Filters ###

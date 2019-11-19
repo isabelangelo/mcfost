@@ -22,6 +22,7 @@ else:
 
 # retrieve list with indices corresponding to parameter combinations
 model_idx_path = model_path+ 'model_indices.txt'
+model_idx_path = 'model_indices.txt'
 f = open(model_idx_path,'r')
 model_list = [literal_eval(line.strip()) for line in f]
 
