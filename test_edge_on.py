@@ -93,7 +93,7 @@ def slope_test(obj):
             windows, slopes = 10**s[0], s[1]
     
             min = slopes[np.where((windows>=2) & (windows<=10))].min()
-            max = slopes[np.where((windows>10) & (windows<=20))].max()
+            max = slopes[np.where((windows>10) & (windows<=40))].max()
     
             dif = max-min
             #print('model'+str(obj.n_model), obj.inclinations[inc_idx], dif, P3(dif))
@@ -107,7 +107,7 @@ def slope_test(obj):
         windows, slopes, slope_errs = 10**s[0], s[1], s[2]
         
         min = slopes[np.where((windows>=2) & (windows<=10))].min()
-        max = slopes[np.where((windows>10) & (windows<=20))].max()
+        max = slopes[np.where((windows>10) & (windows<=40))].max()
         
         dif = max-min
         #print(self.obs_name, dif, P3(dif))
@@ -169,7 +169,7 @@ def color_test(obj):
     
         # perform fit
         a,b=np.polyfit(logw,logs,1)
-        return a
+        return Pcolor(a)
         
 
         

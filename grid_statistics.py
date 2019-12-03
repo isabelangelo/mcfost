@@ -14,8 +14,7 @@ from probability_array import *
 from weights import *
 
 # load binary array with probabilities
-#binary_arr_path = model_path + 'binary_array.fits'
-binary_arr_path = model_path + 'SED_and_image_array.fits'
+binary_arr_path = model_path + 'binary_array_linear.fits'
 binary_array = fits.open(binary_arr_path)[0].data
 
 # generate array with masked values
@@ -40,7 +39,7 @@ unweighted_values = [[1,1,1,1,1], # dust_mass_weights
                 [1,1,1,1]] # amax weights
 
 
-weight_values = [mass_taurus_truncated, #[1,1,1,1,1], # dust_mass_weights
+weighted_values = [mass_taurus_truncated, #[1,1,1,1,1], # dust_mass_weights
                 [1,1,1,0], # Rc_weights
                 [0,1,1,1], # f_exp_weights
                 H0_gaussian_norm, # [1,1,1,1] # H0_weights

@@ -15,12 +15,20 @@ def P1(x):
     Returns:
         y(float): associated probability
     """
-    a = 26
-    b = 99
-    c = 20
-    denom = 1+a*np.e**(b*x-c)
-    y=1/denom
-    return y        
+#     a = 26
+#     b = 99
+#     c = 20
+#     denom = 1+a*np.e**(b*x-c)
+#     y=1/denom
+#     return y  
+
+    x0,x1 = [0.1,0.25]; xvals = [x0,x1]; yvals = [1,0]
+    a,b = np.polyfit(xvals,yvals,deg=1)
+    conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
+    funcs = 1, lambda x:a*x+b, 0
+    y = np.piecewise(x, conds, funcs)
+    return y
+        
 def P2(x):
     """
     Arctan filter used to test brightness ratio at 4.5um.
@@ -49,11 +57,17 @@ def P3(x):
     Returns:
         y(float): associated probability
     """
-    a = 12.6
-    b = 17.6
-    c = 37.6
-    denom = 1+a*np.e**(b*x-c)
-    y = 1-1/denom
+#     a = 12.6
+#     b = 17.6
+#     c = 37.6
+#     denom = 1+a*np.e**(b*x-c)
+#     y = 1-1/denom
+#     return y
+    x0,x1 = [1.5,2.5]; xvals = [x0,x1]; yvals = [0,1]
+    a,b = np.polyfit(xvals,yvals,deg=1)
+    conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
+    funcs = 0, lambda x:a*x+b, 1
+    y = np.piecewise(x, conds, funcs)
     return y
     
 def Pcolor(x):
@@ -65,13 +79,20 @@ def Pcolor(x):
     Returns:
         y(float) associated probability
     """
-    a = 1
-    b = 1
-    c = 27
-    d = 0.25
-    num = a
-    denom = 1+b*np.e**(c*(x+d))
-    y=num/denom
+#     a = 1
+#     b = 1
+#     c = 27
+#     d = 0.25
+#     num = a
+#     denom = 1+b*np.e**(c*(x+d))
+#     y=num/denom
+#     return y
+
+    x0,x1 = [-0.5,0]; xvals = [x0,x1]; yvals = [1,0]
+    a,b = np.polyfit(xvals,yvals,deg=1)
+    conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
+    funcs = 1, lambda x:a*x+b, 0
+    y = np.piecewise(x, conds, funcs)
     return y
     
 ### Image Functions and Probability Filters ###
@@ -143,16 +164,22 @@ def image_P1(x):
     Returns:
         y(float): associated probability
     """
-    a = 1
-    b = 0.1
-    # old parameters (1.5-2)
-    c = 23
-    d = -1.8
-    # new parameters (1.25-1.5)
-#    c = 40
-#    d = -1.4
-    denom = 1 + b*np.e**(-c*(x+d))
-    y = a/denom
+#     a = 1
+#     b = 0.1
+#     # old parameters (1.5-2)
+#     c = 23
+#     d = -1.8
+#     # new parameters (1.25-1.5)
+# #    c = 40
+# #    d = -1.4
+#     denom = 1 + b*np.e**(-c*(x+d))
+#     y = a/denom
+#     return y
+    x0,x1 = [1.5,2]; xvals = [x0,x1]; yvals = [0,1]
+    a,b = np.polyfit(xvals,yvals,deg=1)
+    conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
+    funcs = 0, lambda x:a*x+b, 1
+    y = np.piecewise(x, conds, funcs)
     return y
        
 def image_P2(x):
@@ -183,12 +210,18 @@ def image_P3(x):
     Returns:
         y(float): associated probability
     """
-    a = 1
-    b = 0.1
-    c = 110
-    d = -0.17
-    denom = 1 + b*np.e**(-c*(x+d))
-    y = a/denom
+#     a = 1
+#     b = 0.1
+#     c = 110
+#     d = -0.17
+#     denom = 1 + b*np.e**(-c*(x+d))
+#     y = a/denom
+#     return y
+    x0,x1 = [0.1,0.2]; xvals = [x0,x1]; yvals = [0,1]
+    a,b = np.polyfit(xvals,yvals,deg=1)
+    conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
+    funcs = 0, lambda x:a*x+b, 1
+    y = np.piecewise(x, conds, funcs)
     return y
     
 def image_P4(x):
@@ -201,12 +234,18 @@ def image_P4(x):
     Returns:
         y(float): associated probability
     """
-    a = 1
-    b = 0.1
-    c = 150
-    d = -0.08
-    denom = 1 + b*np.e**(-c*(x+d))
-    y = a/denom
+#     a = 1
+#     b = 0.1
+#     c = 150
+#     d = -0.08
+#     denom = 1 + b*np.e**(-c*(x+d))
+#     y = a/denom
+#     return y
+    x0,x1 = [0.02,0.1]; xvals = [x0,x1]; yvals = [0,1]
+    a,b = np.polyfit(xvals,yvals,deg=1)
+    conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
+    funcs = 0, lambda x:a*x+b, 1
+    y = np.piecewise(x, conds, funcs)
     return y
 
         
