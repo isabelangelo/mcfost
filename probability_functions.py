@@ -63,7 +63,7 @@ def P3(x):
 #     denom = 1+a*np.e**(b*x-c)
 #     y = 1-1/denom
 #     return y
-    x0,x1 = [1.5,2.5]; xvals = [x0,x1]; yvals = [0,1]
+    x0,x1 = [1,2]; xvals = [x0,x1]; yvals = [0,1] #prev. x from 1.5>2.5
     a,b = np.polyfit(xvals,yvals,deg=1)
     conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
     funcs = 0, lambda x:a*x+b, 1

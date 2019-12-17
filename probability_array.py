@@ -63,13 +63,13 @@ def generate_probability_array():
                                 # get index with corresponding model                            
                                 param_str = ','.join([a_s,b_s,c_s,d_s,e_s,f_s,g_s])
                                 idx = get_model_index(param_str)
-                                p = image_compute_P(Model(idx))
+                                p = compute_P(Model(idx))
                                 arr[a,b,c,d,e,f,g,:] = p
-                                print(idx)
+                                #print(idx)
                 
     # write the large array to a text file
     hdu = fits.PrimaryHDU(data=arr)
-    hdu.writeto('image_probability_array_linear.fits')
+    hdu.writeto('probability_array_linear2.fits')
 
 
     

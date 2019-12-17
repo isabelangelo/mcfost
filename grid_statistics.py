@@ -69,7 +69,22 @@ weighted_array = generate_weighted_array(
 param_dict = grid_parameters.copy()
 param_dict['inc']=[str(i)[:2] for i in list(Model(0).inclinations)]
 
-def plotP_1D(ax, paramstr):
+# dictionary of parameter names + label strings
+pnames = ['inc']+list(grid_parameters.keys())
+pvalues = ['$i$', '$M_d$', '$R_c$', r'$\beta$', '$H_0$', '$R_{in}$', r'$\gamma$', '$a_{max}$']
+pnames_dict=dict(zip(pnames, pvalues))
+
+#dictionary with axis labels
+labels_dict = {'dust_mass':['$10^{-7}$','$10^{-6}$','$10^{-5}$','$10^{-4}$','$10^{-3}$'], 
+              'Rc':[str(i) for i in param_dict['Rc']],
+              'f_exp':[str(i) for i in param_dict['f_exp']],
+               'H0':[str(i) for i in param_dict['H0']],
+              'Rin':[str(i) for i in param_dict['Rin']],
+              'sd_exp': [str(i) for i in param_dict['sd_exp']],
+              'amax': ['$10$','$10^{2}$','$10^{3}$','$10^{4}$'],
+              'inc': [str(i) for i in param_dict['inc']]}
+
+def plotP_1D(ax, paramstr,linecolor='black'):
     """
     plot histogram for parameter showing probability count
     """
@@ -91,17 +106,22 @@ def plotP_1D(ax, paramstr):
     # plot values in steps
     a = np.arange(0,len(param_list))
     a2 = np.arange(0,len(param_list)+2)
-    ax.step(a2,arr2,where='mid',color='darkslateblue')
-    ax.fill_between(a2,arr2,step='mid',alpha=0.6,color='darkslateblue')
+    ax.step(a2,arr2,where='mid',color=linecolor)
+#    ax.fill_between(a2,arr2,step='mid',alpha=0.6,color='darkslateblue')
     
     ax.set_xticks(a+1)
-    ax.set_xticklabels(param_list,rotation=-45)
+    #ax.set_xticklabels(labels_dict[paramstr],rotation=40)
+    ax.xaxis.set_tick_params(labelsize=7,rotation=40)
+    
+    ax.set_yticks([0,0.5,1])
+    ax.set_yticklabels(labels=[0,0.5,1],rotation=40)
+    ax.yaxis.set_tick_params(labelsize=7)
     #ax.tick_params(direction='in')
     
     ax.set_xlim(a2[0]+0.5,a2[-1]-0.5)
     ax.set_ylim(0,1)
     
-    ax.set_xlabel(paramstr);ax.set_ylabel(paramstr)
+    ax.set_xlabel(pnames_dict[paramstr]);ax.set_ylabel(pnames_dict[paramstr])
     #plt.show()
     
     
@@ -130,17 +150,20 @@ def plotP_2D(fig, ax, paramstrx,paramstry,cmap='Purples',cbar=False):
     arr = numerator/denominator
     
     # determine tick labels
-    labelsx = [str(i) for i in param_listx]
-    labelsy = [str(i) for i in param_listy]
+    labelsx = labels_dict[paramstrx]
+    labelsy = labels_dict[paramstry]
     
     # flip array so that labels will match values
     if keys.index(paramstrx)<keys.index(paramstry):
         arr = arr.T
         
-    ax.set_xticks(np.arange(0,len(param_listx)));ax.set_xticklabels(labelsx,rotation=-45)
-    ax.set_yticks(np.arange(0,len(param_listy)));ax.set_yticklabels(labelsy)
+    ax.set_xticks(np.arange(0,len(param_listx)));ax.set_xticklabels(labelsx,rotation=40)
+    ax.xaxis.set_tick_params(labelsize=7)
     
-    ax.set_xlabel(paramstrx);ax.set_ylabel(paramstry)
+    ax.set_yticks(np.arange(0,len(param_listy)));ax.set_yticklabels(labelsy,rotation=40)
+    ax.yaxis.set_tick_params(labelsize=7)
+    
+    ax.set_xlabel(pnames_dict[paramstrx]);ax.set_ylabel(pnames_dict[paramstry])
     im = ax.imshow(arr, origin='lower',vmin=0.1, vmax=1, norm=LogNorm(),aspect='auto',cmap=cmap)
     #plt.colorbar()#;plt.show()
     
@@ -148,12 +171,11 @@ def plotP_2D(fig, ax, paramstrx,paramstry,cmap='Purples',cbar=False):
     if cbar==True:
         cb = fig.colorbar(im, cax=plt.axes([0.1,0,1,0.02]), orientation='horizontal')
         
-def plot_corner(s):
+def plot_corner(cm='Purples'):
     """
     generates corner plot where all histogram and 2D correlation plots are shown
     """
     # list of parameter names and corresponding indexes
-    pnames = ['inc']+list(grid_parameters.keys())
     ilist = np.arange(0,len(pnames),1)
     
     # generate combinations for correlation plots
@@ -162,7 +184,7 @@ def plot_corner(s):
     allcomb = [(a,b) for a in ilist for b in ilist]
     
     # create figure
-    fig, axes = plt.subplots(8,8, figsize=(8,8))
+    fig, axes = plt.subplots(8,8, figsize=(10,10))
     for comb in allcomb:
         ax = axes[comb[1],comb[0]]
         if comb in icomb:
@@ -170,9 +192,9 @@ def plot_corner(s):
             if x==y:
                 plotP_1D(ax, x)
             elif comb==(0,1):
-                plotP_2D(fig,ax,y,x)#,cbar=True)
+                plotP_2D(fig,ax,y,x,cmap=cm)#,cbar=True)
             else:
-                plotP_2D(fig,ax,y,x,cmap='Purples')
+                plotP_2D(fig,ax,y,x,cmap=cm)
         else:
             ax.axis('off')
         # remove unnecessary labels/ticks
@@ -185,6 +207,10 @@ def plot_corner(s):
         if comb[0]==0 and comb[1]==7:
             ax.set_xticks([2,7,12])
             ax.set_xticklabels(['52','70','84'])
+        if (comb[0]==0 and comb[1]==1):
+            ax.set_yticks([0,2,4])
+        if (comb[0]==1 and comb[1]==7):
+            ax.set_xticklabels(['$10^{-7}$','$10^{-5}$','$10^{-3}$'])
             
     plt.subplots_adjust(wspace=0, hspace=0)
     #plt.savefig('corner_plots/'+s+'_corner.png')
