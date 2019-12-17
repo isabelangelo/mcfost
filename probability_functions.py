@@ -4,6 +4,7 @@ and observation SEDs and model images
 """
 import numpy as np
 from scipy import optimize
+import scipy.ndimage
 
 ### SED Probability Filters ###
 def P1(x):
@@ -115,11 +116,19 @@ def gaussian_kernel():
 
 def rebin(arr, new_shape):
     """
-    rebin an array into a desired shape
+    rebin an array into a desired shape using averaging
     """
     shape = (new_shape[0], arr.shape[0] // new_shape[0],
              new_shape[1], arr.shape[1] // new_shape[1])
     return arr.reshape(shape).mean(-1).mean(1)
+    
+def rebin_image(image, pixscale_old, pixscale_new):
+    """
+    rebin an image to a desired pixel scale with spline interpolation
+    """
+    zoom=pixscale_old/pixscale_new
+    im_new=scipy.ndimage.zoom(image,zoom,order=3,mode='constant',cval=0)
+    return im_new
     
 # these are functions needed to perform second image test
 def gaussian(height, center_x, center_y, width_x, width_y):

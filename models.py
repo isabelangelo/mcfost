@@ -21,6 +21,8 @@ import os
 
 # define path to HST PSF
 tinytim_PSF = fits.open('../result00_psf.fits')[0].data
+tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
+PSF_20mas = rebin_image(tinytim_PSFnorm, 0.0158,0.02) # rebinned PSF to 20mas/pixel
 
 # store model star SED
 star_path = model_path + 'test_peak/data_th/sed_rt.fits'
@@ -70,12 +72,12 @@ class Model(object):
         impath = self.filepath[:-19]+'data_0.6/RT.fits'
         self.images = fits.open(impath)[0].data[0][0]
         
-        # store convolved image
-        tinytim_PSF = fits.open('../result00_psf.fits')[0].data # PSF
-        tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF) # normalized PSF
+        # store convolved+rebinned images image
+        # convolve images with rebinned PSF (20mas/pixel)
+        convolved_prebinned_images = [convolve_fft(i, PSF_20mas) for i in self.images]
+        # rebin to 40mas/pixel via averaging
         binpix = int((self.images[0].shape[0]-1)/2)
-        rebinned_images = [rebin(i[:-1,:-1], (binpix,binpix)) for i in self.images] # binned image
-        self.convolved_images = [convolve_fft(i, tinytim_PSFnorm) for i in rebinned_images]
+        self.convolved_images = [rebin(i[:-1,:-1], (binpix,binpix)) for i in convolved_prebinned_images]
             
         # generate model inclinations- is it in the files?
         i_0, i_f = np.radians(45), np.radians(90)

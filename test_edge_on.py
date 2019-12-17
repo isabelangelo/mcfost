@@ -185,118 +185,131 @@ def compute_P(obj):
     return P
     
     
-### Image Tests ###
-# def image_brightpixel_test(model):
-#     """
-#     determines binary edge-on probability based on criteria of the pixel location
-#     of the brightest pixel in the image
-#     """
-#     P_i = []
-#     images = model.convolved_images
-#     # get center pixel of images
-#     center_pixel = int(images[0].shape[0]/2-0.5)
-#     # determine location of brightest pixel + associated probability
-#     for inc_idx in range(len(model.images)):
-#         im=images[inc_idx]
-#         if im[center_pixel,center_pixel]!=im.max():
-#             P_i.append(1)
-#         else:
-#             P_i.append(0)
-#     return P_i   
-    
-# def image_ysma_test(model):
-#     """
-#     determines edge-on probability (0<=P<=1) based on ratio of convolved image sma to 
-#     TinyTim PSF sma
-#     
-#     note: width_x corresponds to the vertical axis (rows) and 
-#     width_y corresponds to the horizontal axis (columns)
-#     """
-#     P_i = []
-#     # compute sma ratio of image to PSF
-#     images=model.convolved_images
-#     for inc_idx in range(len(images)):
-#         data=images[inc_idx]
-#         params = fitgaussian(data)
-#         fit = gaussian(*params)
-#         (height, x, y, width_x, width_y) = params
-#         sma_ratio = width_x/PSFwidth_x
-#         # append associated probability
-#         P_i.append(image_P1(sma_ratio))
-#     return P_i  
+### Image Tests ### 
 
-def image_verticalfluxratio_test(model):
+def image_verticalfluxratio_test(obj):
     """
     determines edge-on probability (0<=P<=1) based on the flux ratio of 
     an offset row brightest pixel to the image brightest pixel
     """
     # define vertical shift for flux ratio computation
     shift = 6
-    # define flux ratio threshold
-    P_i = []
-    images = model.convolved_images
-    for inc_idx in range(len(images)):
-        # get image for inc
-        im = images[inc_idx]
+    
+    # handle models
+    if type(obj)==Model:
+        P_i = []
+        images = obj.convolved_images
+        for inc_idx in range(len(images)):
+            # get image for inc
+            im = images[inc_idx]
+            # store location of maximum
+            (rowmax,colmax) = np.unravel_index(np.argmax(im, axis=None), im.shape)
+            # brightest pixels in row shifted above + below
+            num1 = np.max(im[rowmax-shift,:]);num2 = np.max(im[rowmax+shift,:])
+            # compute ratio
+            num = max(num1,num2)
+            denom = im[rowmax,colmax] # brightest pixel
+            flux_ratio = num/denom
+            print(flux_ratio)
+            P_i.append(image_P3(flux_ratio))
+        return P_i
+    
+    # handle observations
+    if type(obj)==np.ndarray:
         # store location of maximum
-        (rowmax,colmax) = np.unravel_index(np.argmax(im, axis=None), im.shape)
+        (rowmax,colmax) = np.unravel_index(np.argmax(obj, axis=None), obj.shape)
         # brightest pixels in row shifted above + below
-        num1 = np.max(im[rowmax-shift,:]);num2 = np.max(im[rowmax+shift,:])
+        num1 = np.max(obj[rowmax-shift,:]);num2 = np.max(obj[rowmax+shift,:])
         # compute ratio
         num = max(num1,num2)
-        denom = im[rowmax,colmax] # brightest pixel
+        denom = obj[rowmax,colmax] # brightest pixel
         flux_ratio = num/denom
-        P_i.append(image_P3(flux_ratio))
-    return P_i
+        print(flux_ratio)
+        P = image_P3(flux_ratio)
+        return P
+    
+    
 
-        
-PSFparams = fitgaussian(tinytim_PSF)
+# prepare PSF for image shape test
+tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF)
+PSF_40mas = rebin_image(tinytim_PSFnorm, 0.0158,0.04)        
+PSFparams = fitgaussian(PSF_40mas)
 PSFfit = gaussian(*PSFparams)
 (PSFheight, PSFx, PSFy, PSFwidth_x, PSFwidth_y) = PSFparams
 
 
-def image_shape_test(model):
+def image_shape_test(obj):
     """
     determines edge-on probability (0<=P<=1) based on ratio of convolved image sma to 
     TinyTim PSF sma
     """
-    P_i = []
-    # compute sma ratio of image to PSF
-    images=model.convolved_images
-    for inc_idx in range(len(images)):
-        data=images[inc_idx]
-        params = fitgaussian(data)
+    
+    # handle models
+    if type(obj)==Model:
+        P_i = []
+        # compute sma ratio of image to PSF
+        images=obj.convolved_images
+        for inc_idx in range(len(images)):
+            data=images[inc_idx]
+            params = fitgaussian(data)
+            fit = gaussian(*params)
+            (height, x, y, width_x, width_y) = params
+            sma_ratio = width_y/PSFwidth_y
+            print(sma_ratio)
+            # append associated probability
+            P_i.append(image_P1(sma_ratio))
+        return P_i
+    
+    # handle observations
+    if type(obj)==np.ndarray:
+        # compute sma ratio of image to PSF
+        params=fitgaussian(obj)
         fit = gaussian(*params)
         (height, x, y, width_x, width_y) = params
         sma_ratio = width_y/PSFwidth_y
-        # append associated probability
-        P_i.append(image_P1(sma_ratio))
-    return P_i
+        print(sma_ratio)
+        P = image_P1(sma_ratio)
+        return P
     
     
-def image_horizontalfluxratio_test(model):
+def image_horizontalfluxratio_test(obj):
     """
     determines edge-on probability (0<=P<=1) based on the flux ratio of 
     an offset column brightest pixel to the image brightest pixel
     """
     # define horizontal shift for flux ratio computation
     shift = 8 
-    # define flux ratio threshold
-    P_i = []
-    images = model.convolved_images
-    for inc_idx in range(len(images)):
-        # get image for inc
-        im = images[inc_idx]
+    
+    # handle models
+    if type(obj)==Model:
+        P_i = []
+        images = obj.convolved_images
+        for inc_idx in range(len(images)):
+            # get image for inc
+            im = images[inc_idx]
+            # store location of maximum
+            (rowmax,colmax) = np.unravel_index(np.argmax(im, axis=None), im.shape)
+            # brightest pixels in column shifted left + right
+            num1 = np.max(im[:,colmax-shift]); num2 = np.max(im[:,colmax+shift])
+            # compute ratio
+            num = max(num1,num2)
+            denom = im[rowmax,colmax] # brightest pixel
+            flux_ratio = num/denom
+            P_i.append(image_P4(flux_ratio))
+        return P_i
+        
+    # handle observations
+    if type(obj)==np.ndarray:
         # store location of maximum
-        (rowmax,colmax) = np.unravel_index(np.argmax(im, axis=None), im.shape)
+        (rowmax,colmax) = np.unravel_index(np.argmax(obj, axis=None), obj.shape)
         # brightest pixels in column shifted left + right
-        num1 = np.max(im[:,colmax-shift]); num2 = np.max(im[:,colmax+shift])
+        num1 = np.max(obj[:,colmax-shift]); num2 = np.max(obj[:,colmax+shift])
         # compute ratio
         num = max(num1,num2)
-        denom = im[rowmax,colmax] # brightest pixel
+        denom = obj[rowmax,colmax] # brightest pixel
         flux_ratio = num/denom
-        P_i.append(image_P4(flux_ratio))
-    return P_i
+        P = image_P4(flux_ratio)
+        return P
     
 def image_compute_P(model):
     """
