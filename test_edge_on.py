@@ -187,49 +187,6 @@ def compute_P(obj):
     
 ### Image Tests ### 
 
-def image_verticalfluxratio_test(obj):
-    """
-    determines edge-on probability (0<=P<=1) based on the flux ratio of 
-    an offset row brightest pixel to the image brightest pixel
-    """
-    # define vertical shift for flux ratio computation
-    shift = 6
-    
-    # handle models
-    if type(obj)==Model:
-        P_i = []
-        images = obj.convolved_images
-        for inc_idx in range(len(images)):
-            # get image for inc
-            im = images[inc_idx]
-            # store location of maximum
-            (rowmax,colmax) = np.unravel_index(np.argmax(im, axis=None), im.shape)
-            # brightest pixels in row shifted above + below
-            num1 = np.max(im[rowmax-shift,:]);num2 = np.max(im[rowmax+shift,:])
-            # compute ratio
-            num = max(num1,num2)
-            denom = im[rowmax,colmax] # brightest pixel
-            flux_ratio = num/denom
-            print(flux_ratio)
-            P_i.append(image_P3(flux_ratio))
-        return P_i
-    
-    # handle observations
-    if type(obj)==np.ndarray:
-        # store location of maximum
-        (rowmax,colmax) = np.unravel_index(np.argmax(obj, axis=None), obj.shape)
-        # brightest pixels in row shifted above + below
-        num1 = np.max(obj[rowmax-shift,:]);num2 = np.max(obj[rowmax+shift,:])
-        # compute ratio
-        num = max(num1,num2)
-        denom = obj[rowmax,colmax] # brightest pixel
-        flux_ratio = num/denom
-        print(flux_ratio)
-        P = image_P3(flux_ratio)
-        return P
-    
-    
-
 # prepare PSF for image shape test
 tinytim_PSFnorm = tinytim_PSF/np.max(tinytim_PSF)
 PSF_40mas = rebin_image(tinytim_PSFnorm, 0.0158,0.04)        
@@ -267,9 +224,49 @@ def image_shape_test(obj):
         fit = gaussian(*params)
         (height, x, y, width_x, width_y) = params
         sma_ratio = width_y/PSFwidth_y
-        print(sma_ratio)
         P = image_P1(sma_ratio)
         return P
+
+def image_verticalfluxratio_test(obj):
+    """
+    determines edge-on probability (0<=P<=1) based on the flux ratio of 
+    an offset row brightest pixel to the image brightest pixel
+    """
+    # define vertical shift for flux ratio computation
+    shift = 6
+    
+    # handle models
+    if type(obj)==Model:
+        P_i = []
+        images = obj.convolved_images
+        for inc_idx in range(len(images)):
+            # get image for inc
+            im = images[inc_idx]
+            # store location of maximum
+            (rowmax,colmax) = np.unravel_index(np.argmax(im, axis=None), im.shape)
+            # brightest pixels in row shifted above + below
+            num1 = np.max(im[rowmax-shift,:]);num2 = np.max(im[rowmax+shift,:])
+            # compute ratio
+            num = max(num1,num2)
+            denom = im[rowmax,colmax] # brightest pixel
+            flux_ratio = num/denom
+            P_i.append(image_P3(flux_ratio))
+        return P_i
+    
+    # handle observations
+    if type(obj)==np.ndarray:
+        # store location of maximum
+        (rowmax,colmax) = np.unravel_index(np.argmax(obj, axis=None), obj.shape)
+        # brightest pixels in row shifted above + below
+        num1 = np.max(obj[rowmax-shift,:]);num2 = np.max(obj[rowmax+shift,:])
+        # compute ratio
+        num = max(num1,num2)
+        denom = obj[rowmax,colmax] # brightest pixel
+        flux_ratio = num/denom
+        P = image_P3(flux_ratio)
+        return P
+    
+    
     
     
 def image_horizontalfluxratio_test(obj):
@@ -311,13 +308,13 @@ def image_horizontalfluxratio_test(obj):
         P = image_P4(flux_ratio)
         return P
     
-def image_compute_P(model):
+def image_compute_P(obj):
     """
     Compute final weighted probability from 3 tests for each model image inclination
     """
-    sum = np.array(image_verticalfluxratio_test(model))+\
-            np.array(image_shape_test(model))+\
-            np.array(image_horizontalfluxratio_test(model))
+    sum = np.array(image_verticalfluxratio_test(obj))+\
+            np.array(image_shape_test(obj))+\
+            np.array(image_horizontalfluxratio_test(obj))
     return sum/3.       
         
         

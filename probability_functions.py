@@ -226,7 +226,8 @@ def image_P3(x):
 #     denom = 1 + b*np.e**(-c*(x+d))
 #     y = a/denom
 #     return y
-    x0,x1 = [0.1,0.2]; xvals = [x0,x1]; yvals = [0,1]
+    #x0,x1 = [0.1,0.2];
+    x0,x1 = [0.05,0.1]; xvals = [x0,x1]; yvals = [0,1]
     a,b = np.polyfit(xvals,yvals,deg=1)
     conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
     funcs = 0, lambda x:a*x+b, 1
@@ -250,7 +251,8 @@ def image_P4(x):
 #     denom = 1 + b*np.e**(-c*(x+d))
 #     y = a/denom
 #     return y
-    x0,x1 = [0.02,0.1]; xvals = [x0,x1]; yvals = [0,1]
+    #x0,x1 = [0.02,0.1];
+    x0,x1 = [0.02,0.04]; xvals = [x0,x1]; yvals = [0,1]
     a,b = np.polyfit(xvals,yvals,deg=1)
     conds = [x < x0, (x0<=x)&(x<=x1), x > x1]
     funcs = 0, lambda x:a*x+b, 1
