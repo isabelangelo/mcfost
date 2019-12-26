@@ -14,8 +14,11 @@ from probability_array import *
 from weights import *
 
 # load binary array with probabilities
-binary_arr_path = model_path + 'binary_array_linear.fits'
-binary_array = fits.open(binary_arr_path)[0].data
+binary_arr_path = model_path + 'SED_and_image.fits'
+binary_array_unflipped = fits.open(binary_arr_path)[0].data
+
+# flip binary array along flaring exp axis
+binary_array = np.flip(binary_array_unflipped, axis=5)
 
 # generate array with masked values
 # this gets changed when you want to mask different values
@@ -71,7 +74,7 @@ param_dict['inc']=[str(i)[:2] for i in list(Model(0).inclinations)]
 
 # dictionary of parameter names + label strings
 pnames = ['inc']+list(grid_parameters.keys())
-pvalues = ['$i$', '$M_d$', '$R_c$', r'$\beta$', '$H_0$', '$R_{in}$', r'$\gamma$', '$a_{max}$']
+pvalues = ['$i$ [$^o$]', '$M_d$ [$M_\odot$]', '$R_c$ [AU]', r'$\beta$', '$H_0$ [AU]', '$R_{in}$ [AU]', r'$\gamma$', '$a_{max}$ [$\mu$m]']
 pnames_dict=dict(zip(pnames, pvalues))
 
 #dictionary with axis labels
@@ -80,7 +83,7 @@ labels_dict = {'dust_mass':['$10^{-7}$','$10^{-6}$','$10^{-5}$','$10^{-4}$','$10
               'f_exp':[str(i) for i in param_dict['f_exp']],
                'H0':[str(i) for i in param_dict['H0']],
               'Rin':[str(i) for i in param_dict['Rin']],
-              'sd_exp': [str(i) for i in param_dict['sd_exp']],
+              'sd_exp': [str(i) for i in param_dict['sd_exp']][::-1],
               'amax': ['$10$','$10^{2}$','$10^{3}$','$10^{4}$'],
               'inc': [str(i) for i in param_dict['inc']]}
 
@@ -110,7 +113,7 @@ def plotP_1D(ax, paramstr,linecolor='black'):
 #    ax.fill_between(a2,arr2,step='mid',alpha=0.6,color='darkslateblue')
     
     ax.set_xticks(a+1)
-    #ax.set_xticklabels(labels_dict[paramstr],rotation=40)
+    ax.set_xticklabels(labels_dict[paramstr],rotation=40)
     ax.xaxis.set_tick_params(labelsize=7,rotation=40)
     
     ax.set_yticks([0,0.5,1])
@@ -198,18 +201,19 @@ def plot_corner(cm='Purples'):
         else:
             ax.axis('off')
         # remove unnecessary labels/ticks
-        if comb[1]!=7:
+        if comb[1]!=7: #remove x labels from inner subplots
             ax.set_xlabel('')
             #ax.set_xticks([])
-        if comb[0]!=0:
+        if comb[0]!=0: # remove y label from inner subplots
             ax.set_ylabel('')
             ax.set_yticks([])
-        if comb[0]==0 and comb[1]==7:
+        if comb[0]==0 and comb[1]==7: # label inclination x axis
             ax.set_xticks([2,7,12])
             ax.set_xticklabels(['52','70','84'])
-        if (comb[0]==0 and comb[1]==1):
+        if (comb[0]==0 and comb[1]==1): # label dust mass y axis 
             ax.set_yticks([0,2,4])
-        if (comb[0]==1 and comb[1]==7):
+        if (comb[0]==1 and comb[1]==7): # label dust mass x axis 
+            ax.set_xticks([0,2,4])
             ax.set_xticklabels(['$10^{-7}$','$10^{-5}$','$10^{-3}$'])
             
     plt.subplots_adjust(wspace=0, hspace=0)
