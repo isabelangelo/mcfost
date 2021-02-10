@@ -1,71 +1,78 @@
-"""
-This code will define and generate a grid of parameter files to be run on MCFOST. 
-Lists contain the variable values of the grid, and the parameter files are 
-stored as model*.para.
+from pymcfost import parameters
 
-Written: Isabel Angelo (2018)
-"""
 # define grid
-dust_mass = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3]
-
+host_mass = [0.15, 0.3, 0.6, 1.2]
+dust_fraction = [0.001, 0.01, 0.1]
 Rc = [10, 30, 100, 300]
-
-f_exp = [0.85, 1.0, 1.15, 1.30]
-
-H0 = [5, 10, 15, 20]
-
+f_exp = [1.05, 1.15, 1.25]
+H0 = [5, 10, 15, 20, 25]
 Rin = [0.1, 1, 10]
+sd_exp = [-0.5, -1]
+dust_settling = [1e-5,1e-4,1e-3,'none']
 
-#sd_exp = [0, -0.5, -1.5]
-sd_exp = [0, -0.5, -1, -1.5]
-
-
-amax = [10, 100, 1000, 10000]
+# store star parameters for each host mass
+Teff_values = [3080, 3313, 3574, 4048]
+R_values = [0.96, 1.30, 1.79, 2.36]
+file_values = ['lte3100-4.5.NextGen.fits.gz', 'lte3300-4.5.NextGen.fits.gz', \
+               'lte3600-4.5.NextGen.fits.gz', 'lte4000-4.5.NextGen.fits.gz']
 
 # generate all possible combinations of grid parameters
-combinations = [(a,b,c,d,e,f,g) for a in dust_mass for b in Rc for c in f_exp \
-for d in H0 for e in Rin for f in sd_exp for g in amax]
-# 
-# # generate initial parameters
-# from pymcfost import parameters
-# para = parameters.Params(filename='ref3.0.para')
-# 
-# # update fixed parameters
-# para.phot.nphot_image = 1.28e4
-# para.simu.use_default_wl = False
-# #para.wavelengths.file = 'lambda3.lambda'
-# para.wavelengths.file = 'lambda4.lambda'
-# #para.map.nx = 251
-# #para.map.ny = 251
-# para.map.nx = 375
-# para.map.ny = 375
-# para.map.size=1050 #added for second grid
-# para.map.RT_imin = 45
-# para.map.RT_imax = 90
-# para.map.RT_ntheta = 15
-# para.simu.radial_migration = False
-# para.simu.dust_sublimation = False
-# para.simu.hydrostatic_eq = False
-# para.simu.viscous_heating = False
-# para.zones[0].Rout = 600 #added for second grid
-# para.zones[0].geometry = 2
-# para.zones[0].dust[0].amin = 0.01
-# para.zones[0].dust[0].n_grains = 50
-# para.zones[0].dust[0].amax = 10
-# 
-# # generate individual parameter files
-# for i in range(len(combinations)):
-#     new_para = para
-#     comb = combinations[i]
-#     new_para.zones[0].dust_mass = comb[0]
-#     new_para.zones[0].Rc = comb[1]
-#     new_para.zones[0].flaring_exp = comb[2]
-#     new_para.zones[0].h0 = comb[3]
-#     new_para.zones[0].Rin = comb[4]
-#     new_para.zones[0].surface_density_exp = comb[5]
-#     #new_para.zones[0].dust[0].porosity = comb[6]
-#     new_para.zones[0].dust[0].amax = comb[6]
-#     new_para.writeto('grid_new_para/model'+str(i)+'.para')
+combinations = [(a,b,c,d,e,f,g,h) for a in host_mass \
+                for b in dust_fraction \
+                for c in Rc \
+                for d in f_exp \
+                for e in H0 \
+                for f in Rin \
+                for g in sd_exp \
+                for h in dust_settling]
 
+# generate initial parameters
+para = parameters.Params(filename='ref3.0.para')
 
+# update fixed parameters 
+para.phot.nphot_image = 1.28e4
+para.simu.use_default_wl = False
+para.wavelengths.file = 'lambda4.lambda'
+para.map.nx = 375
+para.map.ny = 375
+para.map.size=1050
+para.map.RT_imin = 45
+para.map.RT_imax = 90
+para.map.RT_ntheta = 15
+para.simu.radial_migration = False
+para.simu.dust_sublimation = False
+para.simu.hydrostatic_eq = False
+para.simu.viscous_heating = False
+para.zones[0].Rout = 600
+para.zones[0].geometry = 2
+para.zones[0].dust[0].amin = 0.01
+para.zones[0].dust[0].n_grains = 50
+para.stars[0].is_bb = False
+para.simu.dust_settling_type = 3 # Fromang settling
+# amax already fixed @1mm
 
+# generate individual parameter files
+for i in range(len(combinations)):
+    new_para = para
+    comb = combinations[i]
+    # set host mass and associated parameters
+    M = comb[0]; i_M=host_mass.index(M)
+    para.stars[0].Teff = Teff_values[i_M]
+    para.stars[0].R = R_values[i_M]
+    para.stars[0].file = file_values[i_M]
+    # set dust mass according to disk mass fraction
+    M_d = comb[1]*M/100 # assuming 1:100 gas-to-dust ratio
+    # other parameters
+    new_para.zones[0].dust_mass = M_d    
+    new_para.zones[0].Rc = comb[2]
+    new_para.zones[0].flaring_exp = comb[3]
+    new_para.zones[0].h0 = comb[4]
+    new_para.zones[0].Rin = comb[5]
+    new_para.zones[0].surface_density_exp = comb[6]
+    # set settling
+    if comb[7]=='none':
+        para.simu.dust_settling_type = 0
+    else:
+        para.simu.viscosity = comb[7]
+    # write to new parameter file
+    new_para.writeto('ParameterFiles/model'+str(i)+'.para')
